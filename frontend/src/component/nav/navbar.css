@@ -1,0 +1,78 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  height: 56px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  padding: 0 7%;
+  margin: 0;
+  position: relative;
+  z-index: 1000;
+}
+
+.navbar-left {
+  padding-left: 52px;
+}
+
+.brand {
+  font-size: 18px;
+  font-weight: bold;
+  color: #1a1a75;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 48px; /* <-- space between links and buttons */
+}
+
+.navbar-links {
+  display: flex;
+  gap: 32px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #1a1a75;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
+
+.navbar-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.login-btn {
+  background-color: #001d7d;
+  color: #F8F8F8;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.signup-btn {
+  background-color: #F8F8F8;
+  color: #001d7d;
+  border: 1px solid #001d7d;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.signup-btn:hover,
+.login-btn:hover {
+  opacity: 0.9;
+}

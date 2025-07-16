@@ -1,13 +1,77 @@
-body {
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* Base body styles */
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  height: 100vh;
+  background-color: #242323;
+  color: white;
+  overflow-x: hidden;
+}
+
+
+/* Responsive typography system */
+h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 4vw, 2.8rem);
+  line-height: 1.1;
+}
+
+h3 {
+  font-size: clamp(1.3rem, 3.5vw, 2.2rem);
+  line-height: 1.1;
+}
+
+h4 {
+  font-size: clamp(1.1rem, 3vw, 1.8rem);
+  line-height: 1.1;
+}
+
+h5 {
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  line-height: 1.1;
+}
+
+h6 {
+  font-size: clamp(0.9rem, 2vw, 1.2rem);
+  line-height: 1.1;
+}
+
+p {
+  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+  line-height: 1.1;
+}
+
+/* Optional: Add margin control for better vertical rhythm */
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0.35em;
+  margin-bottom: 0.35em;
+}
+
+p {
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+}
+
+/* Ensure the page container stretches to full height */
+.product-page, .cart-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Full viewport height */
+}
+
+.product-main, .cart-page > .cart-table {
+  flex: 1;
 }

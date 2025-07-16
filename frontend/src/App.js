@@ -1,27 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useRef } from 'react';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import './App.css'
+import Navbar from './component/nav/navbar'
+import Footer from './component/footer/footer';
 
 function App() {
-  const [message, setMessage] = useState('');
-
-  useEffect(() => {
-    axios.get('http://localhost:5000')
-      .then(response => {
-        setMessage(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data: ', error);
-      });
-  }, []);
-
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Fullstack App</h1>
-        <p>Message from backend: {message}</p>
-      </header>
-    </div>
-  );
+  return(
+    <Router>
+      <div className="App">
+        <Navbar/>
+        {/* Your page content/routes will go here */}
+        <Footer/>
+      </div>
+    </Router>
+  )
 }
 
-export default App;
+export default App

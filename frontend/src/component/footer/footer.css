@@ -1,0 +1,92 @@
+.footer {
+  background-color: #1a1a75;
+  padding: 20px 40px;
+  color: #F8F8F8;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  margin-top: auto;
+  display: flex;
+  gap: 8px;
+  
+}
+
+.footer__container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.footer__section {
+  flex: 1;
+  padding: 10px;
+}
+
+.footer__header h4 {
+  display: flex;
+  margin: auto;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.footer__section h4 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 10px;
+}
+
+.footer__links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.link-footer {
+  text-decoration: none;
+  color: #F8F8F8;
+  text-align: center;
+  display: block;
+}
+
+.link-footer:hover {
+  text-decoration: underline;
+  color: F8F8F8;
+}
+
+ /* Hide toggler on large screens and always show links */
+  @media (min-width: 768px) {
+    .footer__toggler {
+      display: none;
+    }
+    
+    .footer__links {
+      display: flex !important;
+    }
+  }
+  
+  /* On small screens, hide links by default and show toggler */
+  @media (max-width: 767px) {
+    .footer__container {
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .footer__links {
+      display: none;
+    }
+    
+    .footer__links.open {
+      display: flex;
+    }
+    
+    .bi-caret-down-fill.rotated {
+      transform: rotate(180deg);
+    }
+  }
