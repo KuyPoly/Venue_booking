@@ -1,19 +1,29 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import './App.css'
-import Navbar from './component/nav/navbar'
+import './App.css';
+import Navbar from './component/nav/navbar';
 import Footer from './component/footer/footer';
+import Signup from './component/auth/Signup';
+import Login from './component/auth/Login';
+import Home from './component/HomePage/Home';
+import About from './component/HomePage/About';
+
 
 function App() {
-  return(
+  return (
     <Router>
       <div className="App">
-        <Navbar/>
-        {/* Your page content/routes will go here */}
-        <Footer/>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          {/* Add more routes like homepage, search, etc. */}
+        </Routes>
+        <Footer />
       </div>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

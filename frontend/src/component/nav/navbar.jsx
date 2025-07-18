@@ -46,8 +46,8 @@ export default function Navbar() {
           <a href="#" className="nav-link">List Venue</a>
         </div>
         <div className="navbar-buttons">
-          <button className="login-btn">Login</button>
-          <button className="signup-btn">Signup</button>
+          <Link to="/login" className="login-btn">Login</Link>
+          <Link to="/signup" className="signup-btn">Signup</Link>
         </div>
       </div>
     </nav>
