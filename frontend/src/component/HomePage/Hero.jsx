@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import bgImage from '../../assets/image1.png';
-import './Home.css';
+import '../../page/Homepage/Home.css'; // 
 
 export default function Hero() {
   const [backendMessage, setBackendMessage] = useState('');

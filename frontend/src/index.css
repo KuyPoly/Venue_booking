@@ -6,15 +6,12 @@
 
 /* Base body styles */
 body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #242323;
   color: white;
   overflow-x: hidden;
+  font-family: Arial, sans-serif;
 }
 
 

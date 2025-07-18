@@ -5,8 +5,7 @@ import Navbar from './component/nav/navbar';
 import Footer from './component/footer/footer';
 import Signup from './component/auth/Signup';
 import Login from './component/auth/Login';
-import Home from './component/HomePage/Home';
-import About from './component/HomePage/About';
+import Home from './page/Homepage/Home';
 
 
 function App() {

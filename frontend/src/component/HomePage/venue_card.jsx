@@ -1,6 +1,6 @@
 import React from 'react';
-import pancakes from '../../assets/pancakes.png'; // Use placeholder image
-import './CategorySection.css';
+import pancakes from '../../assets/image1.png'; // Use placeholder image
+
 
 const categories = [
   { icon: '👥', label: 'Meeting' },

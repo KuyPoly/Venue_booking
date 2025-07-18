@@ -1,9 +1,10 @@
+/* filepath: d:\y2t3\venue_booking\frontend\src\page\Homepage\Home.css */
 .home-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 80px 10%;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #f6f8fa;
   font-family: Arial, sans-serif;
 }
@@ -75,12 +76,9 @@
 
 .hero-overlay {
   position: relative;
-  top: 0;
-  /* height: 50%; */
   text-align: center;
-  background-color: rgba(0, 0, 0, 0.4); /* dark transparent overlay */
-  padding:  40px;
-  /* border-radius: 10px; */
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 40px;
   width: 100%;
   max-width: 900px;
 }
@@ -110,6 +108,7 @@
   border: none;
   border-radius: 8px;
   width: 200px;
+  min-width: 150px;
 }
 
 .search-btn {
@@ -137,12 +136,14 @@
   justify-content: center;
   gap: 40px;
   margin-bottom: 30px;
+  flex-wrap: wrap;
 }
 
 .category-item {
   text-align: center;
   color: #001d7d;
   cursor: pointer;
+  min-width: 80px;
 }
 
 .category-icon {
@@ -164,6 +165,7 @@
   border-radius: 12px;
   overflow: hidden;
   width: 200px;
+  min-width: 180px;
   transition: transform 0.2s;
 }
 
@@ -201,4 +203,124 @@
 .stars span {
   color: #f4c542;
   font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .home-container {
+    flex-direction: column;
+    padding: 40px 5%;
+    text-align: center;
+  }
+  
+  .home-left {
+    max-width: 100%;
+    margin-bottom: 30px;
+  }
+  
+  .home-title {
+    font-size: 36px;
+  }
+  
+  .home-description {
+    font-size: 16px;
+  }
+  
+  .home-buttons {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .hero {
+    height: 400px;
+  }
+  
+  .hero-overlay {
+    padding: 30px 20px;
+  }
+  
+  .hero-title {
+    font-size: 28px;
+  }
+  
+  .hero-subtitle {
+    font-size: 16px;
+  }
+  
+  .search-box {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .search-box input {
+    width: 280px;
+    max-width: 90%;
+  }
+  
+  .category-section {
+    padding: 20px 20px;
+  }
+  
+  .categories {
+    gap: 20px;
+  }
+  
+  .venue-card {
+    width: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-container {
+    padding: 20px 3%;
+  }
+  
+  .home-title {
+    font-size: 28px;
+  }
+  
+  .home-description {
+    font-size: 14px;
+  }
+  
+  .hero {
+    height: 300px;
+  }
+  
+  .hero-overlay {
+    padding: 20px 15px;
+  }
+  
+  .hero-title {
+    font-size: 24px;
+  }
+  
+  .hero-subtitle {
+    font-size: 14px;
+  }
+  
+  .search-box input {
+    width: 250px;
+  }
+  
+  .category-section {
+    padding: 15px 15px;
+  }
+  
+  .categories {
+    gap: 15px;
+  }
+  
+  .category-item {
+    min-width: 60px;
+  }
+  
+  .category-icon {
+    font-size: 24px;
+  }
+  
+  .venue-card {
+    width: 160px;
+    min-width: 160px;
+  }
 }

@@ -1,12 +1,14 @@
+/* filepath: d:\y2t3\venue_booking\frontend\src\component\nav\navbar.jsx */
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import { Link, useNavigate } from 'react-router-dom';
 import './navbar.css';
 
 export default function Navbar() {
   const [showSearch, setShowSearch] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(''); // State for search input
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const searchRef = useRef(null);
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
 
   // Close the search bar when clicking outside
   useEffect(() => {
@@ -28,28 +30,73 @@ export default function Navbar() {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/search?query=${encodeURIComponent(searchQuery)}`); // Navigate to search results page
-      setShowSearch(false); // Close the search bar
+      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+      setShowSearch(false);
     }
   };
 
-  return (
-    <nav className="navbar">
-      <div className="navbar-left">
-        <h1 className="brand">Booking_Hall</h1>
-      </div>
+  // Toggle mobile menu
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
-      <div className="navbar-right">
-        <div className="navbar-links">
-          <a href="#" className="nav-link">Home</a>
-          <a href="#" className="nav-link">About Us</a>
-          <a href="#" className="nav-link">List Venue</a>
+  // Close mobile menu when clicking on a link
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  return (
+    <>
+      <nav className="navbar">
+        <div className="navbar-left">
+          <Link to="/" className="brand" onClick={closeMobileMenu}>
+            Booking_Hall
+          </Link>
         </div>
+
+        <div className="navbar-right">
+          <div className="navbar-links">
+            <Link to="/" className="nav-link">Home</Link>
+            <a href="#about" className="nav-link">About Us</a>
+            <a href="#list-venue" className="nav-link">List Venue</a>
+          </div>
+          <div className="navbar-buttons">
+            <Link to="/login" className="login-btn">Login</Link>
+            <Link to="/signup" className="signup-btn">Signup</Link>
+          </div>
+        </div>
+
+        {/* Hamburger Menu */}
+        <div 
+          className={`hamburger ${isMobileMenuOpen ? 'active' : ''}`}
+          onClick={toggleMobileMenu}
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </nav>
+
+      {/* Mobile Menu */}
+      <div className={`mobile-menu ${isMobileMenuOpen ? 'active' : ''}`}>
+        <Link to="/" className="nav-link" onClick={closeMobileMenu}>
+          Home
+        </Link>
+        <a href="#about" className="nav-link" onClick={closeMobileMenu}>
+          About Us
+        </a>
+        <a href="#list-venue" className="nav-link" onClick={closeMobileMenu}>
+          List Venue
+        </a>
         <div className="navbar-buttons">
-          <Link to="/login" className="login-btn">Login</Link>
-          <Link to="/signup" className="signup-btn">Signup</Link>
+          <Link to="/login" className="login-btn" onClick={closeMobileMenu}>
+            Login
+          </Link>
+          <Link to="/signup" className="signup-btn" onClick={closeMobileMenu}>
+            Signup
+          </Link>
         </div>
       </div>
-    </nav>
+    </>
   );
 }

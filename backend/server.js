@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const app = express();
-const PORT = 3000;
+const PORT = 5000;
 const SECRET_KEY = 'your_secret_key'; // Keep it safe
 
 app.use(cors());

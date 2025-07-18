@@ -1,6 +1,6 @@
 import React from 'react';
-import Hero from './Hero';
-import CategorySection from './CategorySection'; // ✅ adjust path
+import Hero from '../../component/HomePage/Hero';
+import CategorySection from '../../component/HomePage/venue_card'; // ✅ adjust path
 
 export default function Home() {
   return (

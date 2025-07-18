@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  margin-top: 56px; /* Account for fixed navbar */
 }
 
 .App-logo {
@@ -34,5 +35,18 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .App {
+    margin-top: 56px;
+  }
+}
+
+@media (max-width: 480px) {
+  .App {
+    margin-top: 56px;
   }
 }
