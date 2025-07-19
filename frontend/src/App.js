@@ -6,6 +6,7 @@ import Footer from './component/footer/footer';
 import Signup from './component/auth/Signup';
 import Login from './component/auth/Login';
 import Home from './page/Homepage/Home';
+import RoomDetails from './page/RoomDetails/RoomDetails';
 
 
 function App() {
@@ -17,7 +18,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
-          {/* Add more routes like homepage, search, etc. */}
+          <Route path="/room/:id" element={<RoomDetails />} />
         </Routes>
         <Footer />
       </div>
