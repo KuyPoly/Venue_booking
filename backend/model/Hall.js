@@ -8,10 +8,6 @@ const Hall = sequelize.define('Hall', {
     autoIncrement: true,
     primaryKey: true,
   },
-  type: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   description: {
     type: DataTypes.TEXT,
     allowNull: false,
@@ -36,10 +32,6 @@ const Hall = sequelize.define('Hall', {
     type: DataTypes.TIME,
     allowNull: false,
   },
-  image_url: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   owner_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -54,8 +46,5 @@ const Hall = sequelize.define('Hall', {
   updatedAt: 'updated_at',
   tableName: 'hall',
 });
-
-Hall.belongsTo(User, { foreignKey: 'owner_id', as: 'owner' });
-User.hasMany(Hall, { foreignKey: 'owner_id', as: 'halls' });
 
 module.exports = Hall; 
