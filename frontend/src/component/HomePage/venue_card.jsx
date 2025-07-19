@@ -30,7 +30,7 @@ export default function CategorySection() {
 
       <div className="venues">
         {venues.map((venue) => (
-          <div key={venue.id} className="venue-card">
+          <div key={venue.id} className="venue-card" onClick={() => window.location.href = `/room/${venue.id}` } style={{ cursor: 'pointer' }}>
             <img src={venue.image} alt="venue" className="venue-img" />
             <div className="venue-info">
               <h4>{venue.location}</h4>
