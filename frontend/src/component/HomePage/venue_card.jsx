@@ -36,7 +36,7 @@ export default function CategorySection() {
               <h4>{venue.location}</h4>
               <p>👥 {venue.guests}</p>
               <div className="venue-footer">
-                <span>♡</span>
+                <span className='like'>♡</span>
                 <div className="stars">
                   {[...Array(5)].map((_, i) => (
                     <span key={i}>☆</span>

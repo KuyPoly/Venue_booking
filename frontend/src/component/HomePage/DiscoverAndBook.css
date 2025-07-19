@@ -1,0 +1,82 @@
+.discover-container {
+  font-family: 'Arial', sans-serif;
+  margin: 0 auto;
+  padding: 2rem;
+  padding: 40px 60px;
+  background-color: #f9faff;
+  text-align: center;
+}
+
+.hero-section {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  /* background-color: #f8f8f8; */
+  border-radius: 8px;
+}
+.hero-section p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cta-sections {
+  display: flex;
+  justify-content: center;
+}
+
+.cta-card {
+  background: #bdc7e2;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
+}
+
+.cta-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #1a1a75;
+  border-bottom: 2px solid #a37c59;
+  padding-bottom: 0.5rem;
+}
+
+.cta-content p {
+  margin-bottom: 1rem;
+  line-height: 1.5;
+  color: #1a1a75;
+  text-align: left;
+  padding: 0 90px;
+}
+.cta-content li {
+  margin-bottom: 0.5rem;
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  text-align: left;
+  padding: 0.5rem 70px;
+  color: #1a1a75;
+}
+
+.cta-button {
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+  background-color: #bdc7e2;
+  border: 2px solid #a37c59;
+  color: #1a1a75;
+  font-weight: bold;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.cta-button:hover {
+  background-color: #1a1a75;
+  color: #f9faff;
+}

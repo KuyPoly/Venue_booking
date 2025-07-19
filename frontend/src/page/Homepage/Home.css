@@ -1,6 +1,6 @@
 /* filepath: d:\y2t3\venue_booking\frontend\src\page\Homepage\Home.css */
 .home-container {
-  display: flex;
+  /* display: flex; */
   justify-content: space-between;
   align-items: center;
   padding: 80px 10%;
@@ -201,8 +201,13 @@
 }
 
 .stars span {
-  color: #f4c542;
-  font-size: 14px;
+  color: #001d7d;
+  font-size: 18px;
+}
+.venue-footer .like {
+  color: #001d7d;
+  font-size: 18px;
+  cursor: pointer;
 }
 
 /* Responsive Design */

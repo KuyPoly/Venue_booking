@@ -1,0 +1,90 @@
+.home-container {
+  padding: 40px 60px;
+  background-color: #f9faff;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #1a237e;
+  margin-bottom: 50px;
+}
+
+.section-subtext {
+  max-width: 700px;
+  margin: auto;
+  color: #2c2cac;
+  font-size: 18px;
+  margin-bottom: 50px;
+}
+
+.venue-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 20px;
+  padding: 0 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.venue-card {
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  width: 250px;
+  overflow: hidden;
+  text-align: left;
+  transition: 0.3s;
+}
+
+.venue-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.venue-img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+}
+
+.venue-info {
+  padding: 16px;
+}
+
+.venue-info h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  color: #111827;
+}
+
+.venue-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  color: #555;
+}
+
+.see-more-container {
+  margin-top: 30px;
+}
+
+.see-more-btn {
+  background-color: #fff;
+  border: 2px solid #a37c59;
+  color: #a37c59;
+  font-weight: bold;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.see-more-btn:hover {
+  background-color: #a37c59;
+  color: #fff;
+}
