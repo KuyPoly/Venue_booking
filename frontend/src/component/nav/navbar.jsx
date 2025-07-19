@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './navbar.css';
 
-export default function Navbar() {
+export default function Navbar({ openLoginModal, openSignupModal }) {
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -45,6 +45,24 @@ export default function Navbar() {
     setIsMobileMenuOpen(false);
   };
 
+  // Handle login button click
+  const handleLoginClick = (e) => {
+    e.preventDefault();
+    if (openLoginModal) {
+      openLoginModal();
+    }
+    closeMobileMenu();
+  };
+
+  // Handle signup button click
+  const handleSignupClick = (e) => {
+    e.preventDefault();
+    if (openSignupModal) {
+      openSignupModal();
+    }
+    closeMobileMenu();
+  };
+
   return (
     <>
       <nav className="navbar">
@@ -61,8 +79,8 @@ export default function Navbar() {
             <a href="#list-venue" className="nav-link">List Venue</a>
           </div>
           <div className="navbar-buttons">
-            <Link to="/login" className="login-btn">Login</Link>
-            <Link to="/signup" className="signup-btn">Signup</Link>
+            <a href="#" className="login-btn" onClick={handleLoginClick}>Login</a>
+            <a href="#" className="signup-btn" onClick={handleSignupClick}>Signup</a>
           </div>
         </div>
 
@@ -89,12 +107,12 @@ export default function Navbar() {
           List Venue
         </a>
         <div className="navbar-buttons">
-          <Link to="/login" className="login-btn" onClick={closeMobileMenu}>
+          <a href="#" className="login-btn" onClick={handleLoginClick}>
             Login
-          </Link>
-          <Link to="/signup" className="signup-btn" onClick={closeMobileMenu}>
+          </a>
+          <a href="#" className="signup-btn" onClick={handleSignupClick}>
             Signup
-          </Link>
+          </a>
         </div>
       </div>
     </>

@@ -1,0 +1,85 @@
+.signup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.signup-box {
+  background: white;
+  padding: 30px;
+  width: 400px;
+  border-radius: 16px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+.signup-box h2 {
+  margin-bottom: 20px;
+  color: #001F54;
+}
+
+.role-switch {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.role-switch button {
+  padding: 10px 20px;
+  border: 1px solid #001F54;
+  border-radius: 8px;
+  background: white;
+  color: #001F54;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.role-switch .active {
+  background: #001F54;
+  color: white;
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.signup-box input {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.register-btn {
+  width: 100%;
+  background-color: #001F54;
+  color: white;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.switch-login {
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+.switch-login span {
+  color: #003366;
+  cursor: pointer;
+}
