@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <!-- Google Fonts: Montserrat -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dashboard.css">
+  <!-- Optionally use Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="logo">WEBNAME</div>
+    <div class="section-title">MAIN</div>
+    <ul>
+      <li class="active" onclick="window.location.href='Dashboard.html'"><span class="icon"><i class="fas fa-tachometer-alt"></i></span>Dashboard</li>
+      <li onclick="window.location.href='Booking.html'"><span class="icon"><i class="fas fa-calendar-check"></i></span>Bookings</li>
+      <li onclick="window.location.href='Message.html'"><span class="icon"><i class="fas fa-comment-dots"></i></span>Messages</li>
+      <li><span class="icon"><i class="fas fa-wallet"></i></span>Wallet</li>
+      <li>
+        <span class="icon"><i class="fas fa-home"></i></span>
+        My Listings
+        <span style="margin-left:auto;"><i class="fas fa-chevron-down"></i></span>
+      </li>
+    </ul>
+    <div class="section-title">ACCOUNT</div>
+    <ul>
+      <li><span class="icon"><i class="fas fa-user"></i></span>My Profile</li>
+      <li><span class="icon"><i class="fas fa-cog"></i></span>Setting</li>
+      <li><span class="icon"><i class="fas fa-sign-out-alt"></i></span>Log Out</li>
+    </ul>
+  </nav>
+
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="account">
+      <i class="fas fa-user-circle"></i>
+      My Account
+      <select>
+        <option></option>
+      </select>
+    </div>
+    <div class="help">
+      <i class="fas fa-question-circle"></i>
+      Learn More
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <h1>Hello, User !</h1>
+    <!-- Stats Row -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-map"></i></div>
+        <div class="stat-value">0</div>
+        <div class="stat-title">Active Listings</div>
+      </div>
+      <div class="stat-card views">
+        <div class="stat-icon"><i class="fas fa-eye"></i></div>
+        <div class="stat-value">0</div>
+        <div class="stat-title">Total Views</div>
+      </div>
+      <div class="stat-card bookings">
+        <div class="stat-icon"><i class="fas fa-calendar-plus"></i></div>
+        <div class="stat-value">0</div>
+        <div class="stat-title">Total Bookings</div>
+      </div>
+    </div>
+    <!-- Main Cards Row -->
+    <div style="display: flex; gap: 32px;">
+      <div style="flex: 2;">
+        <!-- Recent Activities -->
+        <div class="card">
+          <div class="card-title">Recent Activities <button class="clear-btn">Clear all</button></div>
+          <div>You don't have any activities logged yet.</div>
+        </div>
+        <!-- Analytics -->
+        <div class="analytics">
+          <div class="card-title">Listings Analytics</div>
+          <!-- Placeholder for chart -->
+          <div style="height:140px; display:flex; align-items:center; justify-content:center; color:#bfc2d4; font-size:1.1rem;">
+            (Analytics Chart Placeholder)
+          </div>
+        </div>
+        <!-- Recent Messages -->
+        <div class="card">
+          <div class="card-title">Recent Messages <button class="clear-btn">Clear all</button></div>
+          <div>You don't have any messages yet.</div>
+        </div>
+      </div>
+      <div style="flex: 0.97; display: flex; flex-direction: column; gap: 18px;">
+        <div class="card small">
+          <div class="card-title">Booking Request</div>
+          <div>You don't have any booking yet.</div>
+        </div>
+        <div class="card small">
+          <div class="card-title">Visitor Review</div>
+          <div>You don't have any review yet.</div>
+        </div>
+        <div class="card small">
+          <div class="card-title">Earnings <span style="float:right; color:#bfc2d4; font-size:0.95rem;">No data</span></div>
+          <div>You don't have any earnings yet.</div>
+        </div>
+        <div class="card small">
+          <div class="card-title">Payout History</div>
+          <div>You don't have any payout yet.<br>You don't have any payout yet.</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
