@@ -37,10 +37,6 @@ module.exports = {
         type: Sequelize.TIME,
         allowNull: false,
       },
-      image_url: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       owner_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
