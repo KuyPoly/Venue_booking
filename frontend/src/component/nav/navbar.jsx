@@ -1,9 +1,12 @@
 /* filepath: d:\y2t3\venue_booking\frontend\src\component\nav\navbar.jsx */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
+import LoggedInNavbar from './LoggedInNavbar';
 import './navbar.css';
 
 export default function Navbar({ openLoginModal, openSignupModal }) {
+  const { isAuthenticated, loading } = useContext(AuthContext);
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -63,6 +66,28 @@ export default function Navbar({ openLoginModal, openSignupModal }) {
     closeMobileMenu();
   };
 
+  // Show loading state
+  if (loading) {
+    return (
+      <nav className="navbar">
+        <div className="navbar-left">
+          <Link to="/" className="brand">
+            Booking_Hall
+          </Link>
+        </div>
+        <div className="navbar-right">
+          <div className="loading-spinner">Loading...</div>
+        </div>
+      </nav>
+    );
+  }
+
+  // Show logged-in navbar
+  if (isAuthenticated) {
+    return <LoggedInNavbar />;
+  }
+
+  // Show logged-out navbar
   return (
     <>
       <nav className="navbar">

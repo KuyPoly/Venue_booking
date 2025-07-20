@@ -26,6 +26,16 @@
   margin-bottom: 20px;
 }
 
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  border: 1px solid #f5c6cb;
+}
+
 .modal-box input {
   width: 100%;
   padding: 10px;
@@ -33,6 +43,13 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 14px;
+  box-sizing: border-box;
+}
+
+.modal-box input:focus {
+  outline: none;
+  border-color: #001F54;
+  box-shadow: 0 0 0 2px rgba(0, 31, 84, 0.1);
 }
 
 .login-btn1 {
@@ -44,6 +61,17 @@
   border-radius: 8px;
   font-weight: bold;
   margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-btn1:hover {
+  background-color: #001a5e;
+}
+
+.login-btn1:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
 }
 
 .switch-register {
@@ -64,4 +92,10 @@
   border: none;
   font-size: 20px;
   cursor: pointer;
+  color: #666;
+  transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #333;
 }

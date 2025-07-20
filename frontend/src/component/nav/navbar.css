@@ -85,6 +85,144 @@
   opacity: 0.9;
 }
 
+/* Logged-in navbar styles */
+.navbar-icons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-icon {
+  color: #1a1a75;
+  font-size: 18px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.nav-icon:hover {
+  color: #001d7d;
+  background-color: #f0f0f0;
+}
+
+.user-menu-container {
+  position: relative;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #001d7d;
+  color: white;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.user-avatar:hover {
+  background-color: #001a5e;
+  transform: scale(1.05);
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  z-index: 1001;
+  overflow: hidden;
+}
+
+.user-info {
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.user-name {
+  font-weight: bold;
+  color: #1a1a75;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.user-email {
+  color: #6c757d;
+  font-size: 12px;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: #e9ecef;
+  margin: 0;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: #1a1a75;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.dropdown-item i {
+  font-size: 16px;
+  width: 16px;
+}
+
+.logout-btn {
+  color: #dc3545 !important;
+}
+
+.logout-btn:hover {
+  background-color: #f8d7da !important;
+}
+
+.logout-btn-mobile {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.loading-spinner {
+  color: #1a1a75;
+  font-size: 14px;
+}
+
 /* Hamburger Menu */
 .hamburger {
   display: none;

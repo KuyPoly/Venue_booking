@@ -1,0 +1,117 @@
+/* Auth Forms Styling */
+.login-form,
+.signup-form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 30px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.login-form h2,
+.signup-form h2 {
+  text-align: center;
+  color: #1a1a75;
+  margin-bottom: 30px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  border: 1px solid #f5c6cb;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.form-row input {
+  flex: 1;
+}
+
+.login-form input,
+.signup-form input,
+.signup-form textarea,
+.signup-form select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-bottom: 15px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.login-form input:focus,
+.signup-form input:focus,
+.signup-form textarea:focus,
+.signup-form select:focus {
+  outline: none;
+  border-color: #001d7d;
+  box-shadow: 0 0 0 2px rgba(0, 29, 125, 0.1);
+}
+
+.signup-form textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+}
+
+.signup-form select {
+  background-color: white;
+  cursor: pointer;
+}
+
+.login-form button,
+.signup-form button {
+  width: 100%;
+  background-color: #001d7d;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-form button:hover,
+.signup-form button:hover {
+  background-color: #001a5e;
+}
+
+.login-form button:disabled,
+.signup-form button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .login-form,
+  .signup-form {
+    margin: 20px;
+    padding: 20px;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .login-form h2,
+  .signup-form h2 {
+    font-size: 20px;
+  }
+} 

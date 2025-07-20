@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../migrations/database/db');
+const sequelize = require('../database/sequelize');
 
 const User = sequelize.define('User', {
   user_id: {
@@ -46,6 +46,7 @@ const User = sequelize.define('User', {
   role: {
     type: DataTypes.ENUM('customer', 'owner'),
     allowNull: false,
+    defaultValue: 'customer',
   },
 }, {
   timestamps: true,

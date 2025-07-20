@@ -3,7 +3,7 @@ import Hero from '../../component/HomePage/Hero';
 import CategorySection from '../../component/HomePage/venue_card'; // ✅ adjust path
 import Featured from '../../component/HomePage/Featured'; // ✅ adjust path
 import DiscoverAndBook from '../../component/HomePage/DiscoverAndBook';
-import SignupModal from '../../components/SignupModal';
+import SignupModal from '../../component/SignupModal/SignupModal';
 
 export default function Home() {
   const [showSignup, setShowSignup] = useState(false);
