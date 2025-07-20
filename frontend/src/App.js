@@ -12,6 +12,7 @@ import VenuesList from './page/VenuesList/VenuesList';
 import LoginModal from './component/LoginModal/LoginModal';
 import SignupModal from './component/SignupModal/SignupModal';
 import Favorites from './page/Favorites/Favorites';
+import Listing from './page/Listing/Listing';
 
 function App() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -54,6 +55,7 @@ function App() {
             <Route path="/room/:id" element={<RoomDetails />} />
             <Route path="/venues" element={<VenuesList />} />
             <Route path="/favorites" element={<Favorites />} />
+            <Route path="/be-owner" element={<Listing />} />
           </Routes>
           <Footer />
           {isLoginModalOpen && <LoginModal onClose={closeLoginModal} onSwitchToSignup={handleSwitchToSignup} />}
