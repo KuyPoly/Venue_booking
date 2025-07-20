@@ -5,6 +5,11 @@ require('dotenv').config();
 const sequelize = require('./database/sequelize');
 // Import associations to ensure relationships work
 require('./model/Association');
+// Import Owner Dashboard
+const bookingRoutes = require('./routes/booking');
+const messageRoutes = require('./routes/message');
+const listingRoutes = require('./routes/listing');
+const walletRoutes = require('./routes/wallet');
 
 const app = express();
 const PORT = 5000; // Changed back to 5000
@@ -36,6 +41,12 @@ app.use('/', (req, res, next) => {
 app.use(authRoutes); // Handles /register, /login, /profile
 app.use(venueRoutes); // Handles /venues, /categories, etc.
 app.use(favoriteRoutes); // Handles /favorites
+
+// Owner Routes
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/messages', messageRoutes);
+app.use('/api/listings', listingRoutes);
+app.use('/api/wallet', walletRoutes);
 
 // Start server
 app.listen(PORT, () => {
