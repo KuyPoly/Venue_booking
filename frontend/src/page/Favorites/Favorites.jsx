@@ -114,6 +114,22 @@ export default function Favorites() {
     return categoryIcons[categoryName?.toLowerCase()] || '🏢';
   };
 
+  const handleRemoveFavorite = async (venueId, e) => {
+    e.stopPropagation(); // Prevent card click
+    if (!token) return;
+    try {
+      const response = await fetch(`http://localhost:5000/favorites/${venueId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (response.ok) {
+        setFavorites(prev => prev.filter(v => v.id !== venueId));
+      }
+    } catch (error) {
+      // Optionally show an error message
+    }
+  };
+
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -290,7 +306,14 @@ export default function Favorites() {
                 <p className="venue-capacity">👥 {venue.capacity} guests</p>
                 <p className="venue-price">{formatPrice(venue.price)}</p>
                 <div className="venue-footer">
-                  <span className='like liked' title="Favorite">❤️</span>
+                  <span
+                    className='like liked'
+                    title="Remove from Favorites"
+                    onClick={(e) => handleRemoveFavorite(venue.id, e)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    ❤️
+                  </span>
                   {venue.categories && venue.categories.length > 0 && (
                     <span className="venue-categories">
                       {venue.categories.slice(0, 2).map(cat => (
