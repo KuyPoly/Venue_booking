@@ -90,6 +90,15 @@ export default function LoggedInNavbar() {
             <Link to="/" className="nav-link">Home</Link>
             <a href="#about" className="nav-link">About Us</a>
             <Link to="/venues" className="nav-link">Venue</Link>
+            
+            {/* Conditional rendering based on user role */}
+            {user?.role === 'customer' ? (
+              <Link to="/be-owner" className="nav-link">List Your Venue</Link>
+            ) : user?.role === 'owner' ? (
+              <Link to="/my-venue" className="nav-link">My Venues</Link>
+            ) : (
+              <Link to="/be-owner" className="nav-link">List Your Venue</Link>
+            )}
           </div>
           
           <div className="navbar-icons">
@@ -159,8 +168,24 @@ export default function LoggedInNavbar() {
           About Us
         </a>
         <Link to="/venues" className="nav-link" onClick={closeMobileMenu}>
-          List Venue
+          Venues
         </Link>
+        
+        {/* Conditional rendering for mobile menu too */}
+        {user?.role === 'customer' ? (
+          <Link to="/be-owner" className="nav-link" onClick={closeMobileMenu}>
+            List Your Venue
+          </Link>
+        ) : user?.role === 'owner' ? (
+          <Link to="/my-venue" className="nav-link" onClick={closeMobileMenu}>
+            My Venues
+          </Link>
+        ) : (
+          <Link to="/be-owner" className="nav-link" onClick={closeMobileMenu}>
+            List Your Venue
+          </Link>
+        )}
+        
         <Link to="/favorites" className="nav-icon" onClick={closeMobileMenu} title="Favorites">
           <FaHeart />
         </Link>
@@ -176,4 +201,4 @@ export default function LoggedInNavbar() {
       </div>
     </>
   );
-} 
+}

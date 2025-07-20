@@ -4,8 +4,7 @@ import './SignupModal.css';
 
 const SignupModal = ({ onClose, onSwitchToLogin }) => {
   const { login } = useContext(AuthContext);
-  // Remove role state and role-switch UI
-  // const [role, setRole] = useState('customer');
+  const [role, setRole] = useState('customer'); // Add role state back
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -41,7 +40,7 @@ const SignupModal = ({ onClose, onSwitchToLogin }) => {
           dob: form.dob,
           address: form.address,
           gender: form.gender,
-          role: 'customer' // Always register as customer
+          role: role // Use selected role instead of hardcoded 'customer'
         }),
       });
 
@@ -90,8 +89,23 @@ const SignupModal = ({ onClose, onSwitchToLogin }) => {
 
         {error && <div className="error-message">{error}</div>}
 
-        {/* Remove role-switch UI */}
-        {/* <div className="role-switch"> ... </div> */}
+        {/* Add role selection UI back */}
+        <div className="role-switch">
+          <button 
+            type="button"
+            className={role === 'customer' ? 'active' : ''} 
+            onClick={() => setRole('customer')}
+          >
+            Customer
+          </button>
+          <button 
+            type="button"
+            className={role === 'owner' ? 'active' : ''} 
+            onClick={() => setRole('owner')}
+          >
+            Venue Owner
+          </button>
+        </div>
 
         <div className="input-group">
           <input
