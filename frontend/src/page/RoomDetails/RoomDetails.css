@@ -306,3 +306,221 @@
 .continue-btn:hover {
   background: #1a237e;
 }
+/* --- Gallery Card Layout --- */
+.room-gallery-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.13);
+  padding: 32px 32px 24px 32px;
+  width: 650px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0;
+}
+.main-gallery-image {
+  position: relative;
+  width: 560px;
+  height: 320px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  border-radius: 14px;
+  background: #f7f8fa;
+}
+.main-gallery-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1.5px solid #e3e7f1;
+}
+.gallery-thumbnails {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 22px;
+  justify-content: center;
+}
+.gallery-thumbnails img {
+  width: 110px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #eee;
+  cursor: pointer;
+  transition: border 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+}
+.gallery-thumbnails img.selected {
+  border: 2.5px solid #1a237e;
+  box-shadow: 0 2px 8px rgba(26,35,126,0.10);
+}
+.venue-info-card {
+  width: 100%;
+  margin-top: 10px;
+  text-align: left;
+  padding: 0 8px;
+}
+.venue-info-card h2 {
+  color: #1a237e;
+  font-size: 2rem;
+  margin-bottom: 6px;
+}
+.venue-meta {
+  display: flex;
+  gap: 24px;
+  font-weight: 600;
+  color: #0a1857;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+}
+.venue-price {
+  font-size: 1.2rem;
+}
+.venue-location {
+  font-size: 1.05rem;
+  color: #444;
+}
+.venue-description {
+  color: #444;
+  font-size: 1.05rem;
+  margin-bottom: 18px;
+  margin-top: 6px;
+}
+.room-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+.feature-tag {
+  background: #e3e7f1;
+  color: #1a237e;
+  padding: 8px 18px;
+  border-radius: 7px;
+  box-shadow: 0 0px 4px rgba(0,0,0,0.08);
+  font-size: 1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+}
+.feature-tag {
+  background: #e3e7f1;
+  color: #1a237e;
+  border-radius: 6px;
+  font-weight: 540;
+  width: 155px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 6px;
+  margin-right: 10px;
+  box-sizing: border-box;
+}
+/* --- Carousel Navigation Buttons --- */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.8);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #1a237e;
+  cursor: pointer;
+  z-index: 2;
+  transition: background 0.2s;
+}
+.carousel-btn:hover {
+  background: #e3e7f1;
+}
+.carousel-btn.left {
+  left: 8px;
+}
+.carousel-btn.right {
+  right: 8px;
+}
+.back-btn {
+  position: absolute;
+  top: 24px;
+  left: 32px;
+  z-index: 10;
+  background: #fff;
+  color: #1a237e;
+  border: 1.5px solid #e3e7f1;
+  border-radius: 24px;
+  padding: 8px 18px 8px 12px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.back-btn:hover {
+  background: #e3e7f1;
+  color: #0a1857;
+}
+.room-gallery-info {
+  position: relative;
+}
+
+.top-left-back-btn {
+  position: fixed;
+  top: 72px; /* moved down to avoid navbar overlap */
+  left: 32px;
+  z-index: 100;
+  background: #fff;
+  color: #1a237e;
+  border: 1.5px solid #e3e7f1;
+  border-radius: 24px;
+  padding: 8px 18px 8px 12px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.top-left-back-btn:hover {
+  background: #e3e7f1;
+  color: #0a1857;
+}
+
+.venue-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.favorite-icon {
+  font-size: 1.5rem; /* reduced from 2rem */
+  color: #1a237e;
+  transition: color 0.2s;
+  margin-left: 12px;
+}
+.favorite-icon.filled {
+  color: #43d13a;
+}
+.like {
+  display: flex;
+  align-items: center;
+}
+.like.liked .favorite-icon {
+  color: #43d13a;
+}

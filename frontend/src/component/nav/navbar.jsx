@@ -101,7 +101,7 @@ export default function Navbar({ openLoginModal, openSignupModal }) {
           <div className="navbar-links">
             <Link to="/" className="nav-link">Home</Link>
             <a href="#about" className="nav-link">About Us</a>
-            <Link to="/venues" className="nav-link">List Venue</Link>
+            <Link to="/venues" className="nav-link">Venue</Link>
             {/* No Favorites link for guests */}
           </div>
           <div className="navbar-buttons">
