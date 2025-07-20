@@ -21,12 +21,12 @@ export default function Login() {
 
     try {
       const res = await fetch('http://localhost:5000/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      });
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
+    });
       
-      const data = await res.json();
+    const data = await res.json();
       
       if (!res.ok) {
         throw new Error(data.error || 'Login failed');

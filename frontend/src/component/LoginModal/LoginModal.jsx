@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import './LoginModal.css';
 
-const LoginModal = ({ onClose }) => {
+const LoginModal = ({ onClose, onSwitchToSignup }) => {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
   const [email, setEmail] = useState('');
@@ -13,7 +13,7 @@ const LoginModal = ({ onClose }) => {
 
   const handleRegisterClick = () => {
     onClose();
-    navigate('/signup');
+    if (onSwitchToSignup) onSwitchToSignup();
   };
 
   const handleLogin = async () => {
@@ -79,7 +79,7 @@ const LoginModal = ({ onClose }) => {
           {loading ? 'Logging In...' : 'Login'}
         </button>
         <p className="switch-register">
-          Don't have an account? <span onClick={handleRegisterClick} style={{cursor: 'pointer', color: '#003366'}}>Register</span>
+          Not yet have an account? <span onClick={handleRegisterClick} style={{cursor: 'pointer', color: '#003366'}}>Sign up</span>
         </p>
         <button className="close-btn" onClick={onClose}>✖</button>
       </div>

@@ -5,6 +5,7 @@ module.exports = {
     await queryInterface.bulkInsert('hall', [
       // Halls owned by Jane Smith (user_id: 2)
       {
+        name: 'Crystal Palace',
         type: 'Wedding Hall',
         description: 'Elegant wedding hall with crystal chandeliers and marble floors.',
         location: '123 Celebration Ave, Downtown',
@@ -17,6 +18,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
+        name: 'Summit Center',
         type: 'Conference Hall',
         description: 'Modern conference hall with state-of-the-art AV equipment.',
         location: '456 Business District, Corporate Plaza',
@@ -29,6 +31,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
+        name: 'Boardroom One',
         type: 'Meeting Room',
         description: 'Intimate meeting room perfect for small business gatherings.',
         location: '789 Office Park, Suite 100',
@@ -41,6 +44,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
+        name: 'Groove Hall',
         type: 'Party Hall',
         description: 'Vibrant party hall with dance floor and sound system.',
         location: '321 Party Lane, Entertainment District',
@@ -53,6 +57,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
+        name: 'Artisan Studio',
         type: 'Workshop Space',
         description: 'Creative workshop space with flexible seating arrangements.',
         location: '654 Creative St, Arts District',
@@ -67,6 +72,7 @@ module.exports = {
       
       // Halls owned by Mike Johnson (user_id: 3)
       {
+        name: 'Grand Ballroom',
         type: 'Grand Ballroom',
         description: 'Luxurious grand ballroom for upscale events and weddings.',
         location: '987 Grand Ave, Luxury District',
@@ -79,6 +85,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
+        name: 'Executive Suite',
         type: 'Executive Conference',
         description: 'Premium executive conference room with leather seating.',
         location: '147 Executive Blvd, Financial District',
@@ -91,6 +98,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
+        name: 'Birthday Bash Hall',
         type: 'Birthday Party Hall',
         description: 'Fun and colorful hall perfect for birthday celebrations.',
         location: '258 Birthday Blvd, Family District',
@@ -103,6 +111,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
+        name: 'SkillUp Lab',
         type: 'Training Workshop',
         description: 'Professional training space with whiteboards and projectors.',
         location: '369 Training Ave, Education District',
@@ -115,6 +124,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
+        name: 'Garden Bliss',
         type: 'Garden Wedding Venue',
         description: 'Beautiful outdoor garden venue for romantic weddings.',
         location: '741 Garden Way, Countryside',
@@ -129,6 +139,7 @@ module.exports = {
 
       // Halls owned by David Brown (user_id: 5)
       {
+        name: 'Corporate Auditorium',
         type: 'Corporate Auditorium',
         description: 'Large auditorium for corporate presentations and seminars.',
         location: '852 Corporate Dr, Business Park',
@@ -141,6 +152,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
+        name: 'Cocktail Lounge',
         type: 'Cocktail Lounge',
         description: 'Sophisticated lounge for cocktail parties and networking.',
         location: '963 Cocktail St, Nightlife District',
@@ -153,6 +165,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
+        name: 'Art Workshop Studio',
         type: 'Art Workshop Studio',
         description: 'Creative studio space for art workshops and classes.',
         location: '159 Artist Ave, Creative Quarter',
@@ -165,6 +178,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
+        name: 'Boardroom Elite',
         type: 'Boardroom Elite',
         description: 'Premium boardroom for high-level executive meetings.',
         location: '753 Executive Tower, Floor 20',
@@ -177,6 +191,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
+        name: 'Skyline Deck',
         type: 'Rooftop Party Deck',
         description: 'Stunning rooftop venue with city skyline views.',
         location: '486 Skyline Blvd, Tower District',
@@ -189,6 +204,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
+        name: 'Vintage Chapel',
         type: 'Vintage Wedding Chapel',
         description: 'Charming vintage chapel for intimate wedding ceremonies.',
         location: '357 Chapel Hill, Historic District',
@@ -201,6 +217,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
+        name: 'Tech Lab',
         type: 'Tech Innovation Lab',
         description: 'Modern workshop space equipped with latest technology.',
         location: '864 Innovation Dr, Tech Park',
@@ -213,6 +230,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
+        name: 'Community Center',
         type: 'Community Center Hall',
         description: 'Versatile community hall for various local events.',
         location: '975 Community Blvd, Residential Area',
@@ -225,6 +243,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
+        name: 'Luxury Banquet',
         type: 'Luxury Banquet Hall',
         description: 'Opulent banquet hall with gold accents and crystal fixtures.',
         location: '123 Luxury Lane, Upscale District',
@@ -237,6 +256,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
+        name: 'Startup Space',
         type: 'Startup Meetup Space',
         description: 'Casual meeting space perfect for startup gatherings.',
         location: '456 Startup St, Innovation Hub',

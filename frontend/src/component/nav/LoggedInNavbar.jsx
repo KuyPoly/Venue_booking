@@ -89,7 +89,7 @@ export default function LoggedInNavbar() {
           <div className="navbar-links">
             <Link to="/" className="nav-link">Home</Link>
             <a href="#about" className="nav-link">About Us</a>
-            <a href="#list-venue" className="nav-link">List Venue</a>
+            <Link to="/venues" className="nav-link">List Venue</Link>
           </div>
           
           <div className="navbar-icons">
@@ -158,13 +158,13 @@ export default function LoggedInNavbar() {
         <a href="#about" className="nav-link" onClick={closeMobileMenu}>
           About Us
         </a>
-        <a href="#list-venue" className="nav-link" onClick={closeMobileMenu}>
+        <Link to="/venues" className="nav-link" onClick={closeMobileMenu}>
           List Venue
-        </a>
-        <Link to="/favorites" className="nav-link" onClick={closeMobileMenu}>
-          Favorites
         </Link>
-        <Link to="/bookings" className="nav-link" onClick={closeMobileMenu}>
+        <Link to="/favorites" className="nav-icon" onClick={closeMobileMenu} title="Favorites">
+          <FaHeart />
+        </Link>
+        <Link to="/my-bookings" className="nav-link" onClick={closeMobileMenu}>
           My Bookings
         </Link>
         <Link to="/profile" className="nav-link" onClick={closeMobileMenu}>

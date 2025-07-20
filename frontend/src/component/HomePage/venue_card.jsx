@@ -1,52 +1,243 @@
-import React from 'react';
-import pancakes from '../../assets/image1.png'; // Use placeholder image
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import pancakes from '../../assets/image1.png'; // Fallback image
+import { AuthContext } from '../../context/AuthContext';
+import FavoriteModal from './FavoriteModal';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
-
-const categories = [
-  { icon: '👥', label: 'Meeting' },
-  { icon: '🛠️', label: 'Work Shop' },
-  { icon: '💍', label: 'Weeding' },
-  { icon: '🎉', label: 'Party' }
-];
-
-const venues = [
-  { id: 1, location: 'Phnom Penh', guests: 500, image: pancakes },
-  { id: 2, location: 'Phnom Penh', guests: 500, image: pancakes },
-  { id: 3, location: 'Phnom Penh', guests: 500, image: pancakes },
-  { id: 4, location: 'Phnom Penh', guests: 500, image: pancakes },
-];
+const categoryIcons = {
+  meeting: '👥',
+  workshop: '🛠️',
+  wedding: '💍',
+  party: '🎉'
+};
 
 export default function CategorySection() {
+  const [categories, setCategories] = useState([]);
+  const [venues, setVenues] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [favoriteIds, setFavoriteIds] = useState([]);
+  const [showFavoriteModal, setShowFavoriteModal] = useState(false);
+  const navigate = useNavigate();
+  const { isAuthenticated, token } = useContext(AuthContext);
+
+  // Fetch categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/categories');
+        const data = await response.json();
+        setCategories(data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Fetch venues
+  useEffect(() => {
+    const fetchVenues = async () => {
+      setLoading(true);
+      try {
+        const url = selectedCategory 
+          ? `http://localhost:5000/venues?category=${selectedCategory}`
+          : 'http://localhost:5000/venues';
+        const response = await fetch(url);
+        const data = await response.json();
+        setVenues(data);
+      } catch (error) {
+        console.error('Error fetching venues:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchVenues();
+  }, [selectedCategory]);
+
+  // Fetch favorites for logged-in user
+  const fetchFavorites = async () => {
+    if (!isAuthenticated || !token) {
+      setFavoriteIds([]);
+      return;
+    }
+    try {
+      const response = await fetch('http://localhost:5000/favorites', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setFavoriteIds(data.map(v => v.id));
+      }
+    } catch (error) {
+      setFavoriteIds([]);
+    }
+  };
+
+  useEffect(() => {
+    fetchFavorites();
+  }, [isAuthenticated, token]);
+
+  const handleCategoryClick = (categoryName) => {
+    setSelectedCategory(selectedCategory === categoryName ? null : categoryName);
+  };
+
+  const handleVenueClick = (venueId) => {
+    navigate(`/room/${venueId}`);
+  };
+
+  const handleFavoriteClick = async (e, venueId) => {
+    e.stopPropagation();
+    if (!isAuthenticated) {
+      setShowFavoriteModal(true);
+      return;
+    }
+    // Toggle favorite
+    if (favoriteIds.includes(venueId)) {
+      // Remove
+      await fetch(`http://localhost:5000/favorites/${venueId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+    } else {
+      // Add
+      await fetch('http://localhost:5000/favorites', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ hallId: venueId })
+      });
+    }
+    // Always re-fetch after change
+    fetchFavorites();
+  };
+
+  const handleSeeMore = () => {
+    const categoryParam = selectedCategory ? `?category=${selectedCategory}` : '';
+    navigate(`/venues${categoryParam}`);
+  };
+
+  const handleCategorySeeMore = (categoryName, event) => {
+    event.stopPropagation();
+    navigate(`/venues?category=${categoryName}`);
+  };
+
+  const getCategoryIcon = (categoryName) => {
+    return categoryIcons[categoryName.toLowerCase()] || '🏢';
+  };
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
+  };
+
+  if (loading && venues.length === 0) {
+    return (
+      <div className="category-section">
+        <div className="loading">Loading venues...</div>
+      </div>
+    );
+  }
+
+  // Show only first 8 venues (2 rows x 4 columns)
+  const venuesToShow = venues.slice(0, 8);
+  const hasMoreVenues = venues.length > 8;
+
   return (
     <div className="category-section">
+      <FavoriteModal open={showFavoriteModal} onClose={() => setShowFavoriteModal(false)} />
       <div className="categories">
-        {categories.map((cat, i) => (
-          <div key={i} className="category-item">
-            <span className="category-icon">{cat.icon}</span>
-            <p>{cat.label}</p>
+        {categories.map((category) => (
+          <div 
+            key={category.id} 
+            className={`category-item ${selectedCategory === category.name ? 'active' : ''}`}
+            onClick={() => handleCategoryClick(category.name)}
+          >
+            <span className="category-icon">{getCategoryIcon(category.name)}</span>
+            <p>{category.name.charAt(0).toUpperCase() + category.name.slice(1)}</p>
+            <button 
+              className="category-see-more-btn"
+              onClick={(e) => handleCategorySeeMore(category.name, e)}
+            >
+              See More
+            </button>
           </div>
         ))}
       </div>
 
-      <div className="venues">
-        {venues.map((venue) => (
-          <div key={venue.id} className="venue-card" onClick={() => window.location.href = `/room/${venue.id}` } style={{ cursor: 'pointer' }}>
-            <img src={venue.image} alt="venue" className="venue-img" />
-            <div className="venue-info">
-              <h4>{venue.location}</h4>
-              <p>👥 {venue.guests}</p>
-              <div className="venue-footer">
-                <span className='like'>♡</span>
-                <div className="stars">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i}>☆</span>
-                  ))}
+      <div className="venues-grid">
+        {venues.length === 0 ? (
+          <div className="no-venues">
+            <p>No venues found for this category.</p>
+          </div>
+        ) : (
+          <>
+            {venuesToShow.map((venue) => (
+              <div 
+                key={venue.id} 
+                className="venue-card" 
+                onClick={() => handleVenueClick(venue.id)}
+                style={{ cursor: 'pointer' }}
+              >
+                <img 
+                  src={venue.image || pancakes} 
+                  alt={venue.type} 
+                  className="venue-img"
+                  onError={(e) => {
+                    e.target.src = pancakes;
+                  }}
+                />
+                <div className="venue-info">
+                  <h3 className="venue-name">{venue.name}</h3>
+                  <p className="venue-location">{venue.location}</p>
+                  <p className="venue-type">{venue.type}</p>
+                  <p className="venue-capacity">👥 {venue.capacity} guests</p>
+                  <p className="venue-price">{formatPrice(venue.price)}</p>
+                  <div className="venue-footer">
+                    <span 
+                      className={`like${favoriteIds.includes(venue.id) ? ' liked' : ''}`}
+                      onClick={e => handleFavoriteClick(e, venue.id)}
+                      title={isAuthenticated ? (favoriteIds.includes(venue.id) ? 'Remove from favorites' : 'Add to favorites') : 'Login to favorite'}
+                    >
+                      {favoriteIds.includes(venue.id) ? (
+                        <FaHeart className="favorite-icon filled" />
+                      ) : (
+                        <FaRegHeart className="favorite-icon" />
+                      )}
+                    </span>
+                    {venue.categories && venue.categories.length > 0 && (
+                      <span className="venue-categories">
+                        {venue.categories.slice(0, 2).map(cat => (
+                          <span key={cat} className="category-tag">
+                            {getCategoryIcon(cat)} {cat}
+                          </span>
+                        ))}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        ))}
+            ))}
+          </>
+        )}
       </div>
+
+      {/* See More Button */}
+      {hasMoreVenues && (
+        <div className="see-more-container">
+          <button className="see-more-btn" onClick={handleSeeMore}>
+            <span className="see-more-text">See All Venues</span>
+            <span className="see-more-icon">→</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

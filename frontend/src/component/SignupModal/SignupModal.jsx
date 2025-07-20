@@ -2,9 +2,10 @@ import React, { useState, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import './SignupModal.css';
 
-const SignupModal = ({ onClose }) => {
+const SignupModal = ({ onClose, onSwitchToLogin }) => {
   const { login } = useContext(AuthContext);
-  const [role, setRole] = useState('customer');
+  // Remove role state and role-switch UI
+  // const [role, setRole] = useState('customer');
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -40,7 +41,7 @@ const SignupModal = ({ onClose }) => {
           dob: form.dob,
           address: form.address,
           gender: form.gender,
-          role: role
+          role: 'customer' // Always register as customer
         }),
       });
 
@@ -77,6 +78,11 @@ const SignupModal = ({ onClose }) => {
     }
   };
 
+  const handleLoginClick = () => {
+    onClose();
+    if (onSwitchToLogin) onSwitchToLogin();
+  };
+
   return (
     <div className="signup-overlay">
       <div className="signup-box">
@@ -84,20 +90,8 @@ const SignupModal = ({ onClose }) => {
 
         {error && <div className="error-message">{error}</div>}
 
-        <div className="role-switch">
-          <button
-            className={role === 'customer' ? 'active' : ''}
-            onClick={() => setRole('customer')}
-          >
-            👤 Customer
-          </button>
-          <button
-            className={role === 'owner' ? 'active' : ''}
-            onClick={() => setRole('owner')}
-          >
-            🧳 Owner
-          </button>
-        </div>
+        {/* Remove role-switch UI */}
+        {/* <div className="role-switch"> ... </div> */}
 
         <div className="input-group">
           <input
@@ -178,8 +172,9 @@ const SignupModal = ({ onClose }) => {
         </button>
 
         <p className="switch-login">
-          Already have an account? <span onClick={onClose}>Login</span>
+          Already have an account? <span onClick={handleLoginClick} style={{cursor: 'pointer', color: '#003366'}}>Login</span>
         </p>
+        <button className="close-btn" onClick={onClose}>✖</button>
       </div>
     </div>
   );

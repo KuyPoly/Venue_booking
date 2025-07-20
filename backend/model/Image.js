@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../migrations/database/db');
+const sequelize = require('../database/sequelize');
 const Hall = require('./Hall');
 
 const Image = sequelize.define('Image', {

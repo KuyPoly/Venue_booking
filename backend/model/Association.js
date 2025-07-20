@@ -37,3 +37,11 @@ Category.belongsToMany(Hall, { through: HallCategory, foreignKey: 'category_id',
 // User - Hall (Many-to-Many through Favorite)
 User.belongsToMany(Hall, { through: Favorite, foreignKey: 'user_id', otherKey: 'hall_id', as: 'favorite_halls' });
 Hall.belongsToMany(User, { through: Favorite, foreignKey: 'hall_id', otherKey: 'user_id', as: 'favorited_by_users' });
+
+// Each favorite belongs to a user and a hall
+Favorite.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+Favorite.belongsTo(Hall, { foreignKey: 'hall_id', as: 'hall' });
+
+// Optionally, if you want to get all favorites for a user or hall:
+User.hasMany(Favorite, { foreignKey: 'user_id', as: 'favorites' });
+Hall.hasMany(Favorite, { foreignKey: 'hall_id', as: 'favorites' });

@@ -8,8 +8,10 @@ import Signup from './component/auth/Signup';
 // import Login from './component/auth/Login';
 import Home from './page/Homepage/Home';
 import RoomDetails from './page/RoomDetails/RoomDetails';
+import VenuesList from './page/VenuesList/VenuesList';
 import LoginModal from './component/LoginModal/LoginModal';
 import SignupModal from './component/SignupModal/SignupModal';
+import Favorites from './page/Favorites/Favorites';
 
 function App() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -31,6 +33,15 @@ function App() {
     setIsSignupModalOpen(false);
   };
 
+  const handleSwitchToSignup = () => {
+    setIsLoginModalOpen(false);
+    setIsSignupModalOpen(true);
+  };
+  const handleSwitchToLogin = () => {
+    setIsSignupModalOpen(false);
+    setIsLoginModalOpen(true);
+  };
+
   return (
     <AuthProvider>
       <Router>
@@ -41,10 +52,12 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             {/* <Route path="/login" element={<Login />} /> */}
             <Route path="/room/:id" element={<RoomDetails />} />
+            <Route path="/venues" element={<VenuesList />} />
+            <Route path="/favorites" element={<Favorites />} />
           </Routes>
           <Footer />
-          {isLoginModalOpen && <LoginModal onClose={closeLoginModal} />}
-          {isSignupModalOpen && <SignupModal onClose={closeSignupModal} />}
+          {isLoginModalOpen && <LoginModal onClose={closeLoginModal} onSwitchToSignup={handleSwitchToSignup} />}
+          {isSignupModalOpen && <SignupModal onClose={closeSignupModal} onSwitchToLogin={handleSwitchToLogin} />}
         </div>
       </Router>
     </AuthProvider>

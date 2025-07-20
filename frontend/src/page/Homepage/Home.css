@@ -143,20 +143,103 @@
   text-align: center;
   color: #001d7d;
   cursor: pointer;
-  min-width: 80px;
+  min-width: 100px;
+  padding: 15px 10px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid transparent;
+}
+
+.category-item:hover {
+  background-color: rgba(0, 29, 125, 0.05);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  border-color: rgba(0, 29, 125, 0.2);
+}
+
+.category-item.active {
+  background-color: #001d7d;
+  color: white;
+  border-color: #001d7d;
 }
 
 .category-icon {
   font-size: 30px;
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 
-.venues {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+.category-item p {
+  margin: 8px 0 12px 0;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Category See More Button */
+.category-see-more-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.category-see-more-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.category-item.active .category-see-more-btn {
+  background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+  color: #001d7d;
+  box-shadow: 0 2px 6px rgba(255, 255, 255, 0.3);
+}
+
+.category-item.active .category-see-more-btn:hover {
+  background: linear-gradient(135deg, #f0f0f0 0%, #ffffff 100%);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.4);
+}
+
+/* 2x4 Grid Layout for Venues */
+.venues-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, auto);
   gap: 20px;
+  justify-content: center;
+  min-height: 200px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 18px;
+  color: #001d7d;
+}
+
+.no-venues {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 16px;
+  color: #666;
+  grid-column: 1 / -1;
 }
 
 .venue-card {
@@ -164,114 +247,298 @@
   border: 1px solid #dce1f5;
   border-radius: 12px;
   overflow: hidden;
-  width: 200px;
-  min-width: 180px;
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 280px;
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .venue-card:hover {
-  transform: scale(1.03);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .venue-img {
   width: 100%;
-  height: 130px;
+  height: 180px;
   object-fit: cover;
 }
 
 .venue-info {
-  padding: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  justify-content: space-between;
+  height: 100%;
 }
 
 .venue-info h4 {
-  margin: 0;
-  font-size: 16px;
+  margin: 0 0 8px 0;
+  font-size: 18px;
   color: #001d7d;
+  font-weight: bold;
 }
 
-.venue-info p {
+.venue-type {
   margin: 5px 0;
   font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.venue-capacity {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.venue-price {
+  margin: 8px 0;
+  font-size: 16px;
+  color: #001d7d;
+  font-weight: bold;
+}
+
+.venue-name {
+  margin: 0 0 4px 0;
+  font-size: 20px;
+  color: #001d7d;
+  font-weight: bold;
+  line-height: 1.2;
+}
+.venue-location {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+  line-height: 1.2;
 }
 
 .venue-footer {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
+  margin-top: auto;
+  min-height: 32px;
 }
 
-.stars span {
-  color: #001d7d;
-  font-size: 18px;
-}
 .venue-footer .like {
-  color: #001d7d;
-  font-size: 18px;
+  font-size: 20px;
+  color: #ff6b6b;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-/* Responsive Design */
+.venue-footer .like:hover {
+  transform: scale(1.2);
+  color: #ff4757;
+}
+
+.venue-categories {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  margin-left: auto;
+}
+
+.category-tag {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* See More Button Styles */
+.see-more-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  padding: 20px 0;
+}
+
+.see-more-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white !important;
+  border: none;
+  border-radius: 50px;
+  padding: 16px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.see-more-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.see-more-btn:hover::before {
+  left: 100%;
+}
+
+.see-more-btn:hover,
+.see-more-btn:active {
+  color: white !important;
+}
+
+.see-more-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.see-more-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.see-more-text {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.see-more-icon {
+  font-size: 18px;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+
+.see-more-btn:hover .see-more-icon {
+  transform: translateX(4px);
+}
+
+.favorite-icon {
+  font-size: 22px;
+  color: #bbb;
+  vertical-align: middle;
+  transition: color 0.2s;
+}
+.favorite-icon.filled {
+  color: #ff4757;
+}
+.like.liked .favorite-icon.filled {
+  color: #ff4757;
+}
+.like:hover .favorite-icon {
+  color: #ff6b6b;
+}
+
+@media (max-width: 1200px) {
+  .venues-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, auto);
+  }
+}
+
+@media (max-width: 900px) {
+  .venues-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, auto);
+  }
+}
+
 @media (max-width: 768px) {
   .home-container {
-    flex-direction: column;
     padding: 40px 5%;
-    text-align: center;
   }
-  
+
   .home-left {
     max-width: 100%;
-    margin-bottom: 30px;
   }
-  
+
   .home-title {
     font-size: 36px;
   }
-  
+
   .home-description {
     font-size: 16px;
   }
-  
+
   .home-buttons {
-    justify-content: center;
-    flex-wrap: wrap;
+    flex-direction: column;
   }
-  
+
   .hero {
     height: 400px;
   }
-  
+
   .hero-overlay {
-    padding: 30px 20px;
+    padding: 20px;
   }
-  
+
   .hero-title {
     font-size: 28px;
   }
-  
+
   .hero-subtitle {
     font-size: 16px;
   }
-  
+
   .search-box {
     flex-direction: column;
-    align-items: center;
   }
-  
+
   .search-box input {
-    width: 280px;
-    max-width: 90%;
+    width: 100%;
   }
-  
+
   .category-section {
-    padding: 20px 20px;
+    padding: 20px;
   }
-  
+
   .categories {
     gap: 20px;
   }
-  
+
+  .category-item {
+    min-width: 80px;
+    padding: 12px 8px;
+  }
+
+  .category-icon {
+    font-size: 24px;
+  }
+
+  .category-see-more-btn {
+    padding: 5px 10px;
+    font-size: 10px;
+  }
+
+  .venues-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, auto);
+    gap: 15px;
+  }
+
   .venue-card {
-    width: 180px;
+    max-width: 100%;
+  }
+
+  .see-more-btn {
+    padding: 14px 28px;
+    font-size: 15px;
   }
 }
 
@@ -279,53 +546,75 @@
   .home-container {
     padding: 20px 3%;
   }
-  
+
   .home-title {
     font-size: 28px;
   }
-  
+
   .home-description {
     font-size: 14px;
   }
-  
+
   .hero {
     height: 300px;
   }
-  
+
   .hero-overlay {
-    padding: 20px 15px;
+    padding: 15px;
   }
-  
+
   .hero-title {
     font-size: 24px;
   }
-  
+
   .hero-subtitle {
     font-size: 14px;
   }
-  
+
   .search-box input {
-    width: 250px;
+    padding: 10px;
   }
-  
+
   .category-section {
-    padding: 15px 15px;
+    padding: 15px;
   }
-  
+
   .categories {
     gap: 15px;
   }
-  
+
   .category-item {
     min-width: 60px;
+    padding: 10px 6px;
   }
-  
+
   .category-icon {
-    font-size: 24px;
+    font-size: 20px;
   }
-  
+
+  .category-item p {
+    font-size: 12px;
+    margin: 6px 0 8px 0;
+  }
+
+  .category-see-more-btn {
+    padding: 4px 8px;
+    font-size: 9px;
+  }
+
+  .venues-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(8, auto);
+    gap: 15px;
+  }
+
   .venue-card {
-    width: 160px;
-    min-width: 160px;
+    max-width: 100%;
+  }
+
+  .see-more-btn {
+    padding: 12px 24px;
+    font-size: 14px;
+    gap: 8px;
   }
 }

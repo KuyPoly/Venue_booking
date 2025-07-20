@@ -101,7 +101,8 @@ export default function Navbar({ openLoginModal, openSignupModal }) {
           <div className="navbar-links">
             <Link to="/" className="nav-link">Home</Link>
             <a href="#about" className="nav-link">About Us</a>
-            <a href="#list-venue" className="nav-link">List Venue</a>
+            <Link to="/venues" className="nav-link">List Venue</Link>
+            {/* No Favorites link for guests */}
           </div>
           <div className="navbar-buttons">
             <a href="#" className="login-btn" onClick={handleLoginClick}>Login</a>
@@ -128,9 +129,10 @@ export default function Navbar({ openLoginModal, openSignupModal }) {
         <a href="#about" className="nav-link" onClick={closeMobileMenu}>
           About Us
         </a>
-        <a href="#list-venue" className="nav-link" onClick={closeMobileMenu}>
+        <Link to="/venues" className="nav-link" onClick={closeMobileMenu}>
           List Venue
-        </a>
+        </Link>
+        {/* No Favorites link for guests */}
         <div className="navbar-buttons">
           <a href="#" className="login-btn" onClick={handleLoginClick}>
             Login

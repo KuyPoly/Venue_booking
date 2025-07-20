@@ -1,29 +1,21 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../migrations/database/db');
-const Booking = require('./Booking');
+const sequelize = require('../database/sequelize');
 const Hall = require('./Hall');
+const Booking = require('./Booking');
 
 const HallReservation = sequelize.define('HallReservation', {
-  hall_reservation_id: {
+  id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
   },
-  check_in: {
+  start_date: {
     type: DataTypes.DATE,
     allowNull: false,
   },
-  check_out: {
+  end_date: {
     type: DataTypes.DATE,
     allowNull: false,
-  },
-  booking_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Booking,
-      key: 'booking_id',
-    },
   },
   hall_id: {
     type: DataTypes.INTEGER,
@@ -33,17 +25,19 @@ const HallReservation = sequelize.define('HallReservation', {
       key: 'hall_id',
     },
   },
+  booking_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Booking,
+      key: 'booking_id',
+    },
+  },
 }, {
   timestamps: true,
   createdAt: 'created_at',
   updatedAt: 'updated_at',
   tableName: 'hall_reservation',
 });
-
-HallReservation.belongsTo(Booking, { foreignKey: 'booking_id', as: 'booking' });
-Booking.hasMany(HallReservation, { foreignKey: 'booking_id', as: 'hall_reservations' });
-
-HallReservation.belongsTo(Hall, { foreignKey: 'hall_id', as: 'hall' });
-Hall.hasMany(HallReservation, { foreignKey: 'hall_id', as: 'hall_reservations' });
 
 module.exports = HallReservation; 
