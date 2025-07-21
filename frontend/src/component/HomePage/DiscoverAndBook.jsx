@@ -1,6 +1,5 @@
 import React from 'react';
 import './DiscoverAndBook.css';
-// import '../../page/Homepage/Home.css'; // Import the CSS for styling
 import "./Home.css";
 
 const DiscoverAndBook = () => {
