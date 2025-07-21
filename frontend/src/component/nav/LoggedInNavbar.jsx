@@ -109,7 +109,7 @@ export default function LoggedInNavbar() {
             
             {/* Document icon for bookings - only show for customers */}
             {user?.role === 'customer' && (
-              <Link to="/my-bookings" className="nav-icon" title="My Bookings">
+              <Link to="/booking-history" className="nav-icon" title="My Bookings">
                 <FaFileAlt />
               </Link>
             )}

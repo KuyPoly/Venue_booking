@@ -55,9 +55,11 @@ const BookingDetails = () => {
   }
 
   const hall = booking.hall_reservations?.[0]?.hall;
+  const payment = booking.payment;
 
   return (
     <div className="booking-details-container">
+      <h1 className="page-title">Booking Confirmation</h1>
       <div className="booking-details-card">
         <div className="booking-details-image">
           <img 
@@ -65,12 +67,33 @@ const BookingDetails = () => {
             alt={hall?.name} 
           />
         </div>
-        <div className="booking-details-info">
-          <h1>{hall?.name || 'Venue Name'}</h1>
-          <p><strong>Location:</strong> {hall?.location}</p>
-          <p><strong>Booking Date:</strong> {new Date(booking.booking_date).toLocaleDateString()}</p>
-          <p><strong>Price:</strong> ${booking.total_amount}</p>
-          <p><strong>Status:</strong> <span className={`status-${booking.status}`}>{booking.status}</span></p>
+        <div className="booking-details-content">
+          <div className="venue-details">
+            <h2>{hall?.name || 'Venue Name'}</h2>
+            <p className="venue-location">{hall?.location}</p>
+          </div>
+
+          <hr className="divider" />
+
+          <div className="booking-info">
+            <h3>Booking Details</h3>
+            <div className="info-grid">
+              <p><strong>Booking ID:</strong></p><p>{booking.booking_id}</p>
+              <p><strong>Booking Date:</strong></p><p>{new Date(booking.booking_date).toLocaleDateString()}</p>
+              <p><strong>Total Amount:</strong></p><p>${booking.total_amount}</p>
+              <p><strong>Booking Status:</strong></p><p><span className={`status-badge status-${booking.status}`}>{booking.status}</span></p>
+            </div>
+          </div>
+          
+          {payment && (
+            <div className="payment-info">
+              <h3>Payment Information</h3>
+              <div className="info-grid">
+                <p><strong>Payment Method:</strong></p><p>{payment.payment_method}</p>
+                <p><strong>Payment Status:</strong></p><p><span className={`status-badge status-${payment.status}`}>{payment.status}</span></p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

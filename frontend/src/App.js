@@ -19,6 +19,8 @@ import Booking from './page/Booking/booking';
 import OwnerListings from './page/Listing/OwnerList';
 import Sidebar from './component/Owner/Sidebar';
 import Topbar from './component/Owner/Topbar';
+import BookingHistory from './page/BookingHistory/BookingHistory';
+import BookingDetails from './page/BookingDetails/BookingDetails';
 
 // Dashboard Layout without navbar/footer
 function DashboardLayout({ children }) {
@@ -178,6 +180,36 @@ function App() {
                 handleSwitchToLogin={handleSwitchToLogin}
               >
                 <Listing />
+              </RegularLayout>
+            } />
+            
+            <Route path="/booking-history" element={
+              <RegularLayout 
+                isLoginModalOpen={isLoginModalOpen}
+                isSignupModalOpen={isSignupModalOpen}
+                openLoginModal={openLoginModal}
+                openSignupModal={openSignupModal}
+                closeLoginModal={closeLoginModal}
+                closeSignupModal={closeSignupModal}
+                handleSwitchToSignup={handleSwitchToSignup}
+                handleSwitchToLogin={handleSwitchToLogin}
+              >
+                <BookingHistory />
+              </RegularLayout>
+            } />
+            
+            <Route path="/booking/:id" element={
+              <RegularLayout 
+                isLoginModalOpen={isLoginModalOpen}
+                isSignupModalOpen={isSignupModalOpen}
+                openLoginModal={openLoginModal}
+                openSignupModal={openSignupModal}
+                closeLoginModal={closeLoginModal}
+                closeSignupModal={closeSignupModal}
+                handleSwitchToSignup={handleSwitchToSignup}
+                handleSwitchToLogin={handleSwitchToLogin}
+              >
+                <BookingDetails />
               </RegularLayout>
             } />
             
