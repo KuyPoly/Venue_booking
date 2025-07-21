@@ -9,6 +9,7 @@ export default function Sidebar() {
     {
       section: 'MAIN',
       items: [
+        { to: '/', label: 'Home', icon: 'fas fa-home' },
         { to: '/dashboard', label: 'Dashboard', icon: 'fas fa-tachometer-alt' },
         { to: '/dashboard/bookings', label: 'Bookings', icon: 'fas fa-calendar-check' },
         { to: '/dashboard/listings', label: 'My Listings', icon: 'fas fa-home' },
