@@ -7,6 +7,7 @@ export default function ConfirmationOverlay({
   venue,
   date,
   guests,
+  totalPrice,
   onBackHome
 }) {
   if (!show) return null;
@@ -33,7 +34,7 @@ export default function ConfirmationOverlay({
               </tr>
               <tr>
                 <td className="confirmation-label">Total Pay</td>
-                <td className="confirmation-value">{venue?.price ? `$${Number(venue.price) * Number(guests)}` : '-'}</td>
+                <td className="confirmation-value">{totalPrice ? `$${totalPrice}` : '-'}</td>
               </tr>
             </tbody>
           </table>
