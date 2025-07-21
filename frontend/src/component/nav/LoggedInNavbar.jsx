@@ -107,16 +107,9 @@ export default function LoggedInNavbar() {
               <FaHeart />
             </Link>
             
-            {/* Document icon for bookings - only show for customers */}
-            {user?.role === 'customer' && (
+            {/* Document icon for bookings - visible to both customers and owners */}
+            {(user?.role === 'customer' || user?.role === 'owner') && (
               <Link to="/booking-history" className="nav-icon" title="My Bookings">
-                <FaFileAlt />
-              </Link>
-            )}
-            
-            {/* Dashboard icon for owners */}
-            {user?.role === 'owner' && (
-              <Link to="/dashboard" className="nav-icon" title="Dashboard">
                 <FaFileAlt />
               </Link>
             )}
@@ -199,8 +192,8 @@ export default function LoggedInNavbar() {
           Favorites
         </Link>
         
-        {user?.role === 'customer' && (
-          <Link to="/my-bookings" className="nav-link" onClick={closeMobileMenu}>
+        {(user?.role === 'customer' || user?.role === 'owner') && (
+          <Link to="/booking-history" className="nav-link" onClick={closeMobileMenu}>
             My Bookings
           </Link>
         )}
