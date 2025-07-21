@@ -11,7 +11,7 @@ import image3 from '../../assets/image3.png'; // Placeholder image
 import image4 from '../../assets/image4.png'; // Placeholder image
 import image5 from '../../assets/image5.png'; // Placeholder image
 import { AuthContext } from '../../context/AuthContext';
-import FavoriteModal from '../../component/HomePage/FavoriteModal';
+import SignupPopUp from '../../component/HomePage/SignupPopUp';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 const galleryImages = [
@@ -60,6 +60,7 @@ export default function RoomDetails() {
   const [favoriteIds, setFavoriteIds] = useState([]);
   const [showFavoriteModal, setShowFavoriteModal] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showSignupModal, setShowSignupModal] = useState(false);
 
   // Fetch favorites for logged-in user
   const fetchFavorites = async () => {
@@ -126,6 +127,10 @@ export default function RoomDetails() {
 
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
+    if (!isAuthenticated) {
+      setShowSignupModal(true);
+      return;
+    }
     setBookingLoading(true);
     setBookingError('');
     setBookingSuccess(false);
@@ -175,7 +180,7 @@ export default function RoomDetails() {
   return (
     <div className="room-details-container">
       <button className="top-left-back-btn" onClick={() => navigate(-1)} aria-label="Back"> <FaChevronLeft /> Back</button>
-      <FavoriteModal open={showFavoriteModal} onClose={() => setShowFavoriteModal(false)} />
+      <SignupPopUp open={showFavoriteModal} onClose={() => setShowFavoriteModal(false)} />
       <div className="room-main-content">
         {/* Left: Images and Venue Info */}
         <div className="room-gallery-info">
@@ -233,35 +238,7 @@ export default function RoomDetails() {
         {!showPayment ? (
           <div className="room-booking-form">
             <h3>Booking Hall</h3>
-              <form onSubmit={async e => {
-                e.preventDefault();
-                setBookingLoading(true);
-                setBookingError('');
-                setBookingSuccess(false);
-                try {
-                  const response = await fetch('http://localhost:5000/bookings', {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                      date,
-                      startTime,
-                      endTime,
-                      guests,
-                    }),
-                  });
-                  if (!response.ok) throw new Error('Booking failed');
-                  const result = await response.json();
-                  setBookingId(result.booking && result.booking.booking_id);
-                  setBookingSuccess(true);
-                  setShowPayment(true);
-                } catch (err) {
-                  setBookingError('Booking failed. Please try again.');
-                } finally {
-                  setBookingLoading(false);
-                }
-              }}>
+              <form onSubmit={handleBookingSubmit}>
               <label>Date</label>
               <input type="date" value={date} onChange={e => setDate(e.target.value)} required />
               <div className="time-row">
@@ -415,6 +392,7 @@ export default function RoomDetails() {
   guests={guests}
   onBackHome={() => window.location.href = '/'}
 />
+<SignupPopUp open={showSignupModal} onClose={() => setShowSignupModal(false)} />
     </div>
   );
 }

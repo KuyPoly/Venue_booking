@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import pancakes from '../../assets/image1.png';
 import './VenuesList.css';
 import { AuthContext } from '../../context/AuthContext';
-import FavoriteModal from '../../component/HomePage/FavoriteModal';
+import SignupPopUp from '../../component/HomePage/SignupPopUp';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 const categoryIcons = {
@@ -234,7 +234,7 @@ export default function VenuesList() {
 
   return (
     <div className="venues-list-container">
-      <FavoriteModal open={showFavoriteModal} onClose={() => setShowFavoriteModal(false)} />
+      <SignupPopUp open={showFavoriteModal} onClose={() => setShowFavoriteModal(false)} />
       <div className="venues-header">
         <h1>{selectedCategory ? `${selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1)} Venues` : 'All Venues'}</h1>
         <p>Discover the perfect venue for your next event</p>
