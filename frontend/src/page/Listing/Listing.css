@@ -124,7 +124,7 @@
   justify-content: center;
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #1a1a75;
   border-radius: 12px;
   margin-bottom: 20px;
 }
@@ -158,7 +158,7 @@
 
 .feature-card li::before {
   content: '•';
-  color: #667eea;
+  color: #1a1a75;
   font-weight: bold;
   position: absolute;
   left: 0;
@@ -191,7 +191,7 @@
 
 .quote-icon {
   font-size: 4rem;
-  color: #667eea;
+  color: #1a1a75;
   position: absolute;
   top: 10px;
   left: 30px;

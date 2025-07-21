@@ -137,7 +137,7 @@
 /* Register Button */
 .register-btn {
   width: 100%;
-  background: linear-gradient(135deg, #1a1a75 0%, #2563eb 100%);
+  background: #1a1a75;
   color: white;
   padding: 16px;
   margin-top: 20px;

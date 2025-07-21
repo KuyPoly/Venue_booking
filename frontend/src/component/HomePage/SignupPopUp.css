@@ -24,7 +24,7 @@
 }
 
 .favorite-modal-close {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #1a1a75;
   color: white;
   border: none;
   border-radius: 8px;
@@ -36,5 +36,5 @@
 }
 
 .favorite-modal-close:hover {
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  background: #1a1a75
 } 

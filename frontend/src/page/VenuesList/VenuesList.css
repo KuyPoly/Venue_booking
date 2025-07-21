@@ -95,7 +95,7 @@
 }
 
 .filter-toggle-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #1a1a75;
   color: white;
   border: none;
   border-radius: 8px;
@@ -113,7 +113,7 @@
 .filter-toggle-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  background: #1a1a75;
 }
 
 .filter-icon {
@@ -223,7 +223,7 @@
   -webkit-appearance: none;
   width: 20px;
   height: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #1a1a75;
   border-radius: 50%;
   cursor: pointer;
   pointer-events: auto;
@@ -239,7 +239,7 @@
 .range-input::-moz-range-thumb {
   width: 20px;
   height: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #1a1a75;
   border-radius: 50%;
   cursor: pointer;
   border: none;
@@ -403,7 +403,7 @@
 }
 
 .category-tag {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #1a1a75;
   color: white;
   padding: 4px 8px;
   border-radius: 12px;
@@ -423,7 +423,7 @@
 }
 
 .pagination-btn {
-  background: linear-gradient(135deg, #001d7d 0%, #0032cc 100%);
+  background: #1a1a75;
   color: white;
   border: none;
   border-radius: 8px;
@@ -438,7 +438,7 @@
 .pagination-btn:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(0, 29, 125, 0.4);
-  background: linear-gradient(135deg, #0032cc 0%, #0044ff 100%);
+  background: #1a1a75;
 }
 
 .pagination-btn:disabled {

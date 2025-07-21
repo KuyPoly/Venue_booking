@@ -87,8 +87,8 @@
 
 .see-more-btn {
   background-color: #fff;
-  border: 2px solid #a37c59;
-  color: #a37c59;
+  border: 2px solid #1a1a75;
+  color: #f9faff;
   font-weight: bold;
   padding: 10px 24px;
   border-radius: 8px;
@@ -98,6 +98,6 @@
 }
 
 .see-more-btn:hover {
-  background-color: #a37c59;
+  background-color: #1a1a75;
   color: #fff;
 }

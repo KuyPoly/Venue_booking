@@ -78,23 +78,23 @@
   position: relative;
   text-align: center;
   background-color: rgba(0, 0, 0, 0.4);
-  padding: 40px;
+  padding: 170px;
   width: 100%;
-  max-width: 900px;
+  height: 100%;
 }
 
 .hero-title {
   font-size: 36px;
   font-style: italic;
-  font-weight: 600;
-  margin-bottom: 15px;
+  font-weight: 800;
+  margin-bottom: 40px;
   color: white;
 }
 
 .hero-subtitle {
   font-size: 18px;
   font-weight: 400;
-  margin-bottom: 30px;
+  margin-bottom: 50px;
 }
 
 .search-box {
@@ -181,7 +181,7 @@
 
 /* Category See More Button */
 .category-see-more-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #1a1a75;
   color: white;
   border: none;
   border-radius: 20px;
@@ -198,7 +198,7 @@
 .category-see-more-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  background: #1a1a75;
 }
 
 .category-item.active .category-see-more-btn {
@@ -349,8 +349,8 @@
 }
 
 .category-tag {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #1a1a75;
+  color: #1a1a75;
   padding: 4px 8px;
   border-radius: 12px;
   font-size: 11px;
@@ -367,8 +367,8 @@
 }
 
 .see-more-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white !important;
+  background: #1a1a75;
+  color: #1a1a75 !important;
   border: none;
   border-radius: 50px;
   padding: 16px 32px;
@@ -407,7 +407,7 @@
 .see-more-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  background: #1a1a75;
 }
 
 .see-more-btn:active {

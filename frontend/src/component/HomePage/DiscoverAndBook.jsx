@@ -1,8 +1,11 @@
 import React from 'react';
 import './DiscoverAndBook.css';
 import "./Home.css";
+import { useNavigate } from "react-router-dom";
 
 const DiscoverAndBook = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="discover-container">
       <div className="hero-section">
@@ -24,7 +27,12 @@ const DiscoverAndBook = () => {
             <li>Automate bookings processes and get your time back</li>
           </div>
           <div className="cta-footer">
-            <button className="cta-button">Try our online booking software</button>
+            <button
+              className="cta-button"
+              onClick={() => navigate('/venues')}
+            >
+              Try our online booking software
+            </button>
           </div>
         </div>
       </div>

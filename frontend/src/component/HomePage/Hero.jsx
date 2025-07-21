@@ -20,7 +20,7 @@ export default function Hero() {
           Find and book the perfect venue for your special occasions
         </p>
         <p className="hero-subtitle">
-          Perfect spaces for weddings, birthdays, meetings, parties, and corporate events — all in one place. 
+          Perfect spaces for weddings, birthdays, meetings, parties, <br />and corporate events — all in one place. 
           Book your dream venue today!
         </p>
         <div className="search-box">
