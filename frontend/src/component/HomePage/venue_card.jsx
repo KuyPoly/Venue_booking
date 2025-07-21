@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import pancakes from '../../assets/image1.png'; // Fallback image
 import { AuthContext } from '../../context/AuthContext';
-import FavoriteModal from './FavoriteModal';
+import SignupPopUp from './SignupPopUp';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 const categoryIcons = {
@@ -152,7 +152,7 @@ export default function CategorySection() {
 
   return (
     <div className="category-section">
-      <FavoriteModal open={showFavoriteModal} onClose={() => setShowFavoriteModal(false)} />
+      <SignupPopUp open={showFavoriteModal} onClose={() => setShowFavoriteModal(false)} />
       <div className="categories">
         {categories.map((category) => (
           <div 

@@ -1,12 +1,12 @@
 import React from 'react';
-import './FavoriteModal.css';
+import './SignupPopUp.css';
 
-export default function FavoriteModal({ open, onClose }) {
+export default function SignupPopUp({ open, onClose }) {
   if (!open) return null;
   return (
     <div className="favorite-modal-overlay">
       <div className="favorite-modal">
-        <p className="favorite-modal-message">Please log in to add favorites.</p>
+        <p className="favorite-modal-message">Please sign up to continue.</p>
         <button className="favorite-modal-close" onClick={onClose}>Close</button>
       </div>
     </div>

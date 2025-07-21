@@ -19,6 +19,8 @@ import Booking from './page/Booking/booking';
 import Messages from './page/Message/message';
 import Sidebar from './component/Owner/Sidebar';
 import Topbar from './component/Owner/Topbar';
+import BookingHistory from './page/BookingHistory/BookingHistory';
+import BookingDetails from './page/BookingDetails/BookingDetails';
 
 
 function DashboardLayout({ children }) {
@@ -74,6 +76,8 @@ function App() {
             <Route path="/room/:id" element={<RoomDetails />} />
             <Route path="/venues" element={<VenuesList />} />
             <Route path="/favorites" element={<Favorites />} />
+            <Route path="/booking-history" element={<BookingHistory />} />
+            <Route path="/booking/:id" element={<BookingDetails />} />
             <Route path="/be-owner" element={<Listing />} />
             <Route path="/dashboard" element={
                     <DashboardLayout>

@@ -3,29 +3,19 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('hall_reservation', {
-      hall_reservation_id: {
+      id: { // Added this primary key
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false,
       },
-      check_in: {
+      start_date: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      check_out: {
+      end_date: {
         type: Sequelize.DATE,
         allowNull: false,
-      },
-      booking_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'booking',
-          key: 'booking_id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
       },
       hall_id: {
         type: Sequelize.INTEGER,
@@ -33,6 +23,16 @@ module.exports = {
         references: {
           model: 'hall',
           key: 'hall_id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      booking_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'booking',
+          key: 'booking_id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
@@ -52,4 +52,4 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('hall_reservation');
   },
-}; 
+};

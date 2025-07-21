@@ -4,7 +4,7 @@ const Hall = require('./Hall');
 const Booking = require('./Booking');
 
 const HallReservation = sequelize.define('HallReservation', {
-  payment_id: {
+  id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
