@@ -7,6 +7,8 @@ router.get('/', (req, res) => {
 });
 
 const Booking = require('../model/Booking');
+const Hall = require('../model/Hall');
+const HallReservation = require('../model/HallReservation');
 const { authenticateToken } = require('../controllers/favoriteController');
 
 // POST route for creating a booking and saving to DB
@@ -36,6 +38,54 @@ router.post('/', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Error creating booking:', error);
     res.status(500).json({ error: 'Failed to create booking' });
+  }
+});
+
+router.get('/history', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const bookings = await Booking.findAll({
+      where: { user_id: userId },
+      include: [
+        {
+          model: HallReservation,
+          as: 'hall_reservations',
+          include: [{ model: Hall, as: 'hall' }],
+        },
+      ],
+      order: [['booking_date', 'DESC']],
+    });
+    res.json(bookings);
+  } catch (error) {
+    console.error('Error fetching booking history:', error);
+    res.status(500).json({ error: 'Failed to fetch booking history' });
+  }
+});
+
+router.get('/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.userId;
+
+    const booking = await Booking.findOne({
+      where: { booking_id: id, user_id: userId },
+      include: [
+        {
+          model: HallReservation,
+          as: 'hall_reservations',
+          include: [{ model: Hall, as: 'hall', include: ['images'] }],
+        },
+      ],
+    });
+
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    res.json(booking);
+  } catch (error) {
+    console.error('Error fetching booking details:', error);
+    res.status(500).json({ error: 'Failed to fetch booking details' });
   }
 });
 

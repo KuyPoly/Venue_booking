@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Payment = require('../model/Payment');
+const Booking = require('../model/Booking');
 
 // POST /payments - create a new payment
 router.post('/', async (req, res) => {
@@ -12,6 +13,13 @@ router.post('/', async (req, res) => {
       method,
       booking_id,
     });
+    // After payment, update booking status to 'confirmed'
+    if (booking_id) {
+      await Booking.update(
+        { status: 'confirmed' },
+        { where: { booking_id } }
+      );
+    }
     res.status(201).json({ message: 'Payment saved', payment });
   } catch (error) {
     console.error('Error saving payment:', error);

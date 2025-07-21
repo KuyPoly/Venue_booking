@@ -14,16 +14,15 @@ module.exports = {
         allowNull: false,
         defaultValue: 'pending',
       },
-      created_time: {
+      booking_date: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       special_request: {
         type: Sequelize.TEXT,
         allowNull: true,
       },
-      total: {
+      total_amount: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false,
       },

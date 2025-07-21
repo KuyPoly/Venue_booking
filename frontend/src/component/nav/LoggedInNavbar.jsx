@@ -108,7 +108,7 @@ export default function LoggedInNavbar() {
             </Link>
             
             {/* Document icon for bookings */}
-            <Link to="/bookings" className="nav-icon" title="My Bookings">
+            <Link to="/booking-history" className="nav-icon" title="Booking History">
               <FaFileAlt />
             </Link>
             
@@ -189,7 +189,7 @@ export default function LoggedInNavbar() {
         <Link to="/favorites" className="nav-icon" onClick={closeMobileMenu} title="Favorites">
           <FaHeart />
         </Link>
-        <Link to="/my-bookings" className="nav-link" onClick={closeMobileMenu}>
+        <Link to="/booking-history" className="nav-link" onClick={closeMobileMenu}>
           My Bookings
         </Link>
         <Link to="/profile" className="nav-link" onClick={closeMobileMenu}>
