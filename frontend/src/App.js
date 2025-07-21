@@ -5,7 +5,6 @@ import { AuthProvider } from './context/AuthContext';
 import Navbar from './component/nav/navbar';
 import Footer from './component/footer/footer';
 import Signup from './component/auth/Signup';
-// import Login from './component/auth/Login';
 import Home from './page/Homepage/Home';
 import RoomDetails from './page/RoomDetails/RoomDetails';
 import VenuesList from './page/VenuesList/VenuesList';
@@ -13,25 +12,46 @@ import LoginModal from './component/LoginModal/LoginModal';
 import SignupModal from './component/SignupModal/SignupModal';
 import Favorites from './page/Favorites/Favorites';
 import Listing from './page/Listing/Listing';
-// import Dashboard from './page/Owner/Dashboard';
+// Dashboard components
 import Dashboard from './page/Dashboard/Dashboard';
 import Booking from './page/Booking/booking';
-import Messages from './page/Message/message';
+// Owner management components
+import OwnerListings from './page/Listing/OwnerList';
 import Sidebar from './component/Owner/Sidebar';
 import Topbar from './component/Owner/Topbar';
-import BookingHistory from './page/BookingHistory/BookingHistory';
-import BookingDetails from './page/BookingDetails/BookingDetails';
 
-
+// Dashboard Layout without navbar/footer
 function DashboardLayout({ children }) {
   return (
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: 'flex', minHeight: '100vh' }}>
       <Sidebar />
-      <div style={{ flex: 1 }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <Topbar />
-        {children}
+        <main style={{ 
+          flex: 1, 
+          marginLeft: '250px', 
+          marginTop: '64px',
+          padding: '32px 40px',
+          backgroundColor: '#f7f7f7',
+          minHeight: 'calc(100vh - 64px)'
+        }}>
+          {children}
+        </main>
       </div>
     </div>
+  );
+}
+
+// Regular Layout with navbar/footer
+function RegularLayout({ children, isLoginModalOpen, isSignupModalOpen, openLoginModal, openSignupModal, closeLoginModal, closeSignupModal, handleSwitchToSignup, handleSwitchToLogin }) {
+  return (
+    <>
+      <Navbar openLoginModal={openLoginModal} openSignupModal={openSignupModal} />
+      {children}
+      <Footer />
+      {isLoginModalOpen && <LoginModal onClose={closeLoginModal} onSwitchToSignup={handleSwitchToSignup} />}
+      {isSignupModalOpen && <SignupModal onClose={closeSignupModal} onSwitchToLogin={handleSwitchToLogin} />}
+    </>
   );
 }
 
@@ -59,6 +79,7 @@ function App() {
     setIsLoginModalOpen(false);
     setIsSignupModalOpen(true);
   };
+  
   const handleSwitchToLogin = () => {
     setIsSignupModalOpen(false);
     setIsLoginModalOpen(true);
@@ -68,39 +89,127 @@ function App() {
     <AuthProvider>
       <Router>
         <div className="App">
-          <Navbar openLoginModal={openLoginModal} openSignupModal={openSignupModal} />
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/signup" element={<Signup />} />
-            {/* <Route path="/login" element={<Login />} /> */}
-            <Route path="/room/:id" element={<RoomDetails />} />
-            <Route path="/venues" element={<VenuesList />} />
-            <Route path="/favorites" element={<Favorites />} />
-            <Route path="/booking-history" element={<BookingHistory />} />
-            <Route path="/booking/:id" element={<BookingDetails />} />
-            <Route path="/be-owner" element={<Listing />} />
+            {/* Public Routes with Regular Layout */}
+            <Route path="/" element={
+              <RegularLayout 
+                isLoginModalOpen={isLoginModalOpen}
+                isSignupModalOpen={isSignupModalOpen}
+                openLoginModal={openLoginModal}
+                openSignupModal={openSignupModal}
+                closeLoginModal={closeLoginModal}
+                closeSignupModal={closeSignupModal}
+                handleSwitchToSignup={handleSwitchToSignup}
+                handleSwitchToLogin={handleSwitchToLogin}
+              >
+                <Home />
+              </RegularLayout>
+            } />
+            
+            <Route path="/signup" element={
+              <RegularLayout 
+                isLoginModalOpen={isLoginModalOpen}
+                isSignupModalOpen={isSignupModalOpen}
+                openLoginModal={openLoginModal}
+                openSignupModal={openSignupModal}
+                closeLoginModal={closeLoginModal}
+                closeSignupModal={closeSignupModal}
+                handleSwitchToSignup={handleSwitchToSignup}
+                handleSwitchToLogin={handleSwitchToLogin}
+              >
+                <Signup />
+              </RegularLayout>
+            } />
+            
+            <Route path="/room/:id" element={
+              <RegularLayout 
+                isLoginModalOpen={isLoginModalOpen}
+                isSignupModalOpen={isSignupModalOpen}
+                openLoginModal={openLoginModal}
+                openSignupModal={openSignupModal}
+                closeLoginModal={closeLoginModal}
+                closeSignupModal={closeSignupModal}
+                handleSwitchToSignup={handleSwitchToSignup}
+                handleSwitchToLogin={handleSwitchToLogin}
+              >
+                <RoomDetails />
+              </RegularLayout>
+            } />
+            
+            <Route path="/venues" element={
+              <RegularLayout 
+                isLoginModalOpen={isLoginModalOpen}
+                isSignupModalOpen={isSignupModalOpen}
+                openLoginModal={openLoginModal}
+                openSignupModal={openSignupModal}
+                closeLoginModal={closeLoginModal}
+                closeSignupModal={closeSignupModal}
+                handleSwitchToSignup={handleSwitchToSignup}
+                handleSwitchToLogin={handleSwitchToLogin}
+              >
+                <VenuesList />
+              </RegularLayout>
+            } />
+            
+            <Route path="/favorites" element={
+              <RegularLayout 
+                isLoginModalOpen={isLoginModalOpen}
+                isSignupModalOpen={isSignupModalOpen}
+                openLoginModal={openLoginModal}
+                openSignupModal={openSignupModal}
+                closeLoginModal={closeLoginModal}
+                closeSignupModal={closeSignupModal}
+                handleSwitchToSignup={handleSwitchToSignup}
+                handleSwitchToLogin={handleSwitchToLogin}
+              >
+                <Favorites />
+              </RegularLayout>
+            } />
+            
+            <Route path="/be-owner" element={
+              <RegularLayout 
+                isLoginModalOpen={isLoginModalOpen}
+                isSignupModalOpen={isSignupModalOpen}
+                openLoginModal={openLoginModal}
+                openSignupModal={openSignupModal}
+                closeLoginModal={closeLoginModal}
+                closeSignupModal={closeSignupModal}
+                handleSwitchToSignup={handleSwitchToSignup}
+                handleSwitchToLogin={handleSwitchToLogin}
+              >
+                <Listing />
+              </RegularLayout>
+            } />
+            
+            {/* Owner Dashboard Routes - No navbar/footer, only sidebar and topbar */}
+            <Route path="/my-venue" element={
+              <DashboardLayout>
+                <Dashboard />
+              </DashboardLayout>
+            }/>
+            
             <Route path="/dashboard" element={
-                    <DashboardLayout>
-                    <Dashboard />
-                    </DashboardLayout>}/>
+              <DashboardLayout>
+                <Dashboard />
+              </DashboardLayout>
+            }/>
+            
             <Route path="/dashboard/bookings" element={
-                    <DashboardLayout>
-                    <Booking />
-                    </DashboardLayout>}/>
-            <Route path="/dashboard/messages" element={
-                    <DashboardLayout>
-                    <Messages />
-                    </DashboardLayout>}/>
+              <DashboardLayout>
+                <Booking />
+              </DashboardLayout>
+            }/>
+            
+            <Route path="/dashboard/listings" element={
+              <DashboardLayout>
+                <OwnerListings />
+              </DashboardLayout>
+            }/>
           </Routes>
-          <Footer />
-          {isLoginModalOpen && <LoginModal onClose={closeLoginModal} onSwitchToSignup={handleSwitchToSignup} />}
-          {isSignupModalOpen && <SignupModal onClose={closeSignupModal} onSwitchToLogin={handleSwitchToLogin} />}
         </div>
       </Router>
     </AuthProvider>
   );
-
-  
 }
 
 export default App;

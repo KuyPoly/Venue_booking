@@ -1,12 +1,11 @@
-/* 1. Base Styles */
 body {
-    margin: 0;
-    font-family: 'Montserrat', Arial, sans-serif;
-    background: #f7f7f7;
-    color: #222;
-  }
-  
-  /* 2. Sidebar */
+  margin: 0;
+  font-family: 'Montserrat', Arial, sans-serif;
+  background: #f7f7f7;
+  color: #222;
+}
+
+/* Sidebar */
 .sidebar {
   position: fixed;
   left: 0;
@@ -17,151 +16,105 @@ body {
   border-right: 1.5px solid #e5e5e5;
   padding: 0;
   z-index: 10;
-  overflow: hidden;
-  min-width: 60px;
-  max-width: 400px;
-  transition: width 0.3s ease;
+  overflow-y: auto;
 }
 
-/* Sidebar resize handle */
-  .sidebar::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 8px;
-    height: 100%;
-    background: transparent;
-    cursor: col-resize;
-    z-index: 15;
-    transition: background 0.2s ease;
-}
-
-.sidebar:hover::after {
-  background: rgba(191, 194, 212, 0.3);
-}
-
-/* Sidebar resize indicator */
-.sidebar.resizing::after {
-  background: rgba(191, 194, 212, 0.6);
-}
-
-/* Debug: Make resize handle more visible */
-.sidebar::before {
-  content: '⋮';
-  position: absolute;
-  right: 2px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #bfc2d4;
-  font-size: 12px;
-  z-index: 16;
-  opacity: 0.5;
-  transition: opacity 0.2s ease;
-}
-
-.sidebar:hover::before {
-  opacity: 1;
-}
-
-/* Collapsed sidebar styles */
-.sidebar.collapsed {
-  width: 60px !important;
-}
-
-.sidebar.collapsed .logo {
-  font-size: 1.2rem;
-  padding: 20px 0 10px 20px;
-  text-align: center;
-}
-
-.sidebar.collapsed .section-title {
-  display: none;
-}
-
-.sidebar.collapsed li {
-  padding: 12px 0;
-  justify-content: center;
-  font-size: 0.9rem;
-}
-
-.sidebar.collapsed li .icon {
-  margin-right: 0;
-  font-size: 1.2rem;
-}
-
-.sidebar.collapsed li span:not(.icon) {
-  display: none;
-}
-
-/* Semi-collapsed sidebar styles */
-.sidebar.semi-collapsed {
-  width: 120px !important;
-}
-
-.sidebar.semi-collapsed .logo {
-  font-size: 1.4rem;
-  padding: 24px 0 12px 24px;
-}
-
-.sidebar.semi-collapsed .section-title {
-  font-size: 0.8rem;
-  margin: 24px 0 6px 24px;
-}
-
-.sidebar.semi-collapsed li {
-  padding: 10px 0 10px 24px;
-  font-size: 0.9rem;
-}
-
-.sidebar.semi-collapsed li .icon {
-  margin-right: 8px;
-  font-size: 1rem;
-}
-  .sidebar .logo {
+.sidebar .logo {
   font-size: 2rem;
   font-weight: 600;
   color: #222a3a;
   padding: 32px 0 16px 32px;
   letter-spacing: 1px;
-  white-space: nowrap;
-  overflow: hidden;
-  transition: all 0.3s ease;
 }
-  .sidebar .section-title {
+
+.sidebar .section-title {
   color: #bfc2d4;
   font-size: 1rem;
   font-weight: 500;
   margin: 32px 0 8px 32px;
   letter-spacing: 1.5px;
-  white-space: nowrap;
-  overflow: hidden;
-  transition: all 0.3s ease;
 }
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .sidebar li {
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
   display: flex;
   align-items: center;
   padding: 12px 0 12px 32px;
   font-size: 1.08rem;
   color: #222a3a;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease-in-out;
   border-left: 3px solid transparent;
-  white-space: nowrap;
-  overflow: hidden;
 }
-  .sidebar li.active, .sidebar li:hover {
-    background: #e5e7eb;
-    border-left: 3px solid #bfc2d4;
-  }
-  .sidebar li .icon {
+
+.sidebar li:hover,
+.sidebar li.active {
+  background-color: #e0f0ff; /* light blue background */
+  border-left: 3px solid #007bff; /* blue border */
+  color: #007bff; /* blue text */
+}
+
+.sidebar li .icon {
   margin-right: 16px;
   font-size: 1.2rem;
   flex-shrink: 0;
-  transition: margin 0.3s ease;
+}
+
+/* Log out button */
+.sidebar li button.logout-btn {
+  background: none;
+  border: none;
+  color: inherit;
+  width: 100%;
+  text-align: left;
+  padding: 12px 0 12px 32px;
+  font-size: 1.08rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease-in-out;
+}
+
+.sidebar li button.logout-btn:hover {
+  background-color: #e0f0ff;
+  border-left: 3px solid #007bff;
+  color: #007bff;
+}
+
+.sidebar li span {
+  font-weight: 500;
+}
+
+.sidebar li a,
+.sidebar li button.logout-btn {
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .sidebar .logo {
+    padding-left: 20px;
+  }
+
+  .sidebar li {
+    padding-left: 20px;
+  }
+
+  .sidebar .section-title {
+    margin-left: 20px;
+  }
 }

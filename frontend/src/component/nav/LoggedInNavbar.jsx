@@ -107,10 +107,19 @@ export default function LoggedInNavbar() {
               <FaHeart />
             </Link>
             
-            {/* Document icon for bookings */}
-            <Link to="/booking-history" className="nav-icon" title="Booking History">
-              <FaFileAlt />
-            </Link>
+            {/* Document icon for bookings - only show for customers */}
+            {user?.role === 'customer' && (
+              <Link to="/my-bookings" className="nav-icon" title="My Bookings">
+                <FaFileAlt />
+              </Link>
+            )}
+            
+            {/* Dashboard icon for owners */}
+            {user?.role === 'owner' && (
+              <Link to="/dashboard" className="nav-icon" title="Dashboard">
+                <FaFileAlt />
+              </Link>
+            )}
             
             {/* User profile dropdown */}
             <div className="user-menu-container" ref={userMenuRef}>
@@ -186,12 +195,22 @@ export default function LoggedInNavbar() {
           </Link>
         )}
         
-        <Link to="/favorites" className="nav-icon" onClick={closeMobileMenu} title="Favorites">
-          <FaHeart />
+        <Link to="/favorites" className="nav-link" onClick={closeMobileMenu}>
+          Favorites
         </Link>
-        <Link to="/booking-history" className="nav-link" onClick={closeMobileMenu}>
-          My Bookings
-        </Link>
+        
+        {user?.role === 'customer' && (
+          <Link to="/my-bookings" className="nav-link" onClick={closeMobileMenu}>
+            My Bookings
+          </Link>
+        )}
+        
+        {user?.role === 'owner' && (
+          <Link to="/dashboard" className="nav-link" onClick={closeMobileMenu}>
+            Dashboard
+          </Link>
+        )}
+        
         <Link to="/profile" className="nav-link" onClick={closeMobileMenu}>
           Profile
         </Link>

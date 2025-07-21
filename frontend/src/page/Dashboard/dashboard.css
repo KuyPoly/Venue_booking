@@ -1,673 +1,187 @@
-/* 1. Base Styles */
-body {
-    margin: 0;
-    font-family: 'Montserrat', Arial, sans-serif;
-    background: #f7f7f7;
-    color: #222;
-  }
-  
-  /* 2. Sidebar */
-.sidebar {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 250px;
-  height: 100vh;
-  background: #fff;
-  border-right: 1.5px solid #e5e5e5;
-  padding: 0;
-  z-index: 10;
-  overflow: hidden;
-  min-width: 60px;
-  max-width: 400px;
-  transition: width 0.3s ease;
-}
+/* Remove or comment out the main-content class that conflicts with App.js */
 
-/* Sidebar resize handle */
-.sidebar::after {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 8px;
-  height: 100%;
-  background: transparent;
-  cursor: col-resize;
-  z-index: 15;
-  transition: background 0.2s ease;
-}
+/* Keep only the component-specific styles */
 
-.sidebar:hover::after {
-  background: rgba(191, 194, 212, 0.3);
-}
-
-/* Sidebar resize indicator */
-.sidebar.resizing::after {
-  background: rgba(191, 194, 212, 0.6);
-}
-
-/* Debug: Make resize handle more visible */
-.sidebar::before {
-  content: '⋮';
-  position: absolute;
-  right: 2px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #bfc2d4;
-  font-size: 12px;
-  z-index: 16;
-  opacity: 0.5;
-  transition: opacity 0.2s ease;
-}
-
-.sidebar:hover::before {
-  opacity: 1;
-}
-
-/* Collapsed sidebar styles */
-.sidebar.collapsed {
-  width: 60px !important;
-}
-
-.sidebar.collapsed .logo {
-  font-size: 1.2rem;
-  padding: 20px 0 10px 20px;
-  text-align: center;
-}
-
-.sidebar.collapsed .section-title {
-  display: none;
-}
-
-.sidebar.collapsed li {
-  padding: 12px 0;
-  justify-content: center;
-  font-size: 0.9rem;
-}
-
-.sidebar.collapsed li .icon {
-  margin-right: 0;
-  font-size: 1.2rem;
-}
-
-.sidebar.collapsed li span:not(.icon) {
-  display: none;
-}
-
-/* Semi-collapsed sidebar styles */
-.sidebar.semi-collapsed {
-  width: 120px !important;
-}
-
-.sidebar.semi-collapsed .logo {
-  font-size: 1.4rem;
-  padding: 24px 0 12px 24px;
-}
-
-.sidebar.semi-collapsed .section-title {
-  font-size: 0.8rem;
-  margin: 24px 0 6px 24px;
-}
-
-.sidebar.semi-collapsed li {
-  padding: 10px 0 10px 24px;
-  font-size: 0.9rem;
-}
-
-.sidebar.semi-collapsed li .icon {
-  margin-right: 8px;
-  font-size: 1rem;
-}
-  .sidebar .logo {
-  font-size: 2rem;
+/* Dashboard Title */
+h1 {
+  font-size: 2.2rem;
   font-weight: 600;
+  margin-bottom: 32px;
   color: #222a3a;
-  padding: 32px 0 16px 32px;
-  letter-spacing: 1px;
-  white-space: nowrap;
-  overflow: hidden;
-  transition: all 0.3s ease;
 }
-  .sidebar .section-title {
-  color: #bfc2d4;
-  font-size: 1rem;
-  font-weight: 500;
-  margin: 32px 0 8px 32px;
-  letter-spacing: 1.5px;
-  white-space: nowrap;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .sidebar li {
-  display: flex;
-  align-items: center;
-  padding: 12px 0 12px 32px;
-  font-size: 1.08rem;
-  color: #222a3a;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-left: 3px solid transparent;
-  white-space: nowrap;
-  overflow: hidden;
-}
-  .sidebar li.active, .sidebar li:hover {
-    background: #e5e7eb;
-    border-left: 3px solid #bfc2d4;
-  }
-  .sidebar li .icon {
-  margin-right: 16px;
-  font-size: 1.2rem;
-  flex-shrink: 0;
-  transition: margin 0.3s ease;
-}
-  
-  /* 3. Top Bar */
-.topbar {
-  position: fixed;
-  left: 250px;
-  top: 0;
-  right: 0;
-  height: 64px;
-  background: #fff;
-  border-bottom: 1.5px solid #e5e5e5;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 0 40px;
-  z-index: 5;
-  transition: left 0.3s ease;
-}
-  .topbar .account, .topbar .help {
-    margin-left: 32px;
-    font-size: 1.05rem;
-    color: #222a3a;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-  }
-  .topbar .account select {
-    border: none;
-    background: transparent;
-    font-size: 1rem;
-    margin-left: 4px;
-  }
-  
-  /* 4. Main Content */
-.main-content {
-  margin-left: 250px;
-  margin-top: 64px;
-  padding: 32px 40px 32px 40px;
-  min-height: calc(100vh - 64px);
-  transition: margin-left 0.3s ease;
-}
-  .main-content h1 {
-    font-size: 2.2rem;
-    font-weight: 600;
-    margin-bottom: 32px;
-  }
-  
-  /* Dashboard Stats Row */
-  .stats-row {
-    display: flex;
-    gap: 32px;
-    margin-bottom: 32px;
-  }
-  .stat-card {
-    flex: 1;
-    background: #f3eaff;
-    border-radius: 8px;
-    padding: 28px 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    border: 1.5px solid #e5e5e5;
-  }
-  .stat-card.views {
-    background: #fbeaff;
-  }
-  .stat-card.bookings {
-    background: #ffeaea;
-  }
-  .stat-card .stat-icon {
-    font-size: 2.5rem;
-    margin-bottom: 8px;
-    color: #bfc2d4;
-  }
-  .stat-card .stat-title {
-    font-size: 1.1rem;
-    color: #bfc2d4;
-    margin-bottom: 4px;
-  }
-  .stat-card .stat-value {
-    font-size: 2.1rem;
-    font-weight: 700;
-    color: #a18aff;
-  }
-  .stat-card.views .stat-value {
-    color: #e18aff;
-  }
-  .stat-card.bookings .stat-value {
-    color: #ff8a8a;
-  }
-  
-  /* Dashboard Layout */
-.dashboard-layout {
+
+/* Dashboard Stats Row */
+.stats-row {
   display: flex;
   gap: 32px;
   margin-bottom: 32px;
 }
 
-.dashboard-main {
-  flex: 2;
+.stat-card {
+  flex: 1;
+  background: #f3eaff;
+  border-radius: 8px;
+  padding: 28px 24px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  align-items: flex-start;
+  border: 1.5px solid #e5e5e5;
 }
 
-.dashboard-sidebar {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+.stat-card.views {
+  background: #fbeaff;
+}
+
+.stat-card.bookings {
+  background: #ffeaea;
+}
+
+.stat-card .stat-icon {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+  color: #bfc2d4;
+}
+
+.stat-card .stat-title {
+  font-size: 1.1rem;
+  color: #bfc2d4;
+  margin-bottom: 4px;
+}
+
+.stat-card .stat-value {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #a18aff;
+}
+
+.stat-card.views .stat-value {
+  color: #e18aff;
+}
+
+.stat-card.bookings .stat-value {
+  color: #ff8a8a;
 }
 
 /* Cards & Analytics */
-.cards-row {
-  display: flex;
-  gap: 32px;
-  margin-bottom: 32px;
+.card {
+  background: #fff;
+  border-radius: 8px;
+  border: 1.5px solid #e5e5e5;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  font-size: 1rem;
+  color: #222a3a;
 }
-  .card {
-    background: #fff;
-    border-radius: 8px;
-    border: 1.5px solid #e5e5e5;
-    padding: 20px 24px;
-    margin-bottom: 24px;
-    font-size: 1rem;
-    color: #222a3a;
-  }
-  .card-title {
-    font-weight: 600;
-    font-size: 1.08rem;
-    margin-bottom: 12px;
-  }
-  .card.small {
-    min-width: 260px;
-    max-width: 320px;
-    margin-bottom: 18px;
-  }
-  
-  /* Analytics Graph Placeholder */
-  .analytics {
-    background: #fff;
-    border-radius: 8px;
-    border: 1.5px solid #e5e5e5;
-    padding: 20px 24px;
-    margin-bottom: 24px;
-    min-height: 180px;
-  }
-  
-  /* Section Titles */
-  .section-title {
-    font-size: 1.1rem;
-    color: #bfc2d4;
-    font-weight: 500;
-    margin-bottom: 8px;
-  }
-  
-  /* Misc */
-  .clear-btn {
-    background: #f7f7f7;
-    border: 1px solid #e5e5e5;
-    border-radius: 4px;
-    color: #bfc2d4;
-    font-size: 0.95rem;
-    padding: 2px 10px;
-    cursor: pointer;
-    float: right;
-  }
-  
-  /* Responsive Design */
-  /* Large screens (1200px and up) */
-  @media (min-width: 1200px) {
-    .main-content {
-      padding: 40px 60px;
-    }
-    .stats-row {
-      gap: 40px;
-    }
-    .cards-row {
-      gap: 40px;
-    }
-  }
 
-  /* Medium screens (900px to 1199px) */
-  @media (max-width: 1199px) and (min-width: 900px) {
-    .main-content {
-      padding: 28px 32px;
-    }
-    .stats-row {
-      gap: 24px;
-    }
-    .cards-row {
-      gap: 24px;
-    }
-    .stat-card {
-      padding: 24px 20px;
-    }
-    .card {
-      padding: 18px 20px;
-    }
-  }
+.card-title {
+  font-weight: 600;
+  font-size: 1.08rem;
+  margin-bottom: 12px;
+}
 
-  /* Tablet screens (768px to 899px) */
-@media (max-width: 899px) and (min-width: 768px) {
-  .sidebar {
-    width: 200px;
-    min-width: 60px;
-    max-width: 250px;
-  }
-  .sidebar .logo {
-    font-size: 1.6rem;
-    padding: 24px 0 12px 24px;
-  }
-  .sidebar .section-title {
-    margin: 24px 0 6px 24px;
-    font-size: 0.9rem;
-  }
-  .sidebar li {
-    padding: 10px 0 10px 24px;
-    font-size: 1rem;
-  }
-  .sidebar li .icon {
-    margin-right: 12px;
-    font-size: 1.1rem;
+.card.small {
+  min-width: 260px;
+  max-width: 320px;
+  margin-bottom: 18px;
+}
+
+/* Analytics Graph Placeholder */
+.analytics {
+  background: #fff;
+  border-radius: 8px;
+  border: 1.5px solid #e5e5e5;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  min-height: 180px;
+}
+
+/* Clear button */
+.clear-btn {
+  background: #f7f7f7;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  color: #bfc2d4;
+  font-size: 0.95rem;
+  padding: 2px 10px;
+  cursor: pointer;
+  float: right;
+}
+
+/* Responsive Design */
+@media (max-width: 1199px) and (min-width: 900px) {
+  .stats-row {
+    gap: 24px;
   }
   
-  .main-content {
-    margin-left: 200px;
+  .stat-card {
     padding: 24px 20px;
   }
-  .topbar {
-    left: 200px;
-    padding: 0 20px;
-  }
-  .topbar .account, .topbar .help {
-    margin-left: 20px;
-    font-size: 1rem;
-  }
   
-  .dashboard-layout {
+  .card {
+    padding: 18px 20px;
+  }
+}
+
+@media (max-width: 899px) and (min-width: 768px) {
+  .stats-row {
     flex-direction: column;
     gap: 20px;
   }
   
-  .dashboard-main,
-  .dashboard-sidebar {
-    flex: none;
+  .stat-card {
+    padding: 20px 18px;
   }
-    
-    .stats-row {
-      flex-direction: column;
-      gap: 20px;
-    }
-    .cards-row {
-      flex-direction: column;
-      gap: 20px;
-    }
-    .stat-card {
-      padding: 20px 18px;
-    }
-    .stat-card .stat-icon {
-      font-size: 2rem;
-    }
-    .stat-card .stat-title {
-      font-size: 1rem;
-    }
-    .stat-card .stat-value {
-      font-size: 1.8rem;
-    }
-    .card {
-      padding: 16px 18px;
-    }
-    
-    .main-content h1 {
-      font-size: 1.8rem;
-      margin-bottom: 24px;
-    }
+  
+  .card {
+    padding: 16px 18px;
   }
+  
+  h1 {
+    font-size: 1.8rem;
+    margin-bottom: 24px;
+  }
+}
 
-  /* Mobile screens (600px to 767px) */
-@media (max-width: 767px) and (min-width: 600px) {
-  .sidebar {
-    width: 60px;
-    min-width: 60px;
-    max-width: 120px;
+@media (max-width: 767px) {
+  .stats-row {
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 20px;
   }
-    .sidebar .logo {
-      font-size: 1.2rem;
-      padding: 20px 0 10px 20px;
-      text-align: center;
-    }
-    .sidebar .section-title {
-      display: none;
-    }
-    .sidebar li {
-      padding: 12px 0;
-      justify-content: center;
-      font-size: 0.9rem;
-    }
-    .sidebar li .icon {
-      margin-right: 0;
-      font-size: 1.2rem;
-    }
-    .sidebar li span {
-      display: none;
-    }
-    
-    .main-content {
-      margin-left: 60px;
-      padding: 20px 16px;
-    }
-    .topbar {
-      left: 60px;
-      padding: 0 16px;
-    }
-    .topbar .account, .topbar .help {
-      margin-left: 16px;
-      font-size: 0.9rem;
-    }
-    
-    .stats-row {
-      flex-direction: column;
-      gap: 16px;
-    }
-    .cards-row {
-      flex-direction: column;
-      gap: 16px;
-    }
-    .stat-card {
-      padding: 18px 16px;
-    }
-    .stat-card .stat-icon {
-      font-size: 1.8rem;
-    }
-    .stat-card .stat-title {
-      font-size: 0.9rem;
-    }
-    .stat-card .stat-value {
-      font-size: 1.6rem;
-    }
-    .card {
-      padding: 14px 16px;
-      margin-bottom: 16px;
-    }
-    .card.small {
-      min-width: auto;
-      max-width: none;
-    }
-    
-    .main-content h1 {
-      font-size: 1.6rem;
-      margin-bottom: 20px;
-    }
-    
-    .clear-btn {
-      font-size: 0.8rem;
-      padding: 1px 8px;
-    }
+  
+  .stat-card {
+    padding: 18px 16px;
   }
-
-  /* Small mobile screens (up to 599px) */
-@media (max-width: 599px) {
-  .sidebar {
-    width: 100%;
-    height: auto;
-    position: relative;
-    border-right: none;
-    border-bottom: 1.5px solid #e5e5e5;
-    resize: none;
+  
+  .stat-card .stat-icon {
+    font-size: 1.8rem;
+  }
+  
+  .stat-card .stat-title {
+    font-size: 0.9rem;
+  }
+  
+  .stat-card .stat-value {
+    font-size: 1.6rem;
+  }
+  
+  .card {
+    padding: 14px 16px;
+    margin-bottom: 16px;
+  }
+  
+  .card.small {
     min-width: auto;
     max-width: none;
   }
-    .sidebar .logo {
-      font-size: 1.4rem;
-      padding: 16px 20px;
-      text-align: center;
-    }
-    .sidebar .section-title {
-      display: none;
-    }
-    .sidebar ul {
-      display: flex;
-      overflow-x: auto;
-      padding: 0 16px;
-    }
-    .sidebar li {
-      flex-shrink: 0;
-      padding: 12px 16px;
-      font-size: 0.85rem;
-      white-space: nowrap;
-    }
-    .sidebar li .icon {
-      margin-right: 8px;
-      font-size: 1.1rem;
-    }
-    
-    .main-content {
-      margin-left: 0;
-      margin-top: 0;
-      padding: 16px 12px;
-    }
-    .topbar {
-      position: relative;
-      left: 0;
-      height: 56px;
-      padding: 0 12px;
-    }
-    .topbar .account, .topbar .help {
-      margin-left: 12px;
-      font-size: 0.85rem;
-    }
-    
-    .stats-row {
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    .cards-row {
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    .stat-card {
-      padding: 16px 14px;
-    }
-    .stat-card .stat-icon {
-      font-size: 1.8rem;
-    }
-    .stat-card .stat-title {
-      font-size: 0.9rem;
-    }
-    .stat-card .stat-value {
-      font-size: 1.6rem;
-    }
-    .card {
-      padding: 12px 14px;
-      margin-bottom: 16px;
-    }
-    
-    .main-content h1 {
-      font-size: 1.4rem;
-      margin-bottom: 16px;
-    }
-    
-    .clear-btn {
-      font-size: 0.8rem;
-      padding: 1px 8px;
-    }
+  
+  h1 {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
   }
-
-  /* Extra small screens (up to 375px) */
-  @media (max-width: 375px) {
-    .main-content {
-      padding: 12px 8px;
-    }
-    .topbar {
-      padding: 0 8px;
-    }
-    .topbar .account, .topbar .help {
-      margin-left: 8px;
-      font-size: 0.8rem;
-    }
-    
-    .stat-card {
-      padding: 12px 10px;
-    }
-    .card {
-      padding: 10px 12px;
-    }
-    
-    .main-content h1 {
-      font-size: 1.2rem;
-    }
+  
+  .clear-btn {
+    font-size: 0.8rem;
+    padding: 1px 8px;
   }
-
-  /* Landscape orientation adjustments for mobile */
-  @media (max-width: 767px) and (orientation: landscape) {
-    .sidebar {
-      height: 60px;
-    }
-    .sidebar ul {
-      flex-direction: row;
-      height: 100%;
-      align-items: center;
-    }
-    .sidebar li {
-      height: 100%;
-      display: flex;
-      align-items: center;
-    }
-    
-    .main-content {
-      margin-top: 60px;
-    }
-  }
-
-  /* High DPI displays */
-  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .sidebar {
-      border-right-width: 1px;
-    }
-    .topbar {
-      border-bottom-width: 1px;
-    }
-    .card {
-      border-width: 1px;
-    }
-  }
+}
