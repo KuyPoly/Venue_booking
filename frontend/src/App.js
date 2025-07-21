@@ -14,11 +14,11 @@ import SignupModal from './component/SignupModal/SignupModal';
 import Favorites from './page/Favorites/Favorites';
 import Listing from './page/Listing/Listing';
 // import Dashboard from './page/Owner/Dashboard';
-import Dashboard from './pages/Dashboard';
-import Booking from './pages/Booking';
-import Messages from './pages/Messages';
-import Sidebar from './components/Sidebar';
-import Topbar from './components/Topbar';
+import Dashboard from './page/Dashboard/Dashboard';
+import Booking from './page/Booking/booking';
+import Messages from './page/Message/message';
+import Sidebar from './component/Owner/Sidebar';
+import Topbar from './component/Owner/Topbar';
 
 
 function DashboardLayout({ children }) {

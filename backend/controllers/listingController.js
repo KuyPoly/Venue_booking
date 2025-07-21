@@ -1,5 +1,5 @@
 // controllers/listingController.js
-const Listing = require('../models/Listing');
+const Listing = require('../model/Listing');
 
 exports.getAllListings = async (req, res) => {
   try {

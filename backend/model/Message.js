@@ -1,12 +1,26 @@
-// models/Message.js
-const db = require('../config/db');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../database/sequelize');
 
-exports.getAll = async () => {
-  const [rows] = await db.promise().query('SELECT * FROM messages');
-  return rows;
-};
+const Message = sequelize.define('Message', {
+  // Define your columns here, example:
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  content: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  senderId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  receiverId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  }
+  // Add other fields as needed
+});
 
-exports.create = async (data) => {
-  const [result] = await db.promise().query('INSERT INTO messages SET ?', data);
-  return { id: result.insertId, ...data };
-};
+module.exports = Message;

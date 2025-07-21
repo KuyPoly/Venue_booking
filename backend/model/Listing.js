@@ -1,25 +1,28 @@
-// models/Listing.js
-const db = require('../config/db');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../database/sequelize');
 
-exports.getAll = async () => {
-  const [rows] = await db.promise().query('SELECT * FROM listings');
-  return rows;
-};
+const Listing = sequelize.define('Listing', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: false
+  },
+  price: {
+    type: DataTypes.FLOAT,
+    allowNull: false
+  }
+  // Add other fields as needed
+});
 
-exports.getById = async (id) => {
-  const [rows] = await db.promise().query('SELECT * FROM listings WHERE id = ?', [id]);
-  return rows[0];
-};
-
-exports.create = async (data) => {
-  const [result] = await db.promise().query('INSERT INTO listings SET ?', data);
-  return { id: result.insertId, ...data };
-};
-
-exports.update = async (id, data) => {
-  const [result] = await db.promise().query('UPDATE listings SET ? WHERE id = ?', [data, id]);
-  return result.affectedRows > 0;
-};
+module.exports = Listing;
 
 exports.remove = async (id) => {
   const [result] = await db.promise().query('DELETE FROM listings WHERE id = ?', [id]);

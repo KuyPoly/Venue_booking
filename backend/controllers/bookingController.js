@@ -1,5 +1,5 @@
 // controllers/bookingController.js
-const Booking = require('../models/Booking');
+const Booking = require('../model/Booking');
 
 exports.getAllBookings = async (req, res) => {
   try {

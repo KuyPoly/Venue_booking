@@ -1,7 +1,7 @@
 import React from 'react';
-import './Message.css';
+import './message.css';
 
-
+const Message = () => {
   return (
     <>
       {/* Main Content */}
@@ -16,6 +16,6 @@ import './Message.css';
       </main>
     </>
   );
+};
 
-
-export default Messages;
+export default Message;

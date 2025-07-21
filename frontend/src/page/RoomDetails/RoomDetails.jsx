@@ -53,6 +53,7 @@ export default function RoomDetails() {
   const [bookingId, setBookingId] = useState(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentError, setPaymentError] = useState('');
+  const [paymentLoading, setPaymentLoading] = useState(false);
   const [selectedImageIdx, setSelectedImageIdx] = useState(0);
   const navigate = useNavigate();
   const { isAuthenticated, token } = React.useContext(AuthContext);
@@ -326,6 +327,7 @@ export default function RoomDetails() {
                 e.preventDefault();
                 setPaymentError('');
                 setPaymentSuccess(false);
+                setPaymentLoading(true);
                 try {
                   const response = await fetch('http://localhost:5000/payments', {
                     method: 'POST',
@@ -342,6 +344,8 @@ export default function RoomDetails() {
                   setShowConfirmation(true);
                 } catch (err) {
                   setPaymentError('Payment failed. Please try again.');
+                } finally {
+                  setPaymentLoading(false);
                 }
               }}>
                 <label>Card Number</label>
@@ -358,7 +362,10 @@ export default function RoomDetails() {
                     <input type="text" value={cardCVC} onChange={e => setCardCVC(e.target.value)} required maxLength={4} placeholder="123" />
                   </div>
                 </div>
-                <button type="submit" className="pay-now-btn">Pay Now</button>
+                <button type="submit" className="pay-now-btn" disabled={paymentLoading}>
+                  {paymentLoading ? 'Processing...' : 'Pay Now'}
+                </button>
+                {paymentLoading && <div className="payment-loading">Processing payment, please wait...</div>}
               </form>
             )}
             {selectedPayment === 'paypal' && (
@@ -366,6 +373,7 @@ export default function RoomDetails() {
                 e.preventDefault();
                 setPaymentError('');
                 setPaymentSuccess(false);
+                setPaymentLoading(true);
                 try {
                   const response = await fetch('http://localhost:5000/payments', {
                     method: 'POST',
@@ -382,14 +390,19 @@ export default function RoomDetails() {
                   setShowConfirmation(true);
                 } catch (err) {
                   setPaymentError('Payment failed. Please try again.');
+                } finally {
+                  setPaymentLoading(false);
                 }
               }}>
                 <label>PayPal Email</label>
                 <input type="email" value={paypalEmail} onChange={e => setPaypalEmail(e.target.value)} required placeholder="your@email.com" />
-                <button type="submit" className="pay-now-btn">Pay Now</button>
+                <button type="submit" className="pay-now-btn" disabled={paymentLoading}>
+                  {paymentLoading ? 'Processing...' : 'Pay Now'}
+                </button>
+                {paymentLoading && <div className="payment-loading">Processing payment, please wait...</div>}
               </form>
             )}
-            {bookingSuccess && <div className="booking-success">Booking successful!</div>}
+            {/* Booking success message removed as requested */}
             {/* Removed old paymentSuccess message, overlay will show instead */}
             {paymentError && <div className="booking-error">{paymentError}</div>}
           </div>
