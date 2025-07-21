@@ -1,0 +1,30 @@
+/* 3. Top Bar */
+.topbar {
+  position: fixed;
+  left: 250px;
+  top: 0;
+  right: 0;
+  height: 64px;
+  background: #fff;
+  border-bottom: 1.5px solid #e5e5e5;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 40px;
+  z-index: 5;
+  transition: left 0.3s ease;
+}
+  .topbar .account, .topbar .help {
+    margin-left: 32px;
+    font-size: 1.05rem;
+    color: #222a3a;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  .topbar .account select {
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    margin-left: 4px;
+  }

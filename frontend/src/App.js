@@ -13,6 +13,25 @@ import LoginModal from './component/LoginModal/LoginModal';
 import SignupModal from './component/SignupModal/SignupModal';
 import Favorites from './page/Favorites/Favorites';
 import Listing from './page/Listing/Listing';
+// import Dashboard from './page/Owner/Dashboard';
+import Dashboard from './pages/Dashboard';
+import Booking from './pages/Booking';
+import Messages from './pages/Messages';
+import Sidebar from './components/Sidebar';
+import Topbar from './components/Topbar';
+
+
+function DashboardLayout({ children }) {
+  return (
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ flex: 1 }}>
+        <Topbar />
+        {children}
+      </div>
+    </div>
+  );
+}
 
 function App() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -56,6 +75,18 @@ function App() {
             <Route path="/venues" element={<VenuesList />} />
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/be-owner" element={<Listing />} />
+            <Route path="/dashboard" element={
+                    <DashboardLayout>
+                    <Dashboard />
+                    </DashboardLayout>}/>
+            <Route path="/dashboard/bookings" element={
+                    <DashboardLayout>
+                    <Booking />
+                    </DashboardLayout>}/>
+            <Route path="/dashboard/messages" element={
+                    <DashboardLayout>
+                    <Messages />
+                    </DashboardLayout>}/>
           </Routes>
           <Footer />
           {isLoginModalOpen && <LoginModal onClose={closeLoginModal} onSwitchToSignup={handleSwitchToSignup} />}
@@ -64,6 +95,8 @@ function App() {
       </Router>
     </AuthProvider>
   );
+
+  
 }
 
 export default App;
