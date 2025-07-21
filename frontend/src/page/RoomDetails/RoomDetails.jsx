@@ -301,7 +301,7 @@ export default function RoomDetails() {
                 <span className="custom-btn-label" style={{fontWeight:'bold',color:'#253b80'}}>
                   <span style={{color:'#253b80',fontWeight:'bold',fontFamily:'Arial'}}>Pay</span><span style={{color:'#179bd7',fontWeight:'bold',fontFamily:'Arial'}}>Pal</span>
                 </span>
-                <span className="custom-btn-label">PayPal</span>
+                <span className="custom-btn-label"></span>
               </button>
             </div>
             {selectedPayment === 'credit' && (
@@ -390,14 +390,15 @@ export default function RoomDetails() {
           </div>
         )}
       </div>
-<ConfirmationOverlay
-  show={showConfirmation}
-  venue={venue}
-  date={date}
-  guests={guests}
-  onBackHome={() => window.location.href = '/'}
-/>
-<SignupPopUp open={showSignupModal} onClose={() => setShowSignupModal(false)} />
-    </div>
+      <ConfirmationOverlay
+        show={showConfirmation}
+        venue={venue}
+        date={date}
+        guests={guests}
+        totalPrice={venue && guests ? Number(venue.price) : ''}
+        onBackHome={() => window.location.href = '/'}
+      />
+      <SignupPopUp open={showSignupModal} onClose={() => setShowSignupModal(false)} />
+          </div>
   );
 }
