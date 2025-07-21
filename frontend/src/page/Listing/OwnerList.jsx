@@ -376,25 +376,24 @@ function OwnerListings() {
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>Venue Address *</label>
                 <input
-                  type="text"
-                  id="location-input"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="Start typing your address..."
-                  style={{ 
+                    type="text"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleInputChange}
+                    required
+                    placeholder="Enter complete venue address..."
+                    style={{ 
                     width: '100%', 
                     padding: '12px', 
                     border: '2px solid #e5e5e5', 
                     borderRadius: '6px',
                     fontSize: '1rem'
-                  }}
+                    }}
                 />
                 <small style={{ color: '#666', marginTop: '4px', display: 'block' }}>
-                  <i className="fas fa-map-marker-alt"></i> Start typing for address suggestions
+                    Please provide complete address including street, city, and postal code
                 </small>
-              </div>
+                </div>
             </div>
 
             {/* Capacity & Pricing */}
@@ -424,7 +423,7 @@ function OwnerListings() {
                   <small style={{ color: '#666' }}>Number of guests the venue can accommodate</small>
                 </div>
                 <div style={{ flex: 1 }}>
-                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>Price per Hour ($) *</label>
+                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>Price per Day ($) *</label>
                   <input
                     type="number"
                     name="price"
@@ -442,7 +441,7 @@ function OwnerListings() {
                       fontSize: '1rem'
                     }}
                   />
-                  <small style={{ color: '#666' }}>Hourly rental rate</small>
+                  <small style={{ color: '#666' }}>Daily rental rate</small>
                 </div>
               </div>
             </div>
