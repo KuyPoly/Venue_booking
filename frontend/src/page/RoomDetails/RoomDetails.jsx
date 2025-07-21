@@ -137,7 +137,10 @@ export default function RoomDetails() {
     try {
       const res = await fetch('http://localhost:5000/bookings', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Add JWT token for authentication
+        },
         body: JSON.stringify({
           hallId: id,
           date,
@@ -147,6 +150,8 @@ export default function RoomDetails() {
         }),
       });
       if (!res.ok) throw new Error('Booking failed');
+      const data = await res.json();
+      setBookingId(data.id); // <-- Set bookingId from backend response
       setBookingSuccess(true);
       setShowPayment(true);
     } catch (err) {
