@@ -1,3 +1,59 @@
+.custom-credit-btn {
+  border: 1.5px solid #e0e0e0;
+  background: #fff;
+  color: #333;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.custom-credit-btn.selected {
+  border: 2px solid #635bff;
+  box-shadow: 0 4px 16px rgba(99,91,255,0.10);
+}
+.custom-paypal-btn {
+  border: 1.5px solid #e0e0e0;
+  background: #fff;
+  color: #253b80;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.custom-paypal-btn.selected {
+  border: 2px solid #179bd7;
+  box-shadow: 0 4px 16px rgba(23,155,215,0.10);
+}
+.custom-btn-label {
+  font-size: 1.1rem;
+  font-family: Arial, sans-serif;
+}
+.payment-method-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  color: #333;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.payment-method-btn:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  border-color: #bdbdbd;
+}
+.credit-card-svg {
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.paypal-logo {
+  height: 24px;
+  margin-right: 8px;
+  vertical-align: middle;
+
+}
 .payment-total {
   font-weight: bold;
   color: #1a237e;

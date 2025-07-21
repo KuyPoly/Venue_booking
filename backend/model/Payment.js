@@ -3,25 +3,22 @@ const sequelize = require('../database/sequelize');
 const Booking = require('./Booking');
 
 const Payment = sequelize.define('Payment', {
-  id: {
+  payment_id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
-  },
-  amount: {
-    type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
   },
-  payment_date: {
+  paid_at: {
     type: DataTypes.DATE,
-    allowNull: false,
+    allowNull: true,
   },
   status: {
     type: DataTypes.ENUM('pending', 'paid', 'failed', 'refunded'),
     allowNull: false,
     defaultValue: 'pending',
   },
-  payment_method: {
+  method: {
     type: DataTypes.STRING,
     allowNull: false,
   },

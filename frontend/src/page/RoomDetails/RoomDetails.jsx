@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
-import { FaSnowflake, FaChair, FaWifi, FaHeadset, FaChalkboard, FaRestroom, FaVolumeUp, FaMicrophone, FaTag, FaMapMarkerAlt, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaSnowflake, FaChair, FaWifi, FaHeadset, FaChalkboard, FaRestroom, FaVolumeUp, FaMicrophone, FaTag, FaMapMarkerAlt, FaChevronLeft, FaChevronRight, FaCheckCircle } from 'react-icons/fa';
 import { FaStar } from 'react-icons/fa';
 import './RoomDetails.css';
+import './confirmation-overlay.css';
+import ConfirmationOverlay from './ConfirmationOverlay';
 import image2 from '../../assets/image2.png'; // Placeholder image
 import image3 from '../../assets/image3.png'; // Placeholder image
 import image4 from '../../assets/image4.png'; // Placeholder image
@@ -31,6 +33,12 @@ const features = [
 ];
 
 export default function RoomDetails() {
+  const [selectedPayment, setSelectedPayment] = useState(null);
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardName, setCardName] = useState('');
+  const [cardExpiry, setCardExpiry] = useState('');
+  const [cardCVC, setCardCVC] = useState('');
+  const [paypalEmail, setPaypalEmail] = useState('');
   const { id } = useParams();
   const [venue, setVenue] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -42,11 +50,15 @@ export default function RoomDetails() {
   const [bookingLoading, setBookingLoading] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [bookingError, setBookingError] = useState('');
+  const [bookingId, setBookingId] = useState(null);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [paymentError, setPaymentError] = useState('');
   const [selectedImageIdx, setSelectedImageIdx] = useState(0);
   const navigate = useNavigate();
   const { isAuthenticated, token } = React.useContext(AuthContext);
   const [favoriteIds, setFavoriteIds] = useState([]);
   const [showFavoriteModal, setShowFavoriteModal] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   // Fetch favorites for logged-in user
   const fetchFavorites = async () => {
@@ -217,62 +229,179 @@ export default function RoomDetails() {
           </div>
         </div>
         {/* Right: Booking Form */}
-        <div className="room-booking-form">
-          {!showPayment ? (
-            <>
-              <h3>Booking Hall</h3>
-              <form onSubmit={handleBookingSubmit}>
-                <label>Date</label>
-                <input type="date" value={date} onChange={e => setDate(e.target.value)} required />
-                <div className="time-row">
-                  <div>
-                    <label>Start time</label>
-                    <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} required />
-                  </div>
-                  <div>
-                    <label>Finish time</label>
-                    <input type="time" value={endTime} onChange={e => setEndTime(e.target.value)} required />
-                  </div>
-                </div>
-                <label>Guests</label>
-                <input type="number" min="1" value={guests} onChange={e => setGuests(e.target.value)} required />
-                {bookingError && <div className="booking-error">{bookingError}</div>}
-                <button type="submit" className="continue-btn" disabled={bookingLoading}>{bookingLoading ? 'Booking...' : 'Continue'}</button>
-              </form>
-            </>
-          ) : (
-            <div className="payment-form">
-              <h2 className="payment-title">Payment</h2>
+        {!showPayment ? (
+          <div className="room-booking-form">
+            <h3>Booking Hall</h3>
+              <form onSubmit={async e => {
+                e.preventDefault();
+                setBookingLoading(true);
+                setBookingError('');
+                setBookingSuccess(false);
+                try {
+                  const response = await fetch('http://localhost:5000/bookings', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      date,
+                      startTime,
+                      endTime,
+                      guests,
+                    }),
+                  });
+                  if (!response.ok) throw new Error('Booking failed');
+                  const result = await response.json();
+                  setBookingId(result.booking && result.booking.booking_id);
+                  setBookingSuccess(true);
+                  setShowPayment(true);
+                } catch (err) {
+                  setBookingError('Booking failed. Please try again.');
+                } finally {
+                  setBookingLoading(false);
+                }
+              }}>
               <label>Date</label>
-              <input type="date" value={date} readOnly />
+              <input type="date" value={date} onChange={e => setDate(e.target.value)} required />
               <div className="time-row">
                 <div>
                   <label>Start time</label>
-                  <input type="time" value={startTime} readOnly />
+                  <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} required />
                 </div>
                 <div>
                   <label>Finish time</label>
-                  <input type="time" value={endTime} readOnly />
+                  <input type="time" value={endTime} onChange={e => setEndTime(e.target.value)} required />
                 </div>
               </div>
               <label>Guests</label>
-              <input type="number" min="1" value={guests} readOnly />
-              <div className="payment-total">Total Price : ${venue.price || 1000}</div>
-              <div className="payment-method-label">Choose payment method</div>
-              <div className="payment-method-row">
-                <button type="button" className="payment-method-btn">
-                  <span role="img" aria-label="credit-card" className="credit-card-icon">💳</span> Credit Card
-                </button>
-                <button type="button" className="payment-method-btn">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/ABA_Bank_logo.png" alt="ABA" className="aba-logo" /> ABA
-                </button>
+              <input type="number" min="1" value={guests} onChange={e => setGuests(e.target.value)} required />
+              {bookingError && <div className="booking-error">{bookingError}</div>}
+              <button type="submit" className="continue-btn" disabled={bookingLoading}>{bookingLoading ? 'Booking...' : 'Continue'}</button>
+            </form>
+          </div>
+        ) : (
+          <div className="room-booking-form">
+            <h2 className="payment-title">Payment</h2>
+            <label>Date</label>
+            <input type="date" value={date} onChange={e => setDate(e.target.value)} />
+            <div className="time-row">
+              <div>
+                <label>Start time</label>
+                <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} />
               </div>
-              <button type="button" className="pay-now-btn">Pay Now</button>
-              {bookingSuccess && <div className="booking-success">Booking successful!</div>}
+              <div>
+                <label>Finish time</label>
+                <input type="time" value={endTime} onChange={e => setEndTime(e.target.value)} />
+              </div>
             </div>
-          )}
-        </div>
+            <label>Guests</label>
+            <input type="number" min="1" value={guests} onChange={e => setGuests(e.target.value)} />
+            <div className="payment-total">Total Price : ${venue.price || 1000}</div>
+            <div className="payment-method-row">
+              <button
+                type="button"
+                className={`payment-method-btn custom-credit-btn${selectedPayment === 'credit' ? ' selected' : ''}`}
+                onClick={() => setSelectedPayment('credit')}
+              >
+                <svg className="credit-card-svg" width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="6" y="10" width="28" height="20" rx="3" fill="#fff" stroke="#333" strokeWidth="2"/>
+                  <rect x="6" y="16" width="28" height="4" fill="#333"/>
+                </svg>
+                <span className="custom-btn-label">Credit Card</span>
+              </button>
+              <button
+                type="button"
+                className={`payment-method-btn custom-paypal-btn${selectedPayment === 'paypal' ? ' selected' : ''}`}
+                onClick={() => setSelectedPayment('paypal')}
+              >
+                <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" alt="PayPal" className="paypal-logo" style={{height:'32px',marginRight:'8px'}} />
+                <span className="custom-btn-label" style={{fontWeight:'bold',color:'#253b80'}}>
+                  <span style={{color:'#253b80',fontWeight:'bold',fontFamily:'Arial'}}>Pay</span><span style={{color:'#179bd7',fontWeight:'bold',fontFamily:'Arial'}}>Pal</span>
+                </span>
+                <span className="custom-btn-label">PayPal</span>
+              </button>
+            </div>
+            {selectedPayment === 'credit' && (
+              <form className="credit-form" onSubmit={async e => {
+                e.preventDefault();
+                setPaymentError('');
+                setPaymentSuccess(false);
+                try {
+                  const response = await fetch('http://localhost:5000/payments', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      paid_at: new Date().toISOString(),
+                      status: 'paid',
+                      method: 'credit_card',
+                      booking_id: bookingId,
+                    }),
+                  });
+                  if (!response.ok) throw new Error('Payment failed');
+                  setPaymentSuccess(true);
+                  setShowConfirmation(true);
+                } catch (err) {
+                  setPaymentError('Payment failed. Please try again.');
+                }
+              }}>
+                <label>Card Number</label>
+                <input type="text" value={cardNumber} onChange={e => setCardNumber(e.target.value)} required maxLength={19} placeholder="1234 5678 9012 3456" />
+                <label>Name on Card</label>
+                <input type="text" value={cardName} onChange={e => setCardName(e.target.value)} required />
+                <div style={{ display: 'flex', gap: '12px' }}>
+                  <div style={{ flex: 1 }}>
+                    <label>Expiry</label>
+                    <input type="text" value={cardExpiry} onChange={e => setCardExpiry(e.target.value)} required placeholder="MM/YY" />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <label>CVC</label>
+                    <input type="text" value={cardCVC} onChange={e => setCardCVC(e.target.value)} required maxLength={4} placeholder="123" />
+                  </div>
+                </div>
+                <button type="submit" className="pay-now-btn">Pay Now</button>
+              </form>
+            )}
+            {selectedPayment === 'paypal' && (
+              <form className="paypal-form" onSubmit={async e => {
+                e.preventDefault();
+                setPaymentError('');
+                setPaymentSuccess(false);
+                try {
+                  const response = await fetch('http://localhost:5000/payments', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      paid_at: new Date().toISOString(),
+                      status: 'paid',
+                      method: 'paypal',
+                      booking_id: bookingId,
+                    }),
+                  });
+                  if (!response.ok) throw new Error('Payment failed');
+                  setPaymentSuccess(true);
+                  setShowConfirmation(true);
+                } catch (err) {
+                  setPaymentError('Payment failed. Please try again.');
+                }
+              }}>
+                <label>PayPal Email</label>
+                <input type="email" value={paypalEmail} onChange={e => setPaypalEmail(e.target.value)} required placeholder="your@email.com" />
+                <button type="submit" className="pay-now-btn">Pay Now</button>
+              </form>
+            )}
+            {bookingSuccess && <div className="booking-success">Booking successful!</div>}
+            {/* Removed old paymentSuccess message, overlay will show instead */}
+            {paymentError && <div className="booking-error">{paymentError}</div>}
+          </div>
+        )}
       </div>
+<ConfirmationOverlay
+  show={showConfirmation}
+  venue={venue}
+  date={date}
+  guests={guests}
+  onBackHome={() => window.location.href = '/'}
+/>
     </div>
   );
 }

@@ -6,6 +6,7 @@ const sequelize = require('./database/sequelize');
 // Import associations to ensure relationships work
 require('./model/Association');
 
+
 const app = express();
 const PORT = 5000; // Changed back to 5000
 
@@ -25,6 +26,10 @@ sequelize.sync({ alter: true })
 const authRoutes = require('./routes/auth');
 const venueRoutes = require('./routes/venues');
 const favoriteRoutes = require('./routes/favorites');
+const bookingsRoutes = require('./routes/bookings');
+
+const paymentsRoutes = require('./routes/payments');
+app.use('/payments', paymentsRoutes); // Handles /payments
 
 // Use routers
 app.use('/', (req, res, next) => {
@@ -36,6 +41,7 @@ app.use('/', (req, res, next) => {
 app.use(authRoutes); // Handles /register, /login, /profile
 app.use(venueRoutes); // Handles /venues, /categories, etc.
 app.use(favoriteRoutes); // Handles /favorites
+app.use('/bookings', bookingsRoutes); // Handles /bookings
 
 // Start server
 app.listen(PORT, () => {
