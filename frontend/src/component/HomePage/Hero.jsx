@@ -16,6 +16,9 @@ export default function Hero() {
     <div className="hero" style={{ backgroundImage: `url(${bgImage})` }}>
       <div className="hero-overlay">
         <h1 className="hero-title">Discover Top Event Venues in Cambodia!</h1>
+        <p className="section-subtitle">
+          Find and book the perfect venue for your special occasions
+        </p>
         <p className="hero-subtitle">
           Perfect spaces for weddings, birthdays, meetings, parties, and corporate events — all in one place. 
           Book your dream venue today!

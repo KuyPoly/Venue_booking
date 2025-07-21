@@ -6,9 +6,9 @@ const DiscoverAndBook = () => {
   return (
     <div className="discover-container">
       <div className="hero-section">
-        <h2 className="section-title">Discover and Book Local Community <br />
+        <h2 className="title">Discover and Book Local Community <br />
         Halls Fast, Simple, and Affordable</h2>
-        <p className="section-subtext">
+        <p className="subtext">
           Your go-to platform for finding and booking nearby community halls for events,
           workshops, meetings, or social gatherings—all in one place.
         </p>
