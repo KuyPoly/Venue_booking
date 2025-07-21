@@ -10,7 +10,6 @@ exports.testVenues = async (req, res) => {
       venues: venues.map(v => ({
         id: v.hall_id,
         name: v.name,
-        type: v.type,
         location: v.location,
         capacity: v.capacity,
         price: v.price
@@ -37,7 +36,6 @@ exports.debugVenues = async (req, res) => {
       categories: categories.map(c => ({ id: c.id, name: c.name })),
       venues: venues.map(v => ({
         id: v.hall_id,
-        type: v.type,
         location: v.location,
         imageCount: v.images ? v.images.length : 0,
         categoryCount: v.categories ? v.categories.length : 0,
@@ -63,40 +61,59 @@ exports.getCategories = async (req, res) => {
 exports.getVenues = async (req, res) => {
   try {
     const { category } = req.query;
+    console.log('Filtering by category:', category); // Debug log
+    
     let includeClause = [
-      { model: Image, as: 'images', attributes: ['url', 'order'], where: { order: 1 }, required: false }
+      { 
+        model: Image, 
+        as: 'images', 
+        attributes: ['url', 'order'], 
+        required: false,
+        order: [['order', 'ASC']]
+      }
     ];
+    
     if (category) {
       includeClause.push({
         model: Category,
         as: 'categories',
         through: { attributes: [] },
         attributes: ['id', 'name'],
-        where: { name: category }
+        where: { name: category },
+        required: true // This ensures only venues with this category are returned
       });
     } else {
       includeClause.push({
         model: Category,
         as: 'categories',
         through: { attributes: [] },
-        attributes: ['id', 'name']
+        attributes: ['id', 'name'],
+        required: false
       });
     }
+    
     const venues = await Hall.findAll({
       include: includeClause,
       order: [['created_at', 'DESC']]
     });
+    
+    console.log(`Found ${venues.length} venues for category: ${category}`); // Debug log
+    
     const transformedVenues = venues.map(venue => ({
       id: venue.hall_id,
       name: venue.name,
-      type: venue.type,
       description: venue.description,
       location: venue.location,
       capacity: venue.capacity,
       price: venue.price,
       openHour: venue.open_hour,
       closeHour: venue.close_hour,
-      image: venue.images && venue.images.length > 0 ? venue.images[0].url : null,
+      // Fix image URL generation
+      image: venue.images && venue.images.length > 0 
+        ? (venue.images[0].url.startsWith('http') 
+           ? venue.images[0].url 
+           : `http://localhost:5000/${venue.images[0].url}`)
+        : null,
       categories: venue.categories ? venue.categories.map(cat => cat.name) : []
     }));
     res.json(transformedVenues);
@@ -109,31 +126,59 @@ exports.getVenues = async (req, res) => {
 exports.getVenueById = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log('Fetching venue details for ID:', id); // Debug log
+    
     const venue = await Hall.findByPk(id, {
       include: [
-        { model: Image, as: 'images', attributes: ['url', 'order'], order: [['order', 'ASC']] },
-        { model: Category, as: 'categories', through: { attributes: [] }, attributes: ['id', 'name'] }
+        { 
+          model: Image, 
+          as: 'images', 
+          attributes: ['id', 'url', 'order'], 
+          order: [['order', 'ASC']] 
+        },
+        { 
+          model: Category, 
+          as: 'categories', 
+          through: { attributes: [] }, 
+          attributes: ['id', 'name'] 
+        }
       ]
     });
+    
     if (!venue) {
       return res.status(404).json({ error: 'Venue not found' });
     }
+
+    console.log('Raw venue images:', venue.images); // Debug log
+    
     const transformedVenue = {
       id: venue.hall_id,
       name: venue.name,
-      type: venue.type,
       description: venue.description,
       location: venue.location,
       capacity: venue.capacity,
       price: venue.price,
       openHour: venue.open_hour,
       closeHour: venue.close_hour,
-      images: venue.images ? venue.images.map(img => img.url) : [],
+      // Fix image URLs - handle both seeded URLs (full HTTP) and uploaded files (relative paths)
+      images: venue.images ? venue.images.map(img => {
+        let imageUrl = img.url;
+        
+        // If it's a relative path (uploaded file), add the server URL
+        if (!imageUrl.startsWith('http')) {
+          imageUrl = `http://localhost:5000/${imageUrl}`;
+        }
+        
+        console.log('Image URL:', imageUrl); // Debug log
+        return imageUrl;
+      }) : [],
       categories: venue.categories ? venue.categories.map(cat => cat.name) : []
     };
+    
+    console.log('Transformed venue:', transformedVenue); // Debug log
     res.json(transformedVenue);
   } catch (error) {
     console.error('Venue detail error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-}; 
+};

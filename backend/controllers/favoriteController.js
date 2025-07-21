@@ -57,24 +57,34 @@ exports.getFavorites = async (req, res) => {
       where: { user_id: userId },
       include: [{ model: Hall, as: 'hall', include: [
         { model: Category, as: 'categories', through: { attributes: [] } },
-        { model: Image, as: 'images', attributes: ['url', 'order'] }
+        { model: Image, as: 'images', attributes: ['url', 'order'], order: [['order', 'ASC']] }
       ] }]
     });
+    
+    console.log(`Found ${favorites.length} favorites for user: ${userId}`); // Debug log
+    
     const venues = favorites.map(fav => {
       const hall = fav.hall;
       return hall ? {
         id: hall.hall_id,
         name: hall.name,
-        type: hall.type,
         location: hall.location,
         capacity: hall.capacity,
         price: hall.price,
         categories: hall.categories ? hall.categories.map(c => c.name) : [],
-        image: hall.images && hall.images.length > 0 ? hall.images[0].url : null
+        // Fix image URL generation
+        image: hall.images && hall.images.length > 0 
+          ? (hall.images[0].url.startsWith('http') 
+             ? hall.images[0].url 
+             : `http://localhost:5000/${hall.images[0].url}`)
+          : null
       } : null;
     }).filter(Boolean);
+    
+    console.log(`Returning ${venues.length} favorite venues`); // Debug log
     res.json(venues);
   } catch (error) {
+    console.error('Favorites error:', error); // Debug log
     res.status(500).json({ error: 'Internal server error' });
   }
 }; 

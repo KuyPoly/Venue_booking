@@ -17,7 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 // Serve static files (uploaded images)
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static('uploads'));
 
 // Sync database
 sequelize.sync({ alter: true })

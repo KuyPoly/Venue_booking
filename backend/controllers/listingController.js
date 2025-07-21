@@ -74,14 +74,18 @@ exports.getAllListings = async (req, res) => {
     const transformedListings = listings.map(hall => ({
       id: hall.hall_id,
       name: hall.name,
-      type: hall.type,
       description: hall.description,
       location: hall.location,
       capacity: hall.capacity,
       price: hall.price,
       openHour: hall.open_hour,
       closeHour: hall.close_hour,
-      images: hall.images ? hall.images.map(img => `http://localhost:5000/${img.url}`) : [],
+      // Fix image URL generation
+      images: hall.images ? hall.images.map(img => 
+        img.url.startsWith('http') 
+          ? img.url 
+          : `http://localhost:5000/${img.url}`
+      ) : [],
       categories: hall.categories ? hall.categories.map(cat => ({ id: cat.id, name: cat.name })) : [],
       createdAt: hall.created_at,
       updatedAt: hall.updated_at
@@ -132,7 +136,6 @@ exports.getListingById = async (req, res) => {
     const transformedListing = {
       id: listing.hall_id,
       name: listing.name,
-      type: listing.type,
       description: listing.description,
       location: listing.location,
       capacity: listing.capacity,
@@ -140,7 +143,12 @@ exports.getListingById = async (req, res) => {
       openHour: listing.open_hour,
       closeHour: listing.close_hour,
       ownerId: listing.owner_id,
-      images: listing.images ? listing.images.map(img => `http://localhost:5000/${img.url}`) : [],
+      // Fix image URL generation
+      images: listing.images ? listing.images.map(img => 
+        img.url.startsWith('http') 
+          ? img.url 
+          : `http://localhost:5000/${img.url}`
+      ) : [],
       categories: listing.categories ? listing.categories.map(cat => ({ id: cat.id, name: cat.name })) : [],
       createdAt: listing.created_at,
       updatedAt: listing.updated_at
@@ -201,14 +209,9 @@ exports.createListing = async (req, res) => {
       return res.status(400).json({ error: 'Price must be a non-negative number' });
     }
 
-    // Get the primary category name to use as type
-    const primaryCategory = await Category.findByPk(categoryIds[0]);
-    const type = primaryCategory ? primaryCategory.name : 'venue';
-
-    // Create the hall listing - set type from primary category
+    // Create the hall listing without type field
     const newListing = await Hall.create({
       name,
-      type: type, // Use primary category as type
       description,
       location,
       capacity: parseInt(capacity),
@@ -232,24 +235,24 @@ exports.createListing = async (req, res) => {
 
     // Handle image uploads if provided
     if (req.files && req.files.length > 0) {
-      const imageRecords = req.files.map((file, index) => ({
-        hall_id: newListing.hall_id,
-        url: file.path,
-        order: index + 1,
-        created_at: new Date(),
-        updated_at: new Date()
-      }));
+  const imageRecords = req.files.map((file, index) => ({
+    hall_id: newListing.hall_id,
+    url: file.path.replace(/\\/g, '/'), // Normalize path separators and ensure it's just the relative path
+    order: index + 1,
+    created_at: new Date(),
+    updated_at: new Date()
+  }));
 
-      await Image.bulkCreate(imageRecords);
-      console.log('Created images:', imageRecords);
-    }
+  console.log('Image records to be created:', imageRecords); // Debug log
+  await Image.bulkCreate(imageRecords);
+  console.log('Created images:', imageRecords);
+}
 
     res.status(201).json({
       message: 'New venue created successfully!',
       listing: {
         id: newListing.hall_id,
         name: newListing.name,
-        type: newListing.type,
         description: newListing.description,
         location: newListing.location,
         capacity: newListing.capacity,
