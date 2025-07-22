@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import './booking.css';
-import { useAuth } from './path/to/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 
 function Booking() {
-  const [booking, setBooking] = useState([]);
+  const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
+  const { user } = useContext(AuthContext);
   const ownerId = user?.id;
 
   useEffect(() => {
