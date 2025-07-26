@@ -17,11 +17,13 @@
     "cloudinary": "^1.41.3",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
+    "emailjs": "^4.0.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.2",
     "multer-storage-cloudinary": "^4.0.0",
     "mysql2": "^3.14.2",
+    "nodemailer": "^7.0.5",
     "sequelize": "^6.37.7",
     "sequelize-cli": "^6.6.3"
   },
