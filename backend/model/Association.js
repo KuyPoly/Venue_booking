@@ -45,3 +45,16 @@ Favorite.belongsTo(Hall, { foreignKey: 'hall_id', as: 'hall' });
 // Optionally, if you want to get all favorites for a user or hall:
 User.hasMany(Favorite, { foreignKey: 'user_id', as: 'favorites' });
 Hall.hasMany(Favorite, { foreignKey: 'hall_id', as: 'favorites' });
+
+// Export all models
+module.exports = {
+  Hall,
+  Image,
+  Category,
+  HallCategory,
+  Favorite,
+  User,
+  Booking,
+  HallReservation,
+  Payment
+};

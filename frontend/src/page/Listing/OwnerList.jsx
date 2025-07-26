@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext'; // Add this import
 
 function OwnerListings() {
+  const { user } = useContext(AuthContext); // Get user from auth context
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -24,21 +26,33 @@ function OwnerListings() {
   const [map, setMap] = useState(null);
   const [autocomplete, setAutocomplete] = useState(null);
 
-  const owner_id = 1; // Replace with actual owner ID from auth context
+  // Get owner_id from authenticated user
+  const owner_id = user?.id; // Use actual user ID from auth context
 
-  // Load Google Maps API
+  // Add debugging to check user and owner_id
   useEffect(() => {
-    if (!window.google) {
-      const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places`;
-      script.async = true;
-      script.defer = true;
-      script.onload = initializeGoogleMaps;
-      document.head.appendChild(script);
-    } else {
-      initializeGoogleMaps();
+    console.log('=== DEBUG INFO ===');
+    console.log('User from auth context:', user);
+    console.log('User ID (owner_id):', user?.id);
+    console.log('User role:', user?.role);
+    console.log('Owner ID being used:', owner_id);
+    console.log('=================');
+  }, [user, owner_id]);
+
+  // Add a check to ensure user is logged in and is an owner
+  useEffect(() => {
+    if (!user) {
+      alert('Please log in to access this page');
+      window.location.href = '/';
+      return;
     }
-  }, []);
+    
+    if (user.role !== 'owner') {
+      alert('Access denied. Only venue owners can access this page.');
+      window.location.href = '/';
+      return;
+    }
+  }, [user]);
 
   const initializeGoogleMaps = () => {
     // Initialize autocomplete when the form is shown
@@ -77,8 +91,14 @@ function OwnerListings() {
   // Fetch categories and listings on component mount
   useEffect(() => {
     fetchCategories();
-    fetchListings();
   }, []);
+
+  // Fetch listings when owner_id becomes available
+  useEffect(() => {
+    if (owner_id) {
+      fetchListings();
+    }
+  }, [owner_id]);
 
   const fetchCategories = async () => {
     try {
@@ -91,13 +111,32 @@ function OwnerListings() {
   };
 
   const fetchListings = async () => {
+    if (!owner_id) {
+      console.log('No owner_id available, cannot fetch listings');
+      setListings([]);
+      return;
+    }
+
     try {
       setLoading(true);
+      console.log('Fetching listings for owner_id:', owner_id); // Debug log
       const response = await fetch(`http://localhost:5000/api/listings?owner_id=${owner_id}`);
+      console.log('Response status:', response.status); // Debug log
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('API error response:', response.status, errorText);
+        setListings([]);
+        return;
+      }
+      
       const data = await response.json();
+      console.log('Response data:', data); // Debug log
       setListings(data.listings || []);
+      console.log('Set listings to:', data.listings || []); // Debug log
     } catch (error) {
       console.error('Error fetching listings:', error);
+      setListings([]); // Set empty array on error
     } finally {
       setLoading(false);
     }

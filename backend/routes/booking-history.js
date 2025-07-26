@@ -3,7 +3,37 @@ const router = express.Router();
 
 // Example GET route for bookings
 router.get('/', (req, res) => {
-  res.json({ message: 'Booking history route is working!' });
+  const { owner_id } = req.query;
+  
+  if (!owner_id) {
+    return res.status(400).json({ error: 'Owner ID is required' });
+  }
+
+  // For now, return empty bookings - you can implement actual booking logic later
+  res.json({ 
+    message: 'Booking history route is working!',
+    bookings: []
+  });
+});
+
+// Add stats endpoint
+router.get('/stats', (req, res) => {
+  const { owner_id } = req.query;
+  
+  if (!owner_id) {
+    return res.status(400).json({ error: 'Owner ID is required' });
+  }
+
+  // For now, return empty stats - you can implement actual booking logic later
+  res.json({
+    stats: [
+      { status: 'confirmed', count: 0 },
+      { status: 'pending', count: 0 },
+      { status: 'cancelled', count: 0 }
+    ],
+    totalBookings: 0,
+    totalRevenue: 0
+  });
 });
 
 const Booking = require('../model/Booking');

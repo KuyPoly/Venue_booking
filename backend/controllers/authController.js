@@ -38,26 +38,34 @@ exports.register = async (req, res) => {
   }
 };
 
+
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    // Find user and include user_id in response
     const user = await User.findOne({ where: { email } });
+    
     if (!user) {
-      return res.status(400).json({ error: 'User not found' });
+      return res.status(401).json({ error: 'Invalid credentials' });
     }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ error: 'Invalid credentials' });
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: 'Invalid credentials' });
     }
+
     const token = jwt.sign(
       { userId: user.user_id, email: user.email, role: user.role },
-      SECRET_KEY,
+      process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
-    res.json({ 
+
+    // Make sure we return the correct user_id
+    res.json({
       token,
       user: {
-        id: user.user_id,
+        id: user.user_id, // This should match what frontend expects
         firstName: user.first_name,
         lastName: user.last_name,
         email: user.email,
@@ -66,7 +74,7 @@ exports.login = async (req, res) => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Login failed' });
   }
 };
 

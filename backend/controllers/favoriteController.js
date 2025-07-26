@@ -52,6 +52,12 @@ exports.removeFavorite = async (req, res) => {
 
 exports.getFavorites = async (req, res) => {
   try {
+    // Check if user is authenticated
+    if (!req.user || !req.user.userId) {
+      // Return empty favorites if not authenticated
+      return res.json([]);
+    }
+    
     const userId = req.user.userId;
     const favorites = await Favorite.findAll({
       where: { user_id: userId },

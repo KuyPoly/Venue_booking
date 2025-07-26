@@ -9,7 +9,7 @@ const sequelize = new Sequelize(
     host: config.development.host,
     port: config.development.port,
     dialect: config.development.dialect,
-    logging: false, // Set to console.log to see SQL queries
+    logging: console.log, // Set to console.log to see SQL queries
     pool: {
       max: 5,
       min: 0,

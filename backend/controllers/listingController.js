@@ -3,25 +3,7 @@ const Image = require('../model/Image');
 const Category = require('../model/Category');
 const HallCategory = require('../model/HallCategory');
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
-
-// Configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = 'uploads/venues/';
-    // Create directory if it doesn't exist
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    // Create unique filename
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'venue-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
+const { storage, cloudinary } = require('../config/cloudinary');
 
 const upload = multer({
   storage: storage,
@@ -46,9 +28,18 @@ exports.getAllListings = async (req, res) => {
   try {
     const { owner_id } = req.query;
     
+    console.log('=== getAllListings Debug ===');
+    console.log('Received owner_id:', owner_id);
+    console.log('Query params:', req.query);
+    
     if (!owner_id) {
+      console.log('❌ No owner_id provided');
       return res.status(400).json({ error: 'Owner ID is required' });
     }
+
+    // First, check if any halls exist for this owner
+    const hallCount = await Hall.count({ where: { owner_id } });
+    console.log(`📊 Total halls for owner ${owner_id}:`, hallCount);
 
     const listings = await Hall.findAll({
       where: { owner_id },
@@ -71,6 +62,13 @@ exports.getAllListings = async (req, res) => {
       order: [['created_at', 'DESC']]
     });
 
+    console.log(`📋 Raw listings found:`, listings.length);
+    console.log('First listing:', listings[0] ? {
+      id: listings[0].hall_id,
+      name: listings[0].name,
+      owner_id: listings[0].owner_id
+    } : 'None');
+
     const transformedListings = listings.map(hall => ({
       id: hall.hall_id,
       name: hall.name,
@@ -82,14 +80,18 @@ exports.getAllListings = async (req, res) => {
       closeHour: hall.close_hour,
       // Fix image URL generation
       images: hall.images ? hall.images.map(img => 
-        img.url.startsWith('http') 
-          ? img.url 
-          : `http://localhost:5000/${img.url}`
+        img.url // Cloudinary URLs are already complete, no need to modify
       ) : [],
       categories: hall.categories ? hall.categories.map(cat => ({ id: cat.id, name: cat.name })) : [],
       createdAt: hall.created_at,
       updatedAt: hall.updated_at
     }));
+
+    console.log(`✅ Returning ${transformedListings.length} transformed listings`);
+    console.log('Response data:', {
+      message: `Found ${transformedListings.length} listings for owner ${owner_id}`,
+      listings: transformedListings
+    });
 
     res.json({
       message: `Found ${transformedListings.length} listings for owner ${owner_id}`,
@@ -145,9 +147,7 @@ exports.getListingById = async (req, res) => {
       ownerId: listing.owner_id,
       // Fix image URL generation
       images: listing.images ? listing.images.map(img => 
-        img.url.startsWith('http') 
-          ? img.url 
-          : `http://localhost:5000/${img.url}`
+        img.url // Cloudinary URLs are already complete, no need to modify
       ) : [],
       categories: listing.categories ? listing.categories.map(cat => ({ id: cat.id, name: cat.name })) : [],
       createdAt: listing.created_at,
@@ -180,7 +180,34 @@ exports.createListing = async (req, res) => {
       categories
     } = req.body;
 
-    // Validate required fields - REMOVED 'type'
+    // Add debugging for owner_id
+    console.log('Attempting to create venue with owner_id:', owner_id);
+
+    // Validate that owner_id exists in the user table
+    const User = require('../model/User');
+    const ownerExists = await User.findByPk(parseInt(owner_id));
+    
+    if (!ownerExists) {
+      console.error(`Owner with ID ${owner_id} does not exist in database`);
+      return res.status(400).json({ 
+        error: `Invalid owner ID. User with ID ${owner_id} does not exist.` 
+      });
+    }
+    
+    console.log('Owner found:', {
+      id: ownerExists.user_id,
+      name: `${ownerExists.first_name} ${ownerExists.last_name}`,
+      role: ownerExists.role
+    });
+
+    // Validate that the user is an owner
+    if (ownerExists.role !== 'owner') {
+      return res.status(403).json({ 
+        error: 'Only users with owner role can create venues' 
+      });
+    }
+
+    // Validate required fields
     if (!name || !description || !location || !capacity || !price || !open_hour || !close_hour || !owner_id) {
       return res.status(400).json({ error: 'All fields are required' });
     }
@@ -218,7 +245,7 @@ exports.createListing = async (req, res) => {
       price: parseFloat(price),
       open_hour,
       close_hour,
-      owner_id: parseInt(owner_id)
+      owner_id: parseInt(owner_id) // Ensure it's an integer
     });
 
     console.log('Created hall:', newListing);
@@ -237,7 +264,7 @@ exports.createListing = async (req, res) => {
     if (req.files && req.files.length > 0) {
   const imageRecords = req.files.map((file, index) => ({
     hall_id: newListing.hall_id,
-    url: file.path.replace(/\\/g, '/'), // Normalize path separators and ensure it's just the relative path
+    url: file.path, // Cloudinary returns the full URL in file.path
     order: index + 1,
     created_at: new Date(),
     updated_at: new Date()
@@ -401,10 +428,28 @@ exports.deleteListing = async (req, res) => {
 
     // Delete associated image files
     if (listing.images && listing.images.length > 0) {
-      listing.images.forEach(image => {
-        const filePath = path.join(__dirname, '..', image.url);
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
+      listing.images.forEach(async (image) => {
+        // Check if it's a Cloudinary URL
+        if (image.url.includes('cloudinary.com')) {
+          try {
+            // Extract public_id from Cloudinary URL to delete the image
+            const urlParts = image.url.split('/');
+            const publicIdWithExtension = urlParts[urlParts.length - 1];
+            const publicId = `halls/${publicIdWithExtension.split('.')[0]}`; // Remove extension and add folder
+            await cloudinary.uploader.destroy(publicId);
+            console.log(`Deleted Cloudinary image: ${publicId}`);
+          } catch (err) {
+            console.error('Error deleting Cloudinary image:', err);
+          }
+        } else {
+          // Handle legacy local files (if any exist)
+          const path = require('path');
+          const fs = require('fs');
+          const filePath = path.join(__dirname, '..', image.url);
+          if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+            console.log(`Deleted local image: ${filePath}`);
+          }
         }
       });
     }

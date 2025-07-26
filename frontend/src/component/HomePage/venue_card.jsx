@@ -44,11 +44,16 @@ export default function CategorySection() {
         const url = selectedCategory 
           ? `http://localhost:5000/venues?category=${selectedCategory}`
           : 'http://localhost:5000/venues';
+        console.log('Homepage: Fetching venues from:', url); // Debug log
         const response = await fetch(url);
+        console.log('Homepage: Response status:', response.status); // Debug log
         const data = await response.json();
+        console.log('Homepage: Response data:', data); // Debug log
+        console.log('Homepage: Number of venues received:', data?.length || 0); // Debug log
         setVenues(data);
       } catch (error) {
         console.error('Error fetching venues:', error);
+        setVenues([]); // Set empty array on error
       } finally {
         setLoading(false);
       }
