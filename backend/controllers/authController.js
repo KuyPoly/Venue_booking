@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../model/User');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
 
@@ -23,6 +24,31 @@ exports.register = async (req, res) => {
       gender,
       role: role || 'customer'
     });
+
+    // Send welcome email
+    const transporter = nodemailer.createTransport({
+      service: 'gmail', // or your email provider
+      auth: {
+        user: 'your_email@gmail.com',
+        pass: 'your_email_password_or_app_password'
+      }
+    });
+
+    const mailOptions = {
+      from: 'your_email@gmail.com',
+      to: email,
+      subject: 'Welcome to Venue Booking!',
+      text: `Hello ${firstName},\n\nThank you for signing up at Venue Booking!`
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error sending welcome email:', error);
+      } else {
+        console.log('Welcome email sent:', info.response);
+      }
+    });
+
     res.status(201).json({ 
       message: 'User registered successfully',
       user: {
@@ -110,4 +136,4 @@ exports.profile = async (req, res) => {
     console.error('Profile error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-}; 
+};
