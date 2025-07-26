@@ -44,6 +44,26 @@ const Hall = sequelize.define('Hall', {
       key: 'user_id',
     },
   },
+  latitude: {
+    type: DataTypes.DECIMAL(10, 8),
+    allowNull: true,
+    validate: {
+      min: -90,
+      max: 90
+    }
+  },
+  longitude: {
+    type: DataTypes.DECIMAL(11, 8),
+    allowNull: true,
+    validate: {
+      min: -180,
+      max: 180
+    }
+  },
+  address: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
 }, {
   timestamps: true,
   createdAt: 'created_at',
