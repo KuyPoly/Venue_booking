@@ -1,5 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext'; // Add this import
+import { GoogleMap, useJsApiLoader, Marker, Autocomplete } from '@react-google-maps/api';
+
+const libraries = ['places'];
+const mapContainerStyle = {
+  width: '100%',
+  height: '300px',
+  borderRadius: '8px',
+  border: '1px solid #ddd'
+};
+
+const defaultCenter = {
+  lat: 11.5564, // Phnom Penh, Cambodia
+  lng: 104.9282
+};
 
 function OwnerListings() {
   const { user } = useContext(AuthContext); // Get user from auth context
@@ -16,7 +30,10 @@ function OwnerListings() {
     capacity: '',
     price: '',
     open_hour: '',
-    close_hour: ''
+    close_hour: '',
+    latitude: '',
+    longitude: '',
+    address: ''
   });
   const [selectedImages, setSelectedImages] = useState([]);
   const [imagePreview, setImagePreview] = useState([]);
@@ -25,6 +42,15 @@ function OwnerListings() {
   // Google Maps integration
   const [map, setMap] = useState(null);
   const [autocomplete, setAutocomplete] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [mapCenter, setMapCenter] = useState(defaultCenter);
+
+  // Load Google Maps API
+  const { isLoaded, loadError } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    libraries: libraries
+  });
 
   // Get owner_id from authenticated user
   const owner_id = user?.id; // Use actual user ID from auth context
@@ -185,6 +211,55 @@ function OwnerListings() {
     
     setSelectedImages(newImages);
     setImagePreview(newPreviews);
+  };
+
+  // Google Maps Event Handlers
+  const handleMapClick = (event) => {
+    const lat = event.latLng.lat();
+    const lng = event.latLng.lng();
+    const location = { lat, lng };
+    
+    setSelectedLocation(location);
+    setFormData(prev => ({
+      ...prev,
+      latitude: lat.toString(),
+      longitude: lng.toString()
+    }));
+
+    // Reverse geocode to get address
+    if (window.google && window.google.maps) {
+      const geocoder = new window.google.maps.Geocoder();
+      geocoder.geocode({ location }, (results, status) => {
+        if (status === 'OK' && results[0]) {
+          setFormData(prev => ({
+            ...prev,
+            address: results[0].formatted_address,
+            location: results[0].formatted_address
+          }));
+        }
+      });
+    }
+  };
+
+  const handlePlaceSelect = () => {
+    if (autocomplete) {
+      const place = autocomplete.getPlace();
+      if (place.geometry && place.geometry.location) {
+        const lat = place.geometry.location.lat();
+        const lng = place.geometry.location.lng();
+        const location = { lat, lng };
+        
+        setSelectedLocation(location);
+        setMapCenter(location);
+        setFormData(prev => ({
+          ...prev,
+          location: place.formatted_address || place.name,
+          address: place.formatted_address || place.name,
+          latitude: lat.toString(),
+          longitude: lng.toString()
+        }));
+      }
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -414,7 +489,31 @@ function OwnerListings() {
               {/* Location with Google Maps */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>Venue Address *</label>
-                <input
+                
+                {/* Address Search Input */}
+                {isLoaded ? (
+                  <Autocomplete
+                    onLoad={setAutocomplete}
+                    onPlaceChanged={handlePlaceSelect}
+                  >
+                    <input
+                      type="text"
+                      name="location"
+                      value={formData.location}
+                      onChange={handleInputChange}
+                      required
+                      placeholder="Search for venue address..."
+                      style={{ 
+                        width: '100%', 
+                        padding: '12px', 
+                        border: '2px solid #e5e5e5', 
+                        borderRadius: '6px',
+                        fontSize: '1rem'
+                      }}
+                    />
+                  </Autocomplete>
+                ) : (
+                  <input
                     type="text"
                     name="location"
                     value={formData.location}
@@ -422,17 +521,91 @@ function OwnerListings() {
                     required
                     placeholder="Enter complete venue address..."
                     style={{ 
-                    width: '100%', 
-                    padding: '12px', 
-                    border: '2px solid #e5e5e5', 
-                    borderRadius: '6px',
-                    fontSize: '1rem'
+                      width: '100%', 
+                      padding: '12px', 
+                      border: '2px solid #e5e5e5', 
+                      borderRadius: '6px',
+                      fontSize: '1rem'
                     }}
-                />
-                <small style={{ color: '#666', marginTop: '4px', display: 'block' }}>
-                    Please provide complete address including street, city, and postal code
-                </small>
+                  />
+                )}
+
+                {/* Google Maps */}
+                <div style={{ marginTop: '12px' }}>
+                  {isLoaded ? (
+                    <GoogleMap
+                      mapContainerStyle={mapContainerStyle}
+                      center={selectedLocation || mapCenter}
+                      zoom={15}
+                      onClick={handleMapClick}
+                      options={{
+                        streetViewControl: false,
+                        mapTypeControl: false,
+                        fullscreenControl: false
+                      }}
+                    >
+                      {selectedLocation && (
+                        <Marker
+                          position={selectedLocation}
+                          draggable={true}
+                          onDragEnd={(event) => {
+                            const lat = event.latLng.lat();
+                            const lng = event.latLng.lng();
+                            const location = { lat, lng };
+                            
+                            setSelectedLocation(location);
+                            setFormData(prev => ({
+                              ...prev,
+                              latitude: lat.toString(),
+                              longitude: lng.toString()
+                            }));
+
+                            // Reverse geocode
+                            if (window.google && window.google.maps) {
+                              const geocoder = new window.google.maps.Geocoder();
+                              geocoder.geocode({ location }, (results, status) => {
+                                if (status === 'OK' && results[0]) {
+                                  setFormData(prev => ({
+                                    ...prev,
+                                    address: results[0].formatted_address,
+                                    location: results[0].formatted_address
+                                  }));
+                                }
+                              });
+                            }
+                          }}
+                        />
+                      )}
+                    </GoogleMap>
+                  ) : (
+                    <div style={{ 
+                      width: '100%', 
+                      height: '300px', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      border: '2px dashed #ddd',
+                      borderRadius: '8px',
+                      backgroundColor: '#f9f9f9',
+                      color: '#666'
+                    }}>
+                      Loading Google Maps...
+                    </div>
+                  )}
                 </div>
+
+                <small style={{ color: '#666', marginTop: '8px', display: 'block' }}>
+                  📍 Click on the map or search above to set venue location
+                  {selectedLocation && (
+                    <span style={{ color: '#28a745', fontWeight: '600' }}>
+                      <br />✅ Location selected: {formData.latitude && formData.longitude ? 
+                        `${parseFloat(formData.latitude).toFixed(6)}, ${parseFloat(formData.longitude).toFixed(6)}` : 
+                        'Coordinates saved'
+                      }
+                    </span>
+                  )}
+                </small>
+              </div>
             </div>
 
             {/* Capacity & Pricing */}

@@ -78,6 +78,9 @@ exports.getAllListings = async (req, res) => {
       price: hall.price,
       openHour: hall.open_hour,
       closeHour: hall.close_hour,
+      latitude: hall.latitude,
+      longitude: hall.longitude,
+      address: hall.address,
       // Fix image URL generation
       images: hall.images ? hall.images.map(img => 
         img.url // Cloudinary URLs are already complete, no need to modify
@@ -177,7 +180,10 @@ exports.createListing = async (req, res) => {
       open_hour,
       close_hour,
       owner_id,
-      categories
+      categories,
+      latitude,
+      longitude,
+      address
     } = req.body;
 
     // Add debugging for owner_id
@@ -236,7 +242,7 @@ exports.createListing = async (req, res) => {
       return res.status(400).json({ error: 'Price must be a non-negative number' });
     }
 
-    // Create the hall listing without type field
+    // Create the hall listing with coordinate fields
     const newListing = await Hall.create({
       name,
       description,
@@ -245,7 +251,10 @@ exports.createListing = async (req, res) => {
       price: parseFloat(price),
       open_hour,
       close_hour,
-      owner_id: parseInt(owner_id) // Ensure it's an integer
+      owner_id: parseInt(owner_id), // Ensure it's an integer
+      latitude: latitude ? parseFloat(latitude) : null,
+      longitude: longitude ? parseFloat(longitude) : null,
+      address: address || location
     });
 
     console.log('Created hall:', newListing);
@@ -286,7 +295,10 @@ exports.createListing = async (req, res) => {
         price: newListing.price,
         openHour: newListing.open_hour,
         closeHour: newListing.close_hour,
-        ownerId: newListing.owner_id
+        ownerId: newListing.owner_id,
+        latitude: newListing.latitude,
+        longitude: newListing.longitude,
+        address: newListing.address
       }
     });
   } catch (err) {
