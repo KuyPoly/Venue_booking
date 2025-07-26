@@ -26,7 +26,7 @@ exports.uploadImages = upload.array('images', 5);
 // Get all listings for a specific owner
 exports.getAllListings = async (req, res) => {
   try {
-    const { owner_id } = req.query;
+    const { owner_id, category } = req.query;
     
     console.log('=== getAllListings Debug ===');
     console.log('Received owner_id:', owner_id);
@@ -41,24 +41,38 @@ exports.getAllListings = async (req, res) => {
     const hallCount = await Hall.count({ where: { owner_id } });
     console.log(`📊 Total halls for owner ${owner_id}:`, hallCount);
 
+    const include = [
+      { 
+        model: Image, 
+        as: 'images', 
+        attributes: ['url', 'order'], 
+        order: [['order', 'ASC']],
+        required: false 
+      },
+      { 
+        model: Category, 
+        as: 'categories', 
+        through: { attributes: [] }, 
+        attributes: ['id', 'name'],
+        required: false 
+      }
+    ];
+
+    // Add category filter if provided
+    if (category) {
+      include.push({
+        model: Category, 
+        as: 'categories', 
+        where: { name: category },
+        through: { attributes: [] }, 
+        attributes: ['id', 'name'],
+        required: true
+      });
+    }
+
     const listings = await Hall.findAll({
       where: { owner_id },
-      include: [
-        { 
-          model: Image, 
-          as: 'images', 
-          attributes: ['url', 'order'], 
-          order: [['order', 'ASC']],
-          required: false 
-        },
-        { 
-          model: Category, 
-          as: 'categories', 
-          through: { attributes: [] }, 
-          attributes: ['id', 'name'],
-          required: false 
-        }
-      ],
+      include,
       order: [['created_at', 'DESC']]
     });
 
