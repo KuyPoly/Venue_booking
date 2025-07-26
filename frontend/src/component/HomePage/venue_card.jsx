@@ -152,8 +152,8 @@ export default function CategorySection() {
   }
 
   // Show only first 8 venues (2 rows x 4 columns)
-  const venuesToShow = venues.slice(0, 8);
-  const hasMoreVenues = venues.length > 8;
+  const venuesToShow = venues.slice(0, 4);
+  const hasMoreVenues = venues.length > 4;
 
   return (
     <div className="category-section">
