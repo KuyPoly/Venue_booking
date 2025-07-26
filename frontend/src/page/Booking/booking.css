@@ -204,6 +204,8 @@ body {
   padding: 32px 40px 32px 40px;
   min-height: calc(100vh - 64px);
   transition: margin-left 0.3s ease;
+  padding: 20px 0 20px 0;
+
 }
   .main-content h1 {
     font-size: 2.2rem;
@@ -221,7 +223,7 @@ body {
     flex: 1;
     background: #f3eaff;
     border-radius: 8px;
-    padding: 28px 24px;
+    padding: 0px 240px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -687,18 +689,18 @@ body {
   display: flex;
   flex-direction: column;
   gap: 28px;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 100%;
 }
+
 
 /* Booking Card */
 .booking-card {
-  background: #fff;
-  border-radius: 7px;
-  border: 1.5px solid #e5e5e5;
-  box-shadow: 0 2px 8px 0 rgba(60,60,60,0.04);
-  padding: 18px 24px 18px 24px;
-  display: flex;
-  flex-direction: column;
-  position: relative;
+  margin-left: 20px;   
+  width: 100%;
+  max-width: none;
+  align-items: flex-start;
 }
 
 .booking-card-header {
@@ -756,6 +758,7 @@ body {
   
   .booking-card {
     padding: 16px 18px;
+    width: 100%;
   }
   
   .booking-card-header {
@@ -772,6 +775,7 @@ body {
   
   .booking-card {
     padding: 14px 16px;
+    width: 100%;
   }
   
   .booking-card-header {
@@ -795,6 +799,7 @@ body {
   
   .booking-card {
     padding: 12px 14px;
+    width: 100%;
   }
   
   .booking-card-header {
@@ -813,6 +818,7 @@ body {
 @media (max-width: 375px) {
   .booking-card {
     padding: 10px 12px;
+    width: 100%;
   }
   
   .booking-requests-title {
