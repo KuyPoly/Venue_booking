@@ -135,7 +135,7 @@ function Featured() {
   }
 
   // Show only first 6 featured venues
-  const featuredVenues = Array.isArray(venues) ? venues.slice(0, 4) : [];
+  const featuredVenues = Array.isArray(venues) ? venues.slice(0, 8) : [];
 
   return (
     <div className="category-section">
