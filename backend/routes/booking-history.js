@@ -3,7 +3,7 @@ const router = express.Router();
 
 // Example GET route for bookings
 router.get('/', (req, res) => {
-  res.json({ message: 'Bookings route is working!' });
+  res.json({ message: 'Booking history route is working!' });
 });
 
 const Booking = require('../model/Booking');
