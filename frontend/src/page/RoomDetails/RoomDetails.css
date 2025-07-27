@@ -467,3 +467,166 @@
 .like.liked .favorite-icon {
   color: #43d13a;
 }
+
+/* See Location Button */
+.see-location-btn {
+  background: #1a237e;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s;
+  margin-left: 12px;
+}
+
+.see-location-btn:hover {
+  background: #0a1857;
+}
+
+.see-location-btn svg {
+  font-size: 0.8rem;
+}
+
+/* Map Modal Styles */
+.map-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.map-modal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 0;
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 600px;
+  height: 500px;
+  outline: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.map-modal-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.map-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px 16px 24px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.map-modal-header h3 {
+  color: #1a237e;
+  font-size: 1.3rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.map-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.get-directions-btn {
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s;
+}
+
+.get-directions-btn:hover {
+  background: #218838;
+}
+
+.get-directions-btn svg {
+  font-size: 0.8rem;
+}
+
+.map-modal-close {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.map-modal-close:hover {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.map-modal-body {
+  flex: 1;
+  padding: 20px 24px;
+  overflow: hidden;
+}
+
+.map-modal-footer {
+  padding: 16px 24px 20px 24px;
+  border-top: 1px solid #e5e5e5;
+  background: #f8f9fa;
+}
+
+.venue-address {
+  background: #f8f9fa;
+  padding: 12px 16px;
+  border-radius: 6px;
+  border-left: 4px solid #1a237e;
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.venue-address strong {
+  color: #1a237e;
+}
+
+/* Update venue-meta to accommodate the button */
+.venue-meta {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  color: #0a1857;
+  font-size: 1.1rem;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-start;
+  text-align: left;
+}

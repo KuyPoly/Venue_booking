@@ -214,6 +214,9 @@ exports.getVenueById = async (req, res) => {
       price: venue.price,
       openHour: venue.open_hour,
       closeHour: venue.close_hour,
+      latitude: venue.latitude,
+      longitude: venue.longitude,
+      address: venue.address,
       // Handle both Cloudinary URLs and legacy local URLs
       images: venue.images ? venue.images.map(img => 
         img.url // Cloudinary URLs are already complete, no need to modify

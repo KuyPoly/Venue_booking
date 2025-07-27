@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 import { FaSnowflake, FaChair, FaWifi, FaHeadset, FaChalkboard, FaRestroom, FaVolumeUp, FaMicrophone, FaTag, FaMapMarkerAlt, FaChevronLeft, FaChevronRight, FaCheckCircle } from 'react-icons/fa';
 import { FaStar } from 'react-icons/fa';
+import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 import './RoomDetails.css';
 import './confirmation-overlay.css';
 import ConfirmationOverlay from './ConfirmationOverlay';
@@ -13,6 +14,17 @@ import image5 from '../../assets/image5.png'; // Placeholder image
 import { AuthContext } from '../../context/AuthContext';
 import SignupPopUp from '../../component/HomePage/SignupPopUp';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import config from '../../config/config';
+
+// Google Maps configuration
+const mapContainerStyle = {
+  width: '100%',
+  height: '300px',
+  borderRadius: '8px',
+  border: '1px solid #ddd'
+};
+
+const defaultCenter = config.googleMaps.defaultCenter;
 
 const galleryImages = [
     image2,
@@ -61,6 +73,65 @@ export default function RoomDetails() {
   const [showFavoriteModal, setShowFavoriteModal] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
+  const [guestError, setGuestError] = useState('');
+  const [showMapModal, setShowMapModal] = useState(false);
+
+  // Google Maps loading
+  const { isLoaded: isMapLoaded, loadError: mapLoadError } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: config.googleMaps.apiKey,
+    libraries: ['places']
+  });
+
+  // Get venue location for map
+  const venueLocation = venue && venue.latitude && venue.longitude 
+    ? { lat: parseFloat(venue.latitude), lng: parseFloat(venue.longitude) }
+    : null;
+
+  // Geocode venue location if coordinates aren't available
+  const [geocodedLocation, setGeocodedLocation] = useState(null);
+  const [geocodingLoading, setGeocodingLoading] = useState(false);
+  
+  useEffect(() => {
+    const geocodeVenueLocation = async () => {
+      if (!venue || venueLocation || !venue.location) return;
+      
+      setGeocodingLoading(true);
+      try {
+        // Use Google Maps Geocoding API to get coordinates from address
+        const response = await fetch(
+          `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(venue.location)}&key=${config.googleMaps.apiKey}`
+        );
+        const data = await response.json();
+        
+        if (data.status === 'OK' && data.results.length > 0) {
+          const location = data.results[0].geometry.location;
+          setGeocodedLocation({
+            lat: location.lat,
+            lng: location.lng
+          });
+        }
+      } catch (error) {
+        console.error('Geocoding error:', error);
+      } finally {
+        setGeocodingLoading(false);
+      }
+    };
+
+    geocodeVenueLocation();
+  }, [venue, venueLocation]);
+
+  // Use geocoded location as fallback
+  const finalVenueLocation = venueLocation || geocodedLocation;
+
+  // Debug venue location
+  console.log('Venue data:', venue);
+  console.log('Venue location:', venueLocation);
+  console.log('Geocoded location:', geocodedLocation);
+  console.log('Final venue location:', finalVenueLocation);
+  console.log('Venue coordinates:', venue ? { lat: venue.latitude, lng: venue.longitude } : 'No venue');
+  console.log('Venue address:', venue?.address);
+  console.log('Venue location string:', venue?.location);
 
   // Fetch favorites for logged-in user
   const fetchFavorites = async () => {
@@ -131,8 +202,16 @@ export default function RoomDetails() {
       setShowSignupModal(true);
       return;
     }
+
+    // Validate guest count against venue capacity
+    if (venue && guests > venue.capacity) {
+      setGuestError(`Maximum capacity for this venue is ${venue.capacity} guests`);
+      return;
+    }
+
     setBookingLoading(true);
     setBookingError('');
+    setGuestError('');
     setBookingSuccess(false);
     try {
       const res = await fetch('http://localhost:5000/bookings', {
@@ -158,6 +237,20 @@ export default function RoomDetails() {
       setBookingError('Booking failed. Please try again.');
     } finally {
       setBookingLoading(false);
+    }
+  };
+
+  // Handle guest input change with validation
+  const handleGuestChange = (e) => {
+    const value = parseInt(e.target.value);
+    setGuests(value);
+    
+    // Clear previous error
+    setGuestError('');
+    
+    // Validate against venue capacity
+    if (venue && value > venue.capacity) {
+      setGuestError(`Maximum capacity for this venue is ${venue.capacity} guests`);
     }
   };
 
@@ -225,6 +318,13 @@ export default function RoomDetails() {
               <div className="venue-meta">
                 <span className="venue-price">{venue.price ? `$${venue.price}` : 'N/A'}</span>
                 <span className="venue-location">{venue.location || 'N/A'}</span>
+                <button 
+                  className="see-location-btn"
+                  onClick={() => setShowMapModal(true)}
+                  title="View on map"
+                >
+                  <FaMapMarkerAlt /> See location
+                </button>
               </div>
               <p className="venue-description">{venue.description}</p>
               <h3>Feature</h3>
@@ -239,6 +339,7 @@ export default function RoomDetails() {
             </div>
           </div>
         </div>
+
         {/* Right: Booking Form */}
         {!showPayment ? (
           <div className="room-booking-form">
@@ -257,9 +358,19 @@ export default function RoomDetails() {
                 </div>
               </div>
               <label>Guests</label>
-              <input type="number" min="1" value={guests} onChange={e => setGuests(e.target.value)} required />
+              <input 
+                type="number" 
+                min="1" 
+                max={venue ? venue.capacity : undefined}
+                value={guests} 
+                onChange={handleGuestChange} 
+                required 
+              />
+              {guestError && <div className="booking-error">{guestError}</div>}
               {bookingError && <div className="booking-error">{bookingError}</div>}
-              <button type="submit" className="continue-btn" disabled={bookingLoading}>{bookingLoading ? 'Booking...' : 'Continue'}</button>
+              <button type="submit" className="continue-btn" disabled={bookingLoading || guestError}>
+                {bookingLoading ? 'Booking...' : 'Continue'}
+              </button>
             </form>
           </div>
         ) : (
@@ -278,7 +389,14 @@ export default function RoomDetails() {
               </div>
             </div>
             <label>Guests</label>
-            <input type="number" min="1" value={guests} onChange={e => setGuests(e.target.value)} />
+            <input 
+              type="number" 
+              min="1" 
+              max={venue ? venue.capacity : undefined}
+              value={guests} 
+              onChange={handleGuestChange} 
+            />
+            {guestError && <div className="booking-error">{guestError}</div>}
             <div className="payment-total">Total Price : ${venue.price || 1000}</div>
             <div className="payment-method-row">
               <button
@@ -399,6 +517,91 @@ export default function RoomDetails() {
         onBackHome={() => window.location.href = '/'}
       />
       <SignupPopUp open={showSignupModal} onClose={() => setShowSignupModal(false)} />
+
+      {/* Map Modal */}
+      <Modal
+        isOpen={showMapModal}
+        onRequestClose={() => setShowMapModal(false)}
+        className="map-modal"
+        overlayClassName="map-modal-overlay"
+        contentLabel="Venue Location"
+      >
+        <div className="map-modal-content">
+          <div className="map-modal-header">
+            <h3>📍 {venue?.name} - Location</h3>
+            <div className="map-modal-actions">
+              <button 
+                className="get-directions-btn"
+                onClick={() => {
+                  const venueAddress = venue?.address || venue?.location || venue?.name;
+                  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venueAddress)}`;
+                  window.open(googleMapsUrl, '_blank');
+                }}
+                title="Open in Google Maps"
+              >
+                <FaMapMarkerAlt /> Get Directions
+              </button>
+              <button 
+                className="map-modal-close"
+                onClick={() => setShowMapModal(false)}
+                aria-label="Close map"
+              >
+                ×
+              </button>
+            </div>
           </div>
+          
+          <div className="map-modal-body">
+            {isMapLoaded ? (
+              geocodingLoading ? (
+                <div className="map-loading">
+                  <p>Finding venue location...</p>
+                </div>
+              ) : (
+                <GoogleMap
+                  key={finalVenueLocation ? `${finalVenueLocation.lat}-${finalVenueLocation.lng}` : 'default'}
+                  mapContainerStyle={{
+                    width: '100%',
+                    height: '400px',
+                    borderRadius: '8px'
+                  }}
+                  center={finalVenueLocation || defaultCenter}
+                  zoom={finalVenueLocation ? 15 : 10}
+                  options={{
+                    streetViewControl: false,
+                    mapTypeControl: false,
+                    fullscreenControl: false
+                  }}
+                >
+                  {finalVenueLocation && (
+                    <Marker
+                      position={finalVenueLocation}
+                      title={venue?.name}
+                    />
+                  )}
+                </GoogleMap>
+              )
+            ) : mapLoadError ? (
+              <div className="map-error">
+                <p>Unable to load map</p>
+                <small>Error: {mapLoadError.message}</small>
+              </div>
+            ) : (
+              <div className="map-loading">
+                <p>Loading map...</p>
+              </div>
+            )}
+          </div>
+
+          {venue?.address && (
+            <div className="map-modal-footer">
+              <div className="venue-address">
+                <strong>Address:</strong> {venue.address}
+              </div>
+            </div>
+          )}
+        </div>
+      </Modal>
+    </div>
   );
 }

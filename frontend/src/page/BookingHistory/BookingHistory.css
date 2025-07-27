@@ -2,6 +2,10 @@
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  min-height: calc(100vh - 200px); /* Account for header and footer */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .booking-history-container h1 {
@@ -13,6 +17,18 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
+  justify-content: center;
+  align-items: start;
+}
+
+.no-bookings {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  min-height: 200px;
 }
 
 .booking-card {

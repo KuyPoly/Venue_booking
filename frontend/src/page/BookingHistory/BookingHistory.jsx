@@ -54,7 +54,9 @@ const BookingHistory = () => {
     <div className="booking-history-container">
       <h1>Booking History</h1>
       {bookings.length === 0 ? (
-        <p>You have no bookings yet.</p>
+        <div className="no-bookings">
+          <p>You have no bookings yet.</p>
+        </div>
       ) : (
         <div className="bookings-grid">
           {bookings.map((booking) => (
