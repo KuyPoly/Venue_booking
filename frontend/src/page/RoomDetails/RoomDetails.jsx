@@ -402,10 +402,10 @@ export default function RoomDetails() {
               onChange={handleGuestChange} 
             />
             {guestError && <div className="booking-error">{guestError}</div>}
-            <div className="payment-total" style={{textAlign:'left',fontWeight:'bold'}}>
+            <div className="payment-total" style={{textAlign:'left',color:'#222'}}>
               Total Price : ${venue.price || 1000}
             </div>
-            <div style={{fontWeight:'bold',fontSize:'1.1rem',color:'#222',margin:'16px 0 0px 0',textAlign:'left'}}>
+            <div style={{fontWeight:'bold',fontSize:'1.1rem',color:'#222',marginTop:'18px',textAlign:'left'}}>
               Choose Payment Method
             </div>
             <div className="payment-method-row">

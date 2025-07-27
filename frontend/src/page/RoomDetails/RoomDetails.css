@@ -319,13 +319,22 @@
   font-weight: 600;
   color: #0a1857;
   font-size: 1.1rem;
+  flex-wrap: wrap;
+  text-align: start;
+  justify-content: flex-start;
 }
 .venue-price {
   font-size: 1.2rem;
+  text-align: left;
+  font-weight: bold;
+  color: #0055A4;
+  margin-bottom: 8px;
 }
 .venue-location {
-  font-size: 1.05rem;
-  color: #444;
+  font-size: 1.25rem;
+  color: #555;
+  text-align: left;
+  margin-bottom: 12px;
 }
 .venue-description {
   color: #444;
@@ -482,7 +491,8 @@
   align-items: center;
   gap: 6px;
   transition: background 0.2s;
-  margin-left: 12px;
+  margin-left: 0;
+  text-align: left;
 }
 
 .see-location-btn:hover {
@@ -621,12 +631,12 @@
 /* Update venue-meta to accommodate the button */
 .venue-meta {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   font-weight: 600;
   color: #0a1857;
   font-size: 1.1rem;
   flex-wrap: wrap;
-  gap: 8px;
   justify-content: flex-start;
   text-align: left;
 }

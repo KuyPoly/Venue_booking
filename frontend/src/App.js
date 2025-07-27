@@ -23,12 +23,8 @@ import Topbar from './component/Owner/Topbar';
 import BookingHistory from './page/BookingHistory/BookingHistory';
 import BookingDetails from './page/BookingDetails/BookingDetails';
 import DebugInputTest from './components/DebugInputTest';
-import Profile from './page/Profile/profile';
-import Setting from './page/OwnerSetting/setting';
-
-// Import the Profile and Setting components we created
-import ProfileComponent from './Profile';
-import SettingComponent from './Setting';
+import ProfileComponent from './page/Profile/profile';
+import SettingComponent from './page/OwnerSetting/setting';
 
 // Dashboard Layout without navbar/footer
 function DashboardLayout({ children }) {
