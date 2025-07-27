@@ -22,9 +22,9 @@ import Sidebar from './component/Owner/Sidebar';
 import Topbar from './component/Owner/Topbar';
 import BookingHistory from './page/BookingHistory/BookingHistory';
 import BookingDetails from './page/BookingDetails/BookingDetails';
+import DebugInputTest from './components/DebugInputTest';
 import Profile from './page/Profile/profile';
 import Setting from './page/OwnerSetting/setting';
-
 
 
 // Dashboard Layout without navbar/footer
@@ -257,6 +257,12 @@ function App() {
               <DashboardLayout>
                 <OwnerListings />
               </DashboardLayout>
+            }/>
+            
+            <Route path="/debug-input" element={
+              <div style={{ padding: '20px' }}>
+                <DebugInputTest />
+              </div>
             }/>
           </Routes>
         </div>

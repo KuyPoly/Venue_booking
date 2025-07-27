@@ -2,6 +2,8 @@ const Hall = require('../model/Hall');
 const Image = require('../model/Image');
 const Category = require('../model/Category');
 const HallCategory = require('../model/HallCategory');
+const User = require('../model/User');
+const { sendVenueAddedNotification } = require('../utils/emailJSService');
 const multer = require('multer');
 const { storage, cloudinary } = require('../config/cloudinary');
 
@@ -289,6 +291,24 @@ exports.createListing = async (req, res) => {
   console.log('Created images:', imageRecords);
 }
 
+    // Fetch owner information to include in response
+    const owner = await User.findByPk(newListing.owner_id, {
+      attributes: ['user_id', 'first_name', 'last_name', 'email']
+    });
+
+    // Optional: Send email notification from backend (alternative to frontend EmailJS)
+    // Uncomment the following lines if you want to send email from backend instead
+    /*
+    if (owner) {
+      try {
+        await sendVenueAddedNotification(newListing, owner);
+        console.log('Email notification sent successfully from backend');
+      } catch (emailError) {
+        console.error('Failed to send email from backend:', emailError);
+      }
+    }
+    */
+
     res.status(201).json({
       message: 'New venue created successfully!',
       listing: {
@@ -301,7 +321,13 @@ exports.createListing = async (req, res) => {
         openHour: newListing.open_hour,
         closeHour: newListing.close_hour,
         ownerId: newListing.owner_id
-      }
+      },
+      owner: owner ? {
+        id: owner.user_id,
+        first_name: owner.first_name,
+        last_name: owner.last_name,
+        email: owner.email
+      } : null
     });
   } catch (err) {
     console.error('Error creating listing:', err);
