@@ -12,7 +12,9 @@ const categoryIcons = {
   party: '🎉'
 };
 
-export default function CategorySection() {
+export default function CategorySection(props) {
+  // Default to false if not provided
+  const hideCategories = props.hideCategories === true;
   const [categories, setCategories] = useState([]);
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -151,6 +153,56 @@ export default function CategorySection() {
     );
   }
 
+  if (props.venue) {
+    const venue = props.venue;
+    return (
+      <div 
+        key={venue.id} 
+        className="venue-card" 
+        onClick={() => handleVenueClick(venue.id)}
+        style={{ cursor: 'pointer' }}
+      >
+        <img 
+          src={venue.image || pancakes} 
+          alt={venue.type} 
+          className="venue-img"
+          onError={(e) => {
+            e.target.src = pancakes;
+          }}
+        />
+        <div className="venue-info">
+          <h3 className="venue-name">{venue.name}</h3>
+          <p className="venue-location">{venue.location}</p>
+          <p className="venue-type">{venue.type}</p>
+          <p className="venue-capacity">👥 {venue.capacity} guests</p>
+          <p className="venue-price">{formatPrice(venue.price)}</p>
+          <div className="venue-footer">
+            <span 
+              className={`like${favoriteIds.includes(venue.id) ? ' liked' : ''}`}
+              onClick={e => handleFavoriteClick(e, venue.id)}
+              title={isAuthenticated ? (favoriteIds.includes(venue.id) ? 'Remove from favorites' : 'Add to favorites') : 'Login to favorite'}
+            >
+              {favoriteIds.includes(venue.id) ? (
+                <FaHeart className="favorite-icon filled" />
+              ) : (
+                <FaRegHeart className="favorite-icon" />
+              )}
+            </span>
+            {(!hideCategories && venue.categories && venue.categories.length > 0) && (
+              <span className="venue-categories">
+                {venue.categories.slice(0, 2).map(cat => (
+                  <span key={cat} className="category-tag">
+                    {getCategoryIcon(cat)} {cat}
+                  </span>
+                ))}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Show only first 8 venues (2 rows x 4 columns)
   const venuesToShow = venues.slice(0, 4);
   const hasMoreVenues = venues.length > 4;
@@ -158,24 +210,26 @@ export default function CategorySection() {
   return (
     <div className="category-section">
       <SignupPopUp open={showFavoriteModal} onClose={() => setShowFavoriteModal(false)} />
-      <div className="categories">
-        {categories.map((category) => (
-          <div 
-            key={category.id} 
-            className={`category-item ${selectedCategory === category.name ? 'active' : ''}`}
-            onClick={() => handleCategoryClick(category.name)}
-          >
-            <span className="category-icon">{getCategoryIcon(category.name)}</span>
-            <p>{category.name.charAt(0).toUpperCase() + category.name.slice(1)}</p>
-            <button 
-              className="category-see-more-btn"
-              onClick={(e) => handleCategorySeeMore(category.name, e)}
+      {!hideCategories && (
+        <div className="categories">
+          {categories.map((category) => (
+            <div 
+              key={category.id} 
+              className={`category-item ${selectedCategory === category.name ? 'active' : ''}`}
+              onClick={() => handleCategoryClick(category.name)}
             >
-              See More
-            </button>
-          </div>
-        ))}
-      </div>
+              <span className="category-icon">{getCategoryIcon(category.name)}</span>
+              <p>{category.name.charAt(0).toUpperCase() + category.name.slice(1)}</p>
+              <button 
+                className="category-see-more-btn"
+                onClick={(e) => handleCategorySeeMore(category.name, e)}
+              >
+                See More
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="venues-grid">
         {venues.length === 0 ? (
@@ -217,7 +271,7 @@ export default function CategorySection() {
                         <FaRegHeart className="favorite-icon" />
                       )}
                     </span>
-                    {venue.categories && venue.categories.length > 0 && (
+                    {(!hideCategories && venue.categories && venue.categories.length > 0) && (
                       <span className="venue-categories">
                         {venue.categories.slice(0, 2).map(cat => (
                           <span key={cat} className="category-tag">

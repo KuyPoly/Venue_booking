@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import bgImage from '../../assets/image1.png';
 import '../../page/Homepage/Home.css'; // 
+import { useNavigate } from 'react-router-dom';
 
 export default function Hero() {
   const [backendMessage, setBackendMessage] = useState('');
+  const [location, setLocation] = useState('');
+  const [guests, setGuests] = useState('');
+  const [budget, setBudget] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://localhost:3000/')
@@ -24,10 +29,34 @@ export default function Hero() {
           Book your dream venue today!
         </p>
         <div className="search-box">
-          <input type="text" placeholder="📍 Target Location" />
-          <input type="number" placeholder="👥 No. of Guests" />
-          <input type="text" placeholder="💲 Budget" />
-          <button className="search-btn">🔍 Search</button>
+          <input
+            type="text"
+            placeholder="📍 Target Location"
+            value={location}
+            onChange={e => setLocation(e.target.value)}
+          />
+          <input
+            type="number"
+            placeholder="👥 No. of Guests"
+            value={guests}
+            onChange={e => setGuests(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="💲 Budget"
+            value={budget}
+            onChange={e => setBudget(e.target.value)}
+          />
+          <button className="search-btn"
+            onClick={() =>{
+              const params = new URLSearchParams({ 
+                location, 
+                guests, 
+                budget 
+              }).toString();
+              navigate(`/venuesearch?${params}`);
+            }}
+          >🔍 Search</button>
         </div>
       </div>
     </div>

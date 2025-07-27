@@ -12,6 +12,7 @@ import LoginModal from './component/LoginModal/LoginModal';
 import SignupModal from './component/SignupModal/SignupModal';
 import Favorites from './page/Favorites/Favorites';
 import Listing from './page/Listing/Listing';
+import VenueSearch from './page/VenueSearch/VenueSearch';
 // Dashboard components
 import Dashboard from './page/Dashboard/Dashboard';
 import Booking from './page/Booking/booking';
@@ -210,6 +211,21 @@ function App() {
                 handleSwitchToLogin={handleSwitchToLogin}
               >
                 <BookingDetails />
+              </RegularLayout>
+            } />
+            
+            <Route path="/venuesearch" element={
+              <RegularLayout 
+                isLoginModalOpen={isLoginModalOpen}
+                isSignupModalOpen={isSignupModalOpen}
+                openLoginModal={openLoginModal}
+                openSignupModal={openSignupModal}
+                closeLoginModal={closeLoginModal}
+                closeSignupModal={closeSignupModal}
+                handleSwitchToSignup={handleSwitchToSignup}
+                handleSwitchToLogin={handleSwitchToLogin}
+              >
+                <VenueSearch />
               </RegularLayout>
             } />
             

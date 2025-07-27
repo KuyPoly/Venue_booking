@@ -18,6 +18,9 @@ const authRoutes = require('./routes/auth');
 const venueRoutes = require('./routes/venues');
 const listingRoutes = require('./routes/listing');
 const favoriteRoutes = require('./routes/favorites');
+const bookingsRoutes = require('./routes/booking');
+const paymentsRoutes = require('./routes/payments');
+const venueSearchRoutes = require('./routes/venueSearch');
 
 // Import additional routes
 const bookingRoutes = require('./routes/booking-history');
@@ -61,5 +64,11 @@ async function startServer() {
     console.error('Unable to start server:', error);
   }
 }
+app.use(authRoutes);
+app.use(venueRoutes);
+app.use(favoriteRoutes);
+app.use('/bookings', bookingsRoutes);
+app.use('/payments', paymentsRoutes);
+app.use('/venuesearch', venueSearchRoutes);
 
 startServer();
