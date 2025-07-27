@@ -4,6 +4,7 @@ import pancakes from '../../assets/image1.png';
 import './VenuesList.css';
 import { AuthContext } from '../../context/AuthContext';
 import SignupPopUp from '../../component/HomePage/SignupPopUp';
+import ABAPayModal from '../../component/ABAPayModal';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 const categoryIcons = {

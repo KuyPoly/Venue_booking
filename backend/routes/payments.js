@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Payment = require('../model/Payment');
 const Booking = require('../model/Booking');
+const { generateABAQR } = require('../controllers/abaPay');
 
 // POST /payments - create a new payment
 router.post('/', async (req, res) => {
@@ -26,6 +27,9 @@ router.post('/', async (req, res) => {
     res.status(500).json({ error: 'Failed to save payment' });
   }
 });
+
+// Generate ABA QR Code
+router.post('/aba-qr', generateABAQR);
 
 // You can add GET, PUT, DELETE as needed
 

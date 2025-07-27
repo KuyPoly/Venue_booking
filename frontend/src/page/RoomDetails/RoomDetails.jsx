@@ -1,3 +1,4 @@
+                        
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
@@ -15,6 +16,7 @@ import { AuthContext } from '../../context/AuthContext';
 import SignupPopUp from '../../component/HomePage/SignupPopUp';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import config from '../../config/config';
+import ABAPayModal from '../../component/ABAPayModal';
 
 // Google Maps configuration
 const mapContainerStyle = {
@@ -46,6 +48,8 @@ const features = [
 
 export default function RoomDetails() {
   const [selectedPayment, setSelectedPayment] = useState(null);
+  const [activeStep, setActiveStep] = useState(1);
+  const [showABAPayModal, setShowABAPayModal] = useState(false);
   const [cardNumber, setCardNumber] = useState('');
   const [cardName, setCardName] = useState('');
   const [cardExpiry, setCardExpiry] = useState('');
@@ -75,6 +79,7 @@ export default function RoomDetails() {
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [guestError, setGuestError] = useState('');
   const [showMapModal, setShowMapModal] = useState(false);
+  const [showConfirmLoading, setShowConfirmLoading] = useState(false); // <-- Added state for confirm loading
 
   // Google Maps loading
   const { isLoaded: isMapLoaded, loadError: mapLoadError } = useJsApiLoader({
@@ -397,30 +402,90 @@ export default function RoomDetails() {
               onChange={handleGuestChange} 
             />
             {guestError && <div className="booking-error">{guestError}</div>}
-            <div className="payment-total">Total Price : ${venue.price || 1000}</div>
+            <div className="payment-total" style={{textAlign:'left',fontWeight:'bold'}}>
+              Total Price : ${venue.price || 1000}
+            </div>
+            <div style={{fontWeight:'bold',fontSize:'1.1rem',color:'#222',margin:'16px 0 0px 0',textAlign:'left'}}>
+              Choose Payment Method
+            </div>
             <div className="payment-method-row">
-              <button
-                type="button"
-                className={`payment-method-btn custom-credit-btn${selectedPayment === 'credit' ? ' selected' : ''}`}
-                onClick={() => setSelectedPayment('credit')}
-              >
-                <svg className="credit-card-svg" width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="6" y="10" width="28" height="20" rx="3" fill="#fff" stroke="#333" strokeWidth="2"/>
-                  <rect x="6" y="16" width="28" height="4" fill="#333"/>
-                </svg>
-                <span className="custom-btn-label">Credit Card</span>
-              </button>
-              <button
-                type="button"
-                className={`payment-method-btn custom-paypal-btn${selectedPayment === 'paypal' ? ' selected' : ''}`}
-                onClick={() => setSelectedPayment('paypal')}
-              >
-                <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" alt="PayPal" className="paypal-logo" style={{height:'32px',marginRight:'8px'}} />
-                <span className="custom-btn-label" style={{fontWeight:'bold',color:'#253b80'}}>
-                  <span style={{color:'#253b80',fontWeight:'bold',fontFamily:'Arial'}}>Pay</span><span style={{color:'#179bd7',fontWeight:'bold',fontFamily:'Arial'}}>Pal</span>
-                </span>
-                <span className="custom-btn-label"></span>
-              </button>
+              {selectedPayment === null && (
+                <>
+                  <button
+                    type="button"
+                    className={`payment-method-btn custom-credit-btn`}
+                    onClick={() => setSelectedPayment('credit')}
+                  >
+                    <svg className="credit-card-svg" width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="6" y="10" width="28" height="20" rx="3" fill="#fff" stroke="#333" strokeWidth="2"/>
+                      <rect x="6" y="16" width="28" height="4" fill="#333"/>
+                    </svg>
+                    <span className="custom-btn-label">Credit Card</span>
+                  </button>
+                  <button
+                    type="button"
+                    className={`payment-method-btn custom-paypal-btn`}
+                    onClick={() => setSelectedPayment('paypal')}
+                  >
+                    <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" alt="PayPal" className="paypal-logo" style={{height:'32px',marginRight:'8px'}} />
+                    <span className="custom-btn-label" style={{fontWeight:'bold',color:'#253b80'}}>
+                      <span style={{color:'#253b80',fontWeight:'bold',fontFamily:'Arial'}}>Pay</span><span style={{color:'#179bd7',fontWeight:'bold',fontFamily:'Arial'}}>Pal</span>
+                    </span>
+                    <span className="custom-btn-label"></span>
+                  </button>
+                  <button
+                    type="button"
+                    className={`payment-method-btn custom-aba-btn`}
+                    onClick={() => {
+                      setSelectedPayment('aba');
+                      setActiveStep(2);
+                      setShowABAPayModal(true);
+                    }}
+                  >
+                    <img src="https://i.pinimg.com/736x/36/9f/61/369f612149566874dcbc2d8735d51ccb.jpg" alt="ABA Pay" className="aba-logo" style={{height:'32px',marginRight:'8px'}} />
+                    <span className="custom-btn-label" style={{fontWeight:'bold',color:'#0055A4'}}>ABA</span>
+                  </button>
+                </>
+              )}
+              {selectedPayment === 'credit' && (
+                <button
+                  type="button"
+                  className={`payment-method-btn custom-credit-btn selected`}
+                  onClick={() => setSelectedPayment(null)}
+                  style={{width:'100%'}}
+                >
+                  <svg className="credit-card-svg" width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="6" y="10" width="28" height="20" rx="3" fill="#fff" stroke="#333" strokeWidth="2"/>
+                    <rect x="6" y="16" width="28" height="4" fill="#333"/>
+                  </svg>
+                  <span className="custom-btn-label">Credit Card</span>
+                </button>
+              )}
+              {selectedPayment === 'paypal' && (
+                <button
+                  type="button"
+                  className={`payment-method-btn custom-paypal-btn selected`}
+                  onClick={() => setSelectedPayment(null)}
+                  style={{width:'100%'}}
+                >
+                  <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" alt="PayPal" className="paypal-logo" style={{height:'32px',marginRight:'8px'}} />
+                  <span className="custom-btn-label" style={{fontWeight:'bold',color:'#253b80'}}>
+                    <span style={{color:'#253b80',fontWeight:'bold',fontFamily:'Arial'}}>Pay</span><span style={{color:'#179bd7',fontWeight:'bold',fontFamily:'Arial'}}>Pal</span>
+                  </span>
+                  <span className="custom-btn-label"></span>
+                </button>
+              )}
+              {selectedPayment === 'aba' && (
+                <button
+                  type="button"
+                  className={`payment-method-btn custom-aba-btn selected`}
+                  onClick={() => setSelectedPayment(null)}
+                  style={{width:'100%'}}
+                >
+                  <img src="https://i.pinimg.com/736x/36/9f/61/369f612149566874dcbc2d8735d51ccb.jpg" alt="ABA Pay" className="aba-logo" style={{height:'32px',marginRight:'8px'}} />
+                  <span className="custom-btn-label" style={{fontWeight:'bold',color:'#0055A4'}}>ABA</span>
+                </button>
+              )}
             </div>
             {selectedPayment === 'credit' && (
               <form className="credit-form" onSubmit={async e => {
@@ -505,17 +570,122 @@ export default function RoomDetails() {
             {/* Booking success message removed as requested */}
             {/* Removed old paymentSuccess message, overlay will show instead */}
             {paymentError && <div className="booking-error">{paymentError}</div>}
+            {/* ABA Pay Modal - redesigned to match screenshot */}
+            {showABAPayModal && (
+              <div style={{position:'fixed',top:0,left:0,width:'100vw',height:'100vh',background:'rgba(0,0,0,0.5)',zIndex:9999,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <div style={{background:'#fff',borderRadius:'16px',minWidth:'900px',maxWidth:'95vw',display:'flex',boxShadow:'0 2px 24px rgba(0,0,0,0.18)',overflow:'hidden'}}>
+                  {/* Left: Steps and User Info */}
+                  <div style={{flex:'1 1 0',padding:'40px 32px',background:'#f8f8f8',display:'flex',flexDirection:'column',justifyContent:'center'}}>
+                    <div style={{display:'flex',alignItems:'center',marginBottom:'32px'}}>
+                    <div style={{display:'flex',alignItems:'center',justifyContent:'center',margin:'32px 0 24px 0',width:'100%'}}>
+                      <div style={{display:'flex',alignItems:'center',width:'100%'}}>
+                        <div style={{width:'32px',height:'32px',borderRadius:'50%',background:activeStep===1?'#000000ff':'#bcbcbcff',color:'#fff',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:'bold',fontSize:'18px'}}>1</div>
+                        <span style={{marginLeft:'12px',fontWeight:'bold',fontSize:'18px',color:activeStep===1?'#222':undefined}}>Your Booking</span>
+                        <div style={{flex:'1',height:'2px',background:'#e0e0e0',margin:'0 12px'}}></div>
+                        <div style={{width:'32px',height:'32px',borderRadius:'50%',background:activeStep===2?'#000000ff':'#bcbcbcff',color:'#fff',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:'bold',fontSize:'18px'}}>2</div>
+                        <span style={{marginLeft:'12px',fontWeight:'bold',fontSize:'18px',color:activeStep===2?'#222':undefined}}>Payment</span>
+                        <div style={{flex:'1',height:'2px',background:'#e0e0e0',margin:'0 12px'}}></div>
+                        <div style={{width:'32px',height:'32px',borderRadius:'50%',background:activeStep===3?'#000000ff':'#bcbcbcff',color:'#fff',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:'bold',fontSize:'18px'}}>3</div>
+                        <span style={{marginLeft:'12px',fontWeight:'bold',fontSize:'18px',color:activeStep===3?'#222':undefined}}>Complete</span>
+                      </div>
+                    </div>
+                    </div>
+                    <div>
+                      {activeStep === 1 && (
+                        <>
+                          <label>Date</label>
+                          <input type="date" value={date} onChange={e => setDate(e.target.value)} />
+                          <div className="time-row">
+                            <div>
+                              <label>Start time</label>
+                              <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} />
+                            </div>
+                            <div>
+                              <label>Finish time</label>
+                              <input type="time" value={endTime} onChange={e => setEndTime(e.target.value)} />
+                            </div>
+                          </div>
+                          <label>Guests</label>
+                          <input 
+                            type="number" 
+                            min="1" 
+                            max={venue ? venue.capacity : undefined}
+                            value={guests} 
+                            onChange={handleGuestChange} 
+                          />
+                          {guestError && <div className="booking-error">{guestError}</div>}
+                          <div className="payment-total">Total Price : ${venue.price || 1000}</div>
+                        </>
+                      )}
+                      {activeStep === 2 && (
+                        <div className="aba-pay-modal-qr" style={{textAlign:'center'}}>
+                          <img src={require('../../assets/aba-qr.PNG')} alt="ABA QR Code" style={{width:'200px',height:'100%',marginBottom:'20px',borderRadius:'12px',border:'1px solid #e0e0e0'}} />
+                          <div className="aba-pay-modal-qr-label">Scan this QR code with ABA Mobile to pay</div>
+                        </div>
+                      )}
+                      <div style={{marginBottom:'24px'}}>
+                      </div>
+                      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',width:'100%',marginTop:'32px'}}>
+                        {activeStep === 1 && (
+                          <>
+                            <button onClick={() => { setActiveStep(1); setShowABAPayModal(false); }} style={{padding:'12px 32px',borderRadius:'6px',background:'#222',color:'#fff',border:'none',fontWeight:'bold',fontSize:'18px'}}>Back to space</button>
+                            <button onClick={() => setActiveStep(2)} style={{padding:'12px 32px',borderRadius:'6px',background:'#0055A4',color:'#fff',border:'none',fontWeight:'bold',fontSize:'18px'}}>Continue</button>
+                          </>
+                        )}
+                        {activeStep === 2 && (
+                          <>
+                            <button onClick={() => { setActiveStep(1); }} style={{padding:'12px 32px',borderRadius:'6px',background:'#222',color:'#fff',border:'none',fontWeight:'bold',fontSize:'18px'}}>Previous</button>
+                            <button
+                              onClick={async () => {
+                                // Simulate payment success and store in DB
+                                try {
+                                  // Show loading if needed
+                                  setShowConfirmLoading(true);
+                                  const response = await fetch('http://localhost:5000/payments', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                      paid_at: new Date().toISOString(),
+                                      status: 'paid',
+                                      method: 'aba',
+                                      booking_id: bookingId,
+                                    }),
+                                  });
+                                  if (!response.ok) throw new Error('Payment failed');
+                                  setActiveStep(3);
+                                } catch (err) {
+                                  alert('Payment failed. Please try again.');
+                                } finally {
+                                  setShowConfirmLoading(false);
+                                }
+                              }}
+                              style={{padding:'12px 32px',borderRadius:'6px',background:'#0055A4',color:'#fff',border:'none',fontWeight:'bold',fontSize:'18px'}}
+                            >
+                              {showConfirmLoading ? 'Processing...' : 'Confirm'}
+                            </button>
+                          </>
+                        )}
+                        {activeStep === 3 && (
+                          <div style={{width:'100%',height:'300px',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',textAlign:'center',margin:'0 auto',minHeight:'300px'}}>
+                            <div style={{flex:'1',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
+                              <h2 style={{marginBottom:'12px',fontSize:'3rem',fontWeight:'bold'}}>Congratulations!</h2>
+                              <div style={{fontSize:'1.25rem',color:'#222',maxWidth:'700px',margin:'0 auto'}}>You've successfully reserved in this venue</div>
+                            </div>
+                            <div style={{width:'100%',display:'flex',justifyContent:'space-between',alignItems:'center',marginTop:'48px'}}>
+                              <button onClick={() => setActiveStep(2)} style={{padding:'12px 32px',borderRadius:'6px',background:'#222',color:'#fff',border:'none',fontWeight:'bold',fontSize:'18px'}}>Previous</button>
+                              <button onClick={() => { setShowABAPayModal(false); navigate('/'); }} style={{padding:'12px 32px',borderRadius:'6px',background:'#0055A4',color:'#fff',border:'none',fontWeight:'bold',fontSize:'18px'}}>Exit</button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div> 
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
-      <ConfirmationOverlay
-        show={showConfirmation}
-        venue={venue}
-        date={date}
-        guests={guests}
-        totalPrice={venue && guests ? Number(venue.price) : ''}
-        onBackHome={() => window.location.href = '/'}
-      />
       <SignupPopUp open={showSignupModal} onClose={() => setShowSignupModal(false)} />
 
       {/* Map Modal */}

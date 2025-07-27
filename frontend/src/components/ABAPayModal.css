@@ -1,0 +1,96 @@
+.aba-pay-modal-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  margin-top: 6px;
+}
+
+.aba-pay-modal-generate-btn {
+  background: #1a237e;
+  color: #fff;
+  padding: 10px 24px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 18px;
+}
+.aba-pay-modal-generate-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.aba-pay-modal-error {
+  color: red;
+  margin-bottom: 12px;
+}
+
+.aba-pay-modal-qr-label {
+  margin-top: 8px;
+  font-size: 15px;
+  color: #333;
+}
+
+.aba-pay-modal-upload-input {
+  margin-top: 8px;
+}
+.aba-pay-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.3);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aba-pay-modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px;
+  min-width: 340px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  position: relative;
+}
+
+.aba-pay-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.aba-pay-modal-title {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.aba-pay-modal-amount {
+  margin-bottom: 16px;
+}
+
+.aba-pay-modal-qr {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.aba-pay-modal-qr img {
+  width: 200px;
+  height: 200px;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+}
+
+.aba-pay-modal-upload {
+  margin-top: 18px;
+  font-size: 14px;
+  color: #666;
+}
