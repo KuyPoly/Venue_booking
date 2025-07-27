@@ -1,258 +1,350 @@
-const Booking = require('../model/Booking');
-const HallReservation = require('../model/HallReservation');
-const Payment = require('../model/Payment');
-const User = require('../model/User');
-const Hall = require('../model/Hall');
+const { Booking, Hall, User, HallReservation } = require('../model/Association');
+const { Op, sequelize } = require('sequelize');
 
-// Get all bookings for owner's halls
-exports.getAllBookings = async (req, res) => {
-  try {
-    const { owner_id } = req.query; // Should come from JWT token
-    
-    if (!owner_id) {
-      return res.status(400).json({ error: 'Owner ID is required' });
-    }
+class BookingController {
+  // Get booking statistics for dashboard
+  static async getBookingStats(ownerId) {
+    try {
+      // Get all halls by this owner
+      const halls = await Hall.findAll({
+        where: { owner_id: ownerId },
+        attributes: ['hall_id']
+      });
 
-    // Find bookings for halls owned by this owner
-    const bookings = await Booking.findAll({
-      include: [
-        {
-          model: User,
-          as: 'user',
-          attributes: ['user_id', 'firstName', 'lastName', 'email', 'phoneNumber']
-        },
-        {
-          model: HallReservation,
-          as: 'hall_reservations',
-          include: [
-            {
-              model: Hall,
-              as: 'hall',
-              where: { owner_id }, // Only include halls owned by this owner
-              attributes: ['hall_id', 'name', 'type', 'location', 'capacity', 'price']
-            }
-          ]
-        },
-        {
-          model: Payment,
-          as: 'payment',
-          required: false,
-          attributes: ['payment_id', 'amount', 'method', 'status', 'created_at']
+      const hallIds = halls.map(hall => hall.hall_id);
+
+      if (hallIds.length === 0) {
+        return {
+          stats: [],
+          totalBookings: 0,
+          totalRevenue: 0
         }
-      ],
-      order: [['created_at', 'DESC']]
-    });
-
-    const transformedBookings = bookings.map(booking => ({
-      bookingId: booking.booking_id,
-      status: booking.status,
-      totalAmount: booking.total_amount,
-      bookingDate: booking.booking_date,
-      createdAt: booking.created_at,
-      customer: {
-        id: booking.user?.user_id,
-        name: `${booking.user?.firstName} ${booking.user?.lastName}`,
-        email: booking.user?.email,
-        phone: booking.user?.phoneNumber
-      },
-      halls: booking.hall_reservations?.map(reservation => ({
-        hallId: reservation.hall?.hall_id,
-        hallName: reservation.hall?.name,
-        hallType: reservation.hall?.type,
-        location: reservation.hall?.location,
-        checkIn: reservation.check_in,
-        checkOut: reservation.check_out
-      })) || [],
-      payment: booking.payment ? {
-        id: booking.payment.payment_id,
-        amount: booking.payment.amount,
-        method: booking.payment.method,
-        status: booking.payment.status,
-        paidAt: booking.payment.created_at
-      } : null
-    }));
-
-    res.json({
-      message: `Found ${transformedBookings.length} bookings for your halls`,
-      bookings: transformedBookings
-    });
-  } catch (err) {
-    console.error('Error fetching owner bookings:', err);
-    res.status(500).json({ error: 'Failed to fetch bookings for your halls' });
-  }
-};
-
-// Get specific booking details (for owner's halls only)
-exports.getBookingById = async (req, res) => {
-  try {
-    const { owner_id } = req.query;
-    
-    const booking = await Booking.findOne({
-      where: { booking_id: req.params.id },
-      include: [
-        {
-          model: User,
-          as: 'user',
-          attributes: ['user_id', 'firstName', 'lastName', 'email', 'phoneNumber', 'address']
-        },
-        {
-          model: HallReservation,
-          as: 'hall_reservations',
-          include: [
-            {
-              model: Hall,
-              as: 'hall',
-              where: { owner_id }, // Ensure owner can only see bookings for their halls
-              attributes: ['hall_id', 'name', 'type', 'description', 'location', 'capacity', 'price']
-            }
-          ]
-        },
-        {
-          model: Payment,
-          as: 'payment',
-          required: false
-        }
-      ]
-    });
-
-    if (!booking) {
-      return res.status(404).json({ error: 'Booking not found or you do not have permission to access it' });
-    }
-
-    const transformedBooking = {
-      bookingId: booking.booking_id,
-      status: booking.status,
-      totalAmount: booking.total_amount,
-      bookingDate: booking.booking_date,
-      createdAt: booking.created_at,
-      customer: {
-        id: booking.user?.user_id,
-        firstName: booking.user?.firstName,
-        lastName: booking.user?.lastName,
-        email: booking.user?.email,
-        phone: booking.user?.phoneNumber,
-        address: booking.user?.address
-      },
-      halls: booking.hall_reservations?.map(reservation => ({
-        reservationId: reservation.hall_reservation_id,
-        hallId: reservation.hall?.hall_id,
-        hallName: reservation.hall?.name,
-        hallType: reservation.hall?.type,
-        hallDescription: reservation.hall?.description,
-        location: reservation.hall?.location,
-        capacity: reservation.hall?.capacity,
-        price: reservation.hall?.price,
-        checkIn: reservation.check_in,
-        checkOut: reservation.check_out
-      })) || [],
-      payment: booking.payment
-    };
-
-    res.json(transformedBooking);
-  } catch (err) {
-    console.error('Error fetching booking details:', err);
-    res.status(500).json({ error: 'Failed to fetch booking details' });
-  }
-};
-
-// Update booking status (owner can confirm/cancel bookings)
-exports.updateBookingStatus = async (req, res) => {
-  try {
-    const { status } = req.body;
-    const { owner_id } = req.query;
-    
-    if (!['pending', 'confirmed', 'cancelled', 'completed'].includes(status)) {
-      return res.status(400).json({ error: 'Invalid status' });
-    }
-
-    // First check if this booking is for owner's hall
-    const booking = await Booking.findOne({
-      where: { booking_id: req.params.id },
-      include: [
-        {
-          model: HallReservation,
-          as: 'hall_reservations',
-          include: [
-            {
-              model: Hall,
-              as: 'hall',
-              where: { owner_id }
-            }
-          ]
-        }
-      ]
-    });
-
-    if (!booking) {
-      return res.status(404).json({ error: 'Booking not found or you do not have permission to update it' });
-    }
-
-    const [updated] = await Booking.update(
-      { status },
-      { where: { booking_id: req.params.id } }
-    );
-
-    if (!updated) {
-      return res.status(404).json({ error: 'Failed to update booking status' });
-    }
-
-    const updatedBooking = await Booking.findByPk(req.params.id);
-    
-    res.json({
-      message: `Booking status updated to ${status}`,
-      booking: {
-        id: updatedBooking.booking_id,
-        status: updatedBooking.status,
-        updatedAt: updatedBooking.updated_at
       }
-    });
-  } catch (err) {
-    console.error('Error updating booking status:', err);
-    res.status(500).json({ error: 'Failed to update booking status' });
-  }
-};
 
-// Get booking statistics for owner (dashboard data)
-exports.getBookingStats = async (req, res) => {
-  try {
-    const { owner_id } = req.query;
-    
-    if (!owner_id) {
-      return res.status(400).json({ error: 'Owner ID is required' });
-    }
-
-    // Get booking stats for owner's halls
-    const stats = await Booking.findAll({
-      attributes: [
-        'status',
-        [sequelize.fn('COUNT', sequelize.col('booking_id')), 'count'],
-        [sequelize.fn('SUM', sequelize.col('total_amount')), 'totalRevenue']
-      ],
-      include: [
-        {
+      // Get booking statistics grouped by status
+      const bookingStats = await Booking.findAll({
+        include: [{
           model: HallReservation,
           as: 'hall_reservations',
-          include: [
-            {
+          include: [{
+            model: Hall,
+            as: 'hall',
+            where: { hall_id: { [Op.in]: hallIds } }
+          }]
+        }],
+        attributes: [
+          'status',
+          [sequelize.fn('COUNT', sequelize.col('Booking.booking_id')), 'count'],
+          [sequelize.fn('SUM', sequelize.col('Booking.total_amount')), 'totalAmount']
+        ],
+        group: ['Booking.status'],
+        raw: true
+      });
+
+      // Calculate totals
+      const totalBookings = bookingStats.reduce((sum, stat) => sum + parseInt(stat.count), 0);
+      const totalRevenue = bookingStats.reduce((sum, stat) => sum + (parseFloat(stat.totalAmount) || 0), 0);
+
+      return {
+        stats: bookingStats,
+        totalBookings,
+        totalRevenue: totalRevenue.toFixed(2)
+      };
+    } catch (error) {
+      throw new Error('Failed to fetch booking statistics');
+    }
+  }
+
+  // Get all bookings for owner's halls
+  static async getOwnerBookings(ownerId) {
+    try {
+      // Get all halls by this owner
+      const halls = await Hall.findAll({
+        where: { owner_id: ownerId },
+        attributes: ['hall_id', 'name']
+      });
+
+      const hallIds = halls.map(hall => hall.hall_id);
+
+      if (hallIds.length === 0) {
+        return { booking: [] };
+      }
+
+      // Get all bookings for these halls
+      const bookings = await Booking.findAll({
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: ['user_id', 'first_name', 'last_name', 'email', 'phone_number']
+          },
+          {
+            model: HallReservation,
+            as: 'hall_reservations',
+            include: [{
               model: Hall,
               as: 'hall',
-              where: { owner_id },
-              attributes: []
-            }
-          ],
-          attributes: []
-        }
-      ],
-      group: ['status'],
-      raw: true
-    });
+              where: { hall_id: { [Op.in]: hallIds } },
+              attributes: ['hall_id', 'name', 'description']
+            }]
+          }
+        ],
+        order: [['created_at', 'DESC']]
+      });
 
-    res.json({
-      message: 'Booking statistics for your halls',
-      stats
-    });
-  } catch (err) {
-    console.error('Error fetching booking stats:', err);
-    res.status(500).json({ error: 'Failed to fetch booking statistics' });
+      // Transform the data to match frontend expectations
+      const transformedBookings = bookings.map(booking => ({
+        bookingId: booking.booking_id,
+        customer: {
+          name: `${booking.user.first_name} ${booking.user.last_name}`,
+          email: booking.user.email,
+          phone: booking.user.phone_number
+        },
+        halls: booking.hall_reservations.map(reservation => ({
+          hallId: reservation.hall.hall_id,
+          hallName: reservation.hall.name,
+          description: reservation.hall.description,
+          startDate: reservation.start_date,
+          endDate: reservation.end_date
+        })),
+        totalAmount: booking.total_amount,
+        bookingDate: booking.booking_date,
+        status: booking.status,
+        createdAt: booking.created_at
+      }));
+
+      return { booking: transformedBookings };
+    } catch (error) {
+      throw new Error('Failed to fetch bookings');
+    }
   }
-};
+
+  // Get specific booking by ID
+  static async getBookingById(bookingId) {
+    try {
+      const booking = await Booking.findByPk(bookingId, {
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: ['user_id', 'first_name', 'last_name', 'email', 'phone_number']
+          },
+          {
+            model: HallReservation,
+            as: 'hall_reservations',
+            include: [{
+              model: Hall,
+              as: 'hall',
+              attributes: ['hall_id', 'name', 'description', 'owner_id']
+            }]
+          }
+        ]
+      });
+
+      if (!booking) {
+        throw new Error('Booking not found');
+      }
+
+      return { booking };
+    } catch (error) {
+      throw new Error('Failed to fetch booking');
+    }
+  }
+
+  // Create new booking
+  static async createBooking(bookingData) {
+    try {
+      // Validate required fields
+      if (!bookingData.user_id || !bookingData.total_amount || !bookingData.booking_date) {
+        throw new Error('Missing required fields');
+      }
+
+      // Create the booking
+      const newBooking = await Booking.create({
+        user_id: bookingData.user_id,
+        total_amount: bookingData.total_amount,
+        booking_date: bookingData.booking_date,
+        status: 'pending'
+      });
+
+      // Create hall reservations
+      if (bookingData.hall_reservations && bookingData.hall_reservations.length > 0) {
+        const hallReservations = bookingData.hall_reservations.map(reservation => ({
+          booking_id: newBooking.booking_id,
+          hall_id: reservation.hall_id,
+          start_date: reservation.start_date,
+          end_date: reservation.end_date
+        }));
+
+        await HallReservation.bulkCreate(hallReservations);
+      }
+
+      return { booking: newBooking };
+    } catch (error) {
+      throw new Error('Failed to create booking');
+    }
+  }
+
+  // Update booking status
+  static async updateBookingStatus(bookingId, updateData) {
+    try {
+      const booking = await Booking.findByPk(bookingId);
+      if (!booking) {
+        throw new Error('Booking not found');
+      }
+
+      // Validate status transition
+      const validStatuses = ['pending', 'confirmed', 'cancelled', 'completed'];
+      if (updateData.status && !validStatuses.includes(updateData.status)) {
+        throw new Error('Invalid status');
+      }
+
+      await booking.update(updateData);
+      return { booking };
+    } catch (error) {
+      throw new Error('Failed to update booking');
+    }
+  }
+
+  // Cancel booking
+  static async cancelBooking(bookingId) {
+    try {
+      const booking = await Booking.findByPk(bookingId);
+      if (!booking) {
+        throw new Error('Booking not found');
+      }
+
+      // Delete associated hall reservations first
+      await HallReservation.destroy({
+        where: { booking_id: bookingId }
+      });
+
+      await booking.destroy();
+      return { message: 'Booking cancelled successfully' };
+    } catch (error) {
+      throw new Error('Failed to cancel booking');
+    }
+  }
+
+  // Check hall availability
+  static async checkHallAvailability(hallId, startDate, endDate, excludeBookingId = null) {
+    try {
+      const whereClause = {
+        hall_id: hallId,
+        [Op.or]: [
+          {
+            start_date: {
+              [Op.between]: [startDate, endDate]
+            }
+          },
+          {
+            end_date: {
+              [Op.between]: [startDate, endDate]
+            }
+          },
+          {
+            [Op.and]: [
+              { start_date: { [Op.lte]: startDate } },
+              { end_date: { [Op.gte]: endDate } }
+            ]
+          }
+        ]
+      };
+
+      if (excludeBookingId) {
+        whereClause.booking_id = { [Op.ne]: excludeBookingId };
+      }
+
+      const conflictingReservations = await HallReservation.findAll({
+        where: whereClause,
+        include: [{
+          model: Booking,
+          as: 'booking',
+          where: { status: { [Op.in]: ['pending', 'confirmed'] } }
+        }]
+      });
+
+      return conflictingReservations.length === 0;
+    } catch (error) {
+      throw new Error('Failed to check hall availability');
+    }
+  }
+
+  // Get booking analytics
+  static async getBookingAnalytics(ownerId) {
+    try {
+      const halls = await Hall.findAll({
+        where: { owner_id: ownerId },
+        attributes: ['hall_id']
+      });
+
+      const hallIds = halls.map(hall => hall.hall_id);
+
+      if (hallIds.length === 0) {
+        return {
+          monthlyBookings: [],
+          revenueData: [],
+          bookingStatusDistribution: []
+        };
+      }
+
+      // Get monthly booking data for the last 6 months
+      const monthlyBookings = await Booking.findAll({
+        include: [{
+          model: HallReservation,
+          as: 'hall_reservations',
+          include: [{
+            model: Hall,
+            as: 'hall',
+            where: { hall_id: { [Op.in]: hallIds } }
+          }]
+        }],
+        where: {
+          created_at: {
+            [Op.gte]: new Date(new Date().setMonth(new Date().getMonth() - 6))
+          }
+        },
+        attributes: [
+          [sequelize.fn('DATE_FORMAT', sequelize.col('Booking.created_at'), '%Y-%m'), 'month'],
+          [sequelize.fn('COUNT', sequelize.col('Booking.booking_id')), 'count'],
+          [sequelize.fn('SUM', sequelize.col('Booking.total_amount')), 'revenue']
+        ],
+        group: [sequelize.fn('DATE_FORMAT', sequelize.col('Booking.created_at'), '%Y-%m')],
+        order: [[sequelize.fn('DATE_FORMAT', sequelize.col('Booking.created_at'), '%Y-%m'), 'ASC']],
+        raw: true
+      });
+
+      // Get booking status distribution
+      const bookingStatusDistribution = await Booking.findAll({
+        include: [{
+          model: HallReservation,
+          as: 'hall_reservations',
+          include: [{
+            model: Hall,
+            as: 'hall',
+            where: { hall_id: { [Op.in]: hallIds } }
+          }]
+        }],
+        attributes: [
+          'status',
+          [sequelize.fn('COUNT', sequelize.col('Booking.booking_id')), 'count']
+        ],
+        group: ['Booking.status'],
+        raw: true
+      });
+
+      return {
+        monthlyBookings,
+        revenueData: monthlyBookings.map(item => ({
+          month: item.month,
+          revenue: parseFloat(item.revenue) || 0
+        })),
+        bookingStatusDistribution
+      };
+    } catch (error) {
+      throw new Error('Failed to fetch booking analytics');
+    }
+  }
+}
+
+module.exports = BookingController; 

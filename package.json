@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@react-google-maps/api": "^2.20.7",
     "cloudinary": "^2.7.0",
     "multer": "^2.0.2"

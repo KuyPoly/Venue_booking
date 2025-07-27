@@ -26,6 +26,9 @@ import DebugInputTest from './components/DebugInputTest';
 import Profile from './page/Profile/profile';
 import Setting from './page/OwnerSetting/setting';
 
+// Import the Profile and Setting components we created
+import ProfileComponent from './Profile';
+import SettingComponent from './Setting';
 
 // Dashboard Layout without navbar/footer
 function DashboardLayout({ children }) {
@@ -259,6 +262,19 @@ function App() {
               </DashboardLayout>
             }/>
             
+            {/* Profile and Setting routes using DashboardLayout */}
+            <Route path="/dashboard/profile" element={
+              <DashboardLayout>
+                <ProfileComponent />
+              </DashboardLayout>
+            }/>
+            
+            <Route path="/dashboard/setting" element={
+              <DashboardLayout>
+                <SettingComponent />
+              </DashboardLayout>
+            }/>
+            
             <Route path="/debug-input" element={
               <div style={{ padding: '20px' }}>
                 <DebugInputTest />
@@ -271,4 +287,4 @@ function App() {
   );
 }
 
-export default App;
+export default App; 
