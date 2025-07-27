@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../model/User');
-const nodemailer = require('nodemailer');
+const axios = require('axios');
 require('dotenv').config();
 const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
 
@@ -25,30 +25,17 @@ exports.register = async (req, res) => {
       role: role || 'customer'
     });
 
-    // --- SEND WELCOME EMAIL ---
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
+    // --- SEND WELCOME EMAIL VIA EMAILJS ---
+    await axios.post('https://api.emailjs.com/api/v1.0/email/send', {
+      service_id: process.env.EMAILJS_SERVICE_ID,
+      template_id: process.env.EMAILJS_TEMPLATE_ID,
+      user_id: process.env.EMAILJS_PUBLIC_KEY, // or PRIVATE_KEY if using server-side
+      template_params: {
+        to_email: email,
+        to_name: firstName,
+        // Add more params as defined in your EmailJS template
       }
     });
-
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: 'Welcome to Venue Booking!',
-      text: `Hello ${firstName},\n\nThank you for signing up at Venue Booking!`
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error('Error sending welcome email:', error);
-      } else {
-        console.log('Welcome email sent:', info.response);
-      }
-    });
-    // --- END SEND EMAIL ---
 
     res.status(201).json({ 
       message: 'User registered successfully',
