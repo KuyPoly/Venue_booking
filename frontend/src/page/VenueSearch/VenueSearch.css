@@ -1,0 +1,98 @@
+.venue-search-form-row-2col {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto 12px auto;
+}
+
+.venue-search-form-rows button {
+  background: #f7f7fa;
+}
+.venue-search-container {
+  display: flex;
+  height: 100vh;
+  background: #f7f7fa;
+}
+
+.venue-search-left {
+  flex: 1.2;
+  padding: 32px 0; /* Reduce horizontal padding */
+  overflow-y: auto;
+}
+
+.venue-search-right {
+  flex: 1;
+  min-width: 700px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  box-shadow: -2px 0 8px rgba(0,0,0,0.05);
+}
+
+.venue-search-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.venue-search-form-col {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.venue-search-form-row {
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+}
+
+.venue-search-form input,
+.venue-search-form select {
+  padding: 15px 20px;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  margin-bottom: 5px;
+  transition: border-color 0.2s;
+}
+
+.venue-search-form input:focus,
+.venue-search-form select:focus {
+  border-color: #4f8cff;
+  outline: none;
+}
+
+.venue-search-form-row {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0;
+}
+
+.venue-search-form button {
+  padding: 10px 24px;
+  border-radius: 6px;
+  background: #4f8cff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.venue-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+.h5 {
+    font-size: 10px;
+    font-weight: bold;
+    color: #333;
+}
