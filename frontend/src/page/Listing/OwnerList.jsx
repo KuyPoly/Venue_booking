@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext'; // Add this import
 import { GoogleMap, useJsApiLoader, Marker, Autocomplete } from '@react-google-maps/api';
+import { sendHallAddedNotification } from '../../services/emailService';
 
 const libraries = ['places'];
 const mapContainerStyle = {
@@ -304,11 +305,30 @@ function OwnerListings() {
       if (response.ok) {
         const result = await response.json();
         console.log('Success:', result);
+        
+        // If creating a new venue (not editing), send email notification
+        if (!editingListing && result.listing && result.owner) {
+          try {
+            console.log('Sending email notification for new venue...');
+            await sendHallAddedNotification(result.listing, result.owner);
+            console.log('Email notification sent successfully!');
+          } catch (emailError) {
+            console.error('Failed to send email notification:', emailError);
+            // Don't block the success flow if email fails
+            alert('Venue saved successfully! However, email notification could not be sent.');
+          }
+        }
+        
         await fetchListings();
         setShowAddForm(false);
         setEditingListing(null);
         resetForm();
-        alert('Venue saved successfully!');
+        
+        if (!editingListing) {
+          alert('Venue added successfully! An email notification has been sent to you.');
+        } else {
+          alert('Venue updated successfully!');
+        }
       } else {
         const error = await response.json();
         console.error('Error:', error);
