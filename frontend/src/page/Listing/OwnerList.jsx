@@ -53,6 +53,16 @@ function OwnerListings() {
     libraries: libraries
   });
 
+  // Add debugging for form data changes
+  useEffect(() => {
+    console.log('FormData changed:', {
+      capacity: formData.capacity,
+      price: formData.price,
+      name: formData.name,
+      location: formData.location
+    });
+  }, [formData.capacity, formData.price, formData.name, formData.location]);
+
   // Get owner_id from authenticated user
   const owner_id = user?.id; // Use actual user ID from auth context
 
@@ -171,9 +181,34 @@ function OwnerListings() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    
+    // For number inputs, ensure we're working with the actual input value
+    let processedValue = value;
+    
+    // For capacity and price fields, handle number inputs carefully
+    if (name === 'capacity' || name === 'price') {
+      // Allow empty string for user to clear the field
+      if (value === '') {
+        processedValue = '';
+      } else {
+        // For capacity, ensure it's a valid integer
+        if (name === 'capacity') {
+          const numValue = parseInt(value, 10);
+          processedValue = isNaN(numValue) ? '' : numValue.toString();
+        }
+        // For price, ensure it's a valid decimal
+        else if (name === 'price') {
+          const numValue = parseFloat(value);
+          processedValue = isNaN(numValue) ? '' : value; // Keep original value for decimal input
+        }
+      }
+    }
+    
+    console.log(`Updating ${name} from "${formData[name]}" to "${processedValue}"`);
+    
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: processedValue
     }));
   };
 
@@ -221,12 +256,6 @@ function OwnerListings() {
     const location = { lat, lng };
     
     setSelectedLocation(location);
-    setFormData(prev => ({
-      ...prev,
-      latitude: lat.toString(),
-      longitude: lng.toString()
-    }));
-
     // Reverse geocode to get address
     if (window.google && window.google.maps) {
       const geocoder = new window.google.maps.Geocoder();
@@ -234,11 +263,27 @@ function OwnerListings() {
         if (status === 'OK' && results[0]) {
           setFormData(prev => ({
             ...prev,
+            latitude: lat.toString(),
+            longitude: lng.toString(),
             address: results[0].formatted_address,
             location: results[0].formatted_address
           }));
+        } else {
+          // If reverse geocoding fails, still update coordinates
+          setFormData(prev => ({
+            ...prev,
+            latitude: lat.toString(),
+            longitude: lng.toString()
+          }));
         }
       });
+    } else {
+      // If no Google Maps geocoder, just update coordinates
+      setFormData(prev => ({
+        ...prev,
+        latitude: lat.toString(),
+        longitude: lng.toString()
+      }));
     }
   };
 
@@ -574,12 +619,7 @@ function OwnerListings() {
                             const location = { lat, lng };
                             
                             setSelectedLocation(location);
-                            setFormData(prev => ({
-                              ...prev,
-                              latitude: lat.toString(),
-                              longitude: lng.toString()
-                            }));
-
+                            
                             // Reverse geocode
                             if (window.google && window.google.maps) {
                               const geocoder = new window.google.maps.Geocoder();
@@ -587,11 +627,27 @@ function OwnerListings() {
                                 if (status === 'OK' && results[0]) {
                                   setFormData(prev => ({
                                     ...prev,
+                                    latitude: lat.toString(),
+                                    longitude: lng.toString(),
                                     address: results[0].formatted_address,
                                     location: results[0].formatted_address
                                   }));
+                                } else {
+                                  // If reverse geocoding fails, still update coordinates
+                                  setFormData(prev => ({
+                                    ...prev,
+                                    latitude: lat.toString(),
+                                    longitude: lng.toString()
+                                  }));
                                 }
                               });
+                            } else {
+                              // If no Google Maps geocoder, just update coordinates
+                              setFormData(prev => ({
+                                ...prev,
+                                latitude: lat.toString(),
+                                longitude: lng.toString()
+                              }));
                             }
                           }}
                         />
