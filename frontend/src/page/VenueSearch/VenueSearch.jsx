@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import VenueCard from '../../component/HomePage/venue_card';
 import Map from '../../component/SearchPage/Map';
+import GoogleMapsTestComponent from '../../components/GoogleMapsTestComponent';
 import './VenueSearch.css';
 
 const VenueSearch = () => {
@@ -80,11 +81,11 @@ return (
           <div className="venue-search-form-row-2col">
             <select name="guests" value={filters.guests} onChange={handleChange}>
               <option value="">Maximum Guest Capacity</option>
-              <option value="50">Up to 50</option>
-              <option value="100">Up to 100</option>
-              <option value="200">Up to 200</option>
-              <option value="500">Up to 500</option>
-              <option value="1000">Up to 1000</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="200">200</option>
+              <option value="500">500</option>
+              <option value="1000">1000</option>
             </select>
             <select name="budget" value={filters.budget} onChange={handleChange}>
               <option value="">Price</option>
@@ -109,7 +110,7 @@ return (
       </div>
     </div>
     <div className="venue-search-right">
-      <Map location={filters.location} />
+      <GoogleMapsTestComponent />
     </div>
   </div>
 );
