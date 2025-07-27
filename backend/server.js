@@ -21,6 +21,11 @@ const favoriteRoutes = require('./routes/favorites');
 const bookingsRoutes = require('./routes/booking');
 const paymentsRoutes = require('./routes/payments');
 const venueSearchRoutes = require('./routes/venueSearch');
+const settingRoutes = require('./routes/setting');
+const profileRoutes = require('./routes/profile');
+// Import settings routes
+
+
 
 // Import additional routes
 const bookingRoutes = require('./routes/booking-history');
@@ -43,6 +48,8 @@ app.use('/booking', bookingRoutes); // For booking stats
 app.use('/categories', categoryRoutes);
 app.use('/listing', listingRoutes); // For dashboard compatibility
 
+app.use('/api/setting', settingRoutes);
+app.use('/api/profile', profileRoutes);
 // Test route
 app.get('/', (req, res) => {
   res.send('Venue Booking API is running!');

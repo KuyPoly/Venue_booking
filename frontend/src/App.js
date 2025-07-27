@@ -22,6 +22,9 @@ import Sidebar from './component/Owner/Sidebar';
 import Topbar from './component/Owner/Topbar';
 import BookingHistory from './page/BookingHistory/BookingHistory';
 import BookingDetails from './page/BookingDetails/BookingDetails';
+import Profile from './page/Profile/profile';
+import Setting from './page/OwnerSetting/setting';
+
 
 
 // Dashboard Layout without navbar/footer
@@ -88,6 +91,7 @@ function App() {
     setIsSignupModalOpen(false);
     setIsLoginModalOpen(true);
   };
+  
 
   return (
     <AuthProvider>
