@@ -5,7 +5,7 @@ import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 const libraries = ['places'];
 const mapContainerStyle = {
   width: '100%',
-  height: '300px',
+  height: '100%',
   borderRadius: '8px',
   border: '1px solid #ddd'
 };
@@ -31,9 +31,7 @@ const GoogleMapsTestComponent = () => {
   }
 
   return (
-    <div>
-      <h3>Google Maps Test</h3>
-      <p>API Key: {process.env.REACT_APP_GOOGLE_MAPS_API_KEY ? 'Loaded' : 'Missing'}</p>
+    <div style={{width: '100%', height: '100%', minHeight: 300}}>
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
         center={defaultCenter}
