@@ -1,4 +1,4 @@
-const { Activity } = require('../model');
+const { Activity } = require('../model/Association');
 
 exports.getActivitiesByOwner = async (req, res) => {
   try {

@@ -1,3 +1,141 @@
+
+
+.sidebar:hover::before {
+  opacity: 1;
+}
+
+/* Collapsed sidebar styles */
+.sidebar.collapsed {
+  width: 60px !important;
+}
+
+.sidebar.collapsed .logo {
+  font-size: 1.2rem;
+  padding: 20px 0 10px 20px;
+  text-align: center;
+}
+
+.sidebar.collapsed .section-title {
+  display: none;
+}
+
+.sidebar.collapsed li {
+  padding: 12px 0;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.sidebar.collapsed li .icon {
+  margin-right: 0;
+  font-size: 1.2rem;
+}
+
+.sidebar.collapsed li span:not(.icon) {
+  display: none;
+}
+
+/* Semi-collapsed sidebar styles */
+.sidebar.semi-collapsed {
+  width: 120px !important;
+}
+
+.sidebar.semi-collapsed .logo {
+  font-size: 1.4rem;
+  padding: 24px 0 12px 24px;
+}
+
+.sidebar.semi-collapsed .section-title {
+  font-size: 0.8rem;
+  margin: 24px 0 6px 24px;
+}
+
+.sidebar.semi-collapsed li {
+  padding: 10px 0 10px 24px;
+  font-size: 0.9rem;
+}
+
+.sidebar.semi-collapsed li .icon {
+  margin-right: 8px;
+  font-size: 1rem;
+}
+  .sidebar .logo {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #222a3a;
+  padding: 32px 0 16px 32px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+  .sidebar .section-title {
+  color: #bfc2d4;
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 32px 0 8px 32px;
+  letter-spacing: 1.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .sidebar li {
+  display: flex;
+  align-items: center;
+  padding: 12px 0 12px 32px;
+  font-size: 1.08rem;
+  color: #222a3a;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+  white-space: nowrap;
+  overflow: hidden;
+}
+  .sidebar li.active, .sidebar li:hover {
+    background: #e5e7eb;
+    border-left: 3px solid #bfc2d4;
+  }
+  .sidebar li .icon {
+  margin-right: 16px;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  transition: margin 0.3s ease;
+}
+  
+  /* 3. Top Bar */
+.topbar {
+  position: fixed;
+  left: 250px;
+  top: 0;
+  right: 0;
+  height: 64px;
+  background: #fff;
+  border-bottom: 1.5px solid #e5e5e5;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 40px;
+  z-index: 5;
+  transition: left 0.3s ease;
+}
+  .topbar .account, .topbar .help {
+    margin-left: 32px;
+    font-size: 1.05rem;
+    color: #222a3a;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  .topbar .account select {
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    margin-left: 4px;
+  }
 /* 1. Base Styles */
 body {
     margin: 0;
@@ -8,15 +146,7 @@ body {
 
   
   /* 4. Main Content */
-.main-content {
-  margin-left: 250px;
-  margin-top: 64px;
-  padding: 32px 40px 32px 40px;
-  min-height: calc(100vh - 64px);
-  transition: margin-left 0.3s ease;
-  padding: 20px 0 20px 0;
 
-}
   .main-content h1 {
     font-size: 2.2rem;
     font-weight: 600;

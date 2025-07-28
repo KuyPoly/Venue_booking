@@ -1,7 +1,23 @@
-module.exports = (sequelize, DataTypes) => {
-  const Activity = sequelize.define('Activity', {
-    owner_id: DataTypes.INTEGER,
-    description: DataTypes.STRING,
-  });
-  return Activity;
-};
+const { DataTypes } = require('sequelize');
+const sequelize = require('../database/sequelize');
+
+const Activity = sequelize.define('Activity', {
+  activity_id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  owner_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+}, {
+  tableName: 'activities',
+  timestamps: true
+});
+
+module.exports = Activity;

@@ -1,4 +1,4 @@
-const { Payout } = require('../model');
+const { Payout } = require('../model/Association');
 
 exports.getPayoutHistory = async (req, res) => {
   const ownerId = req.query.owner_id;
