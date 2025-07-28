@@ -1,0 +1,251 @@
+/* Wallet Balance Component Styles */
+.wallet-balance-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.wallet-balance-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.balance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 25px;
+  position: relative;
+  z-index: 2;
+}
+
+.balance-title h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.balance-title p {
+  margin: 5px 0 0 0;
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
+
+.balance-icon {
+  font-size: 2rem;
+  opacity: 0.8;
+}
+
+.balance-amount {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.currency {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+.amount {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.balance-amount.excellent .amount {
+  color: #68d391;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.balance-amount.good .amount {
+  color: #90cdf4;
+}
+
+.balance-amount.moderate .amount {
+  color: #fbb6ce;
+}
+
+.balance-amount.low .amount {
+  color: #fed7d7;
+}
+
+.balance-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 25px;
+  position: relative;
+  z-index: 2;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.status-indicator.excellent {
+  background: #68d391;
+}
+
+.status-indicator.good {
+  background: #90cdf4;
+}
+
+.status-indicator.moderate {
+  background: #fbb6ce;
+}
+
+.status-indicator.low {
+  background: #fed7d7;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.status-message {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.balance-actions {
+  position: relative;
+  z-index: 2;
+}
+
+.withdraw-btn {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 15px 20px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.withdraw-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.withdraw-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.balance-note {
+  margin-top: 15px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.balance-note small {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  backdrop-filter: blur(5px);
+}
+
+/* Empty State */
+.balance-empty-state {
+  text-align: center;
+  padding: 20px 0;
+  position: relative;
+  z-index: 2;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  opacity: 0.8;
+}
+
+.balance-empty-state h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.balance-empty-state > p {
+  margin: 0 0 25px 0;
+  opacity: 0.9;
+}
+
+.empty-tips {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(5px);
+  text-align: left;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.empty-tips h4 {
+  margin: 0 0 15px 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.empty-tips ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.empty-tips li {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .wallet-balance-card {
+    padding: 25px;
+  }
+  
+  .balance-header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  
+  .balance-amount {
+    justify-content: center;
+  }
+  
+  .amount {
+    font-size: 2.5rem;
+  }
+  
+  .empty-tips {
+    max-width: none;
+  }
+}

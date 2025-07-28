@@ -1,0 +1,376 @@
+/* Withdraw Modal Styles */
+.withdraw-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.withdraw-modal {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.withdraw-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 30px;
+  border-bottom: 1px solid #e2e8f0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 16px 16px 0 0;
+}
+
+.withdraw-modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.withdraw-step {
+  padding: 30px;
+}
+
+.withdraw-step h3 {
+  margin: 0 0 25px 0;
+  color: #1a202c;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+/* Amount Section */
+.amount-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.balance-info {
+  background: #f7fafc;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #4299e1;
+  font-size: 0.95rem;
+  color: #2d3748;
+}
+
+.balance-info strong {
+  color: #1a202c;
+  font-weight: 700;
+}
+
+.amount-input-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.amount-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.currency-symbol {
+  position: absolute;
+  left: 15px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #4a5568;
+  z-index: 1;
+}
+
+.amount-input-wrapper input {
+  width: 100%;
+  padding: 15px 15px 15px 40px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.amount-input-wrapper input:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+.quick-amounts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.quick-amounts > span {
+  font-size: 0.9rem;
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.quick-amount-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.quick-amount-btn {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #e2e8f0;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #4a5568;
+  transition: all 0.2s ease;
+}
+
+.quick-amount-btn:hover {
+  border-color: #4299e1;
+  color: #4299e1;
+  background: #f7fafc;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+/* Withdrawal Summary */
+.withdrawal-summary {
+  background: #f7fafc;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+  border: 1px solid #e2e8f0;
+}
+
+.withdrawal-summary h4 {
+  margin: 0 0 15px 0;
+  color: #1a202c;
+  font-size: 1.1rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding: 5px 0;
+}
+
+.summary-row:last-child {
+  margin-bottom: 0;
+  padding-top: 10px;
+  border-top: 1px solid #e2e8f0;
+  font-weight: 600;
+}
+
+/* Step Actions */
+.step-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.back-btn,
+.next-btn,
+.submit-btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  font-size: 1rem;
+}
+
+.back-btn {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+
+.back-btn:hover {
+  background: #cbd5e0;
+}
+
+.next-btn,
+.submit-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.next-btn:hover,
+.submit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.next-btn:disabled,
+.submit-btn:disabled {
+  background: #e2e8f0;
+  color: #a0aec0;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Success Step */
+.success-step {
+  text-align: center;
+  padding: 40px 30px;
+}
+
+.success-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  animation: successBounce 0.6s ease-out;
+}
+
+@keyframes successBounce {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.success-step h3 {
+  color: #38a169;
+  margin-bottom: 15px;
+}
+
+.success-step p {
+  color: #4a5568;
+  margin-bottom: 20px;
+}
+
+.success-details {
+  background: #f0fff4;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #9ae6b4;
+  margin: 20px 0;
+}
+
+.success-details p {
+  margin: 5px 0;
+  color: #2d3748;
+}
+
+.success-note {
+  background: #fffaf0;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #ed8936;
+}
+
+.success-note p {
+  margin: 5px 0;
+  color: #744210;
+  font-size: 0.9rem;
+}
+
+/* Error Message */
+.error-message {
+  background: #fed7d7;
+  color: #c53030;
+  padding: 12px 15px;
+  border-radius: 6px;
+  margin: 15px 0;
+  border: 1px solid #feb2b2;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .withdraw-modal {
+    width: 95%;
+    margin: 20px;
+  }
+  
+  .withdraw-modal-header,
+  .withdraw-step {
+    padding: 20px;
+  }
+  
+  .step-actions {
+    flex-direction: column;
+  }
+  
+  .quick-amount-buttons {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  
+  .quick-amount-btn {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+}

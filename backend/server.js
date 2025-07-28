@@ -25,6 +25,7 @@ const SettingRoutes = require('./routes/setting');
 const dashboardRoutes = require('./routes/dashboard');
 const ProfileRoutes = require('./routes/profile');
 const bookingManagementRoutes = require('./routes/booking-management');
+const walletRoutes = require('./routes/wallet');
 // Import settings routes
 
 
@@ -54,6 +55,7 @@ app.use('/api/setting', SettingRoutes);
 app.use('/profile', ProfileRoutes); // For profile management
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/booking-management', bookingManagementRoutes);
+app.use('/api/wallet', walletRoutes);
 // Test route
 app.get('/', (req, res) => {
   res.send('Venue Booking API is running!');
@@ -62,15 +64,22 @@ app.get('/', (req, res) => {
 // Test database connection and sync
 async function startServer() {
   try {
-    await sequelize.authenticate();
-    console.log('Database connected successfully');
-    
-    await sequelize.sync({ force: false });
-    console.log('Database synced');
-    
+    // Start the server first
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
+
+    // Then try to connect to database
+    try {
+      await sequelize.authenticate();
+      console.log('Database connected successfully');
+      
+      await sequelize.sync({ force: false });
+      console.log('Database synced');
+    } catch (dbError) {
+      console.error('Database connection failed:', dbError.message);
+      console.log('Server is running but database features will be limited');
+    }
   } catch (error) {
     console.error('Unable to start server:', error);
   }

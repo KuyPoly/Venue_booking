@@ -26,6 +26,7 @@ import DebugInputTest from './components/DebugInputTest';
 import ProfileComponent from './page/Profile/profile';
 import Setting from './page/OwnerSetting/setting';
 import About from './page/About/About';
+import Wallet from './page/Wallet/Wallet';
 
 // Dashboard Layout without navbar/footer
 function DashboardLayout({ children }) {
@@ -271,6 +272,12 @@ function App() {
             <Route path="/dashboard/listings" element={
               <DashboardLayout>
                 <OwnerListings />
+              </DashboardLayout>
+            }/>
+
+            <Route path="/dashboard/wallet" element={
+              <DashboardLayout>
+                <Wallet />
               </DashboardLayout>
             }/>
             
