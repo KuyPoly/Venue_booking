@@ -25,6 +25,7 @@ import BookingDetails from './page/BookingDetails/BookingDetails';
 import DebugInputTest from './components/DebugInputTest';
 import ProfileComponent from './page/Profile/profile';
 import Setting from './page/OwnerSetting/setting';
+import About from './page/About/About';
 
 // Dashboard Layout without navbar/footer
 function DashboardLayout({ children }) {
@@ -233,6 +234,21 @@ function App() {
               </RegularLayout>
             } />
             
+            <Route path="/about" element={
+              <RegularLayout 
+                isLoginModalOpen={isLoginModalOpen}
+                isSignupModalOpen={isSignupModalOpen}
+                openLoginModal={openLoginModal}
+                openSignupModal={openSignupModal}
+                closeLoginModal={closeLoginModal}
+                closeSignupModal={closeSignupModal}
+                handleSwitchToSignup={handleSwitchToSignup}
+                handleSwitchToLogin={handleSwitchToLogin}
+              >
+                <About />
+              </RegularLayout>
+            } />
+            
             {/* Owner Dashboard Routes - No navbar/footer, only sidebar and topbar */}
             <Route path="/my-venue" element={
               <DashboardLayout>
@@ -283,4 +299,4 @@ function App() {
   );
 }
 
-export default App; 
+export default App;
