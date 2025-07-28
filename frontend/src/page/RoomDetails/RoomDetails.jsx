@@ -372,7 +372,15 @@ export default function RoomDetails() {
                 <span className="venue-price">
                   {venue.price ? (
                     bookingType === 'hourly' 
-                      ? `$${(venue.price / 8).toFixed(2)}` 
+                      ? `$${(() => {
+                          if (venue.openHour && venue.closeHour) {
+                            const openHour = parseInt(venue.openHour.split(':')[0]);
+                            const closeHour = parseInt(venue.closeHour.split(':')[0]);
+                            const operatingHours = closeHour - openHour;
+                            return (venue.price / operatingHours).toFixed(2);
+                          }
+                          return (venue.price / 8).toFixed(2);
+                        })()}` 
                       : `$${venue.price}`
                   ) : 'N/A'} 
                   <span className="per-day-text">(per {bookingType === 'hourly' ? 'hour' : 'day'})</span>
@@ -433,7 +441,17 @@ export default function RoomDetails() {
                     />
                     <span className="booking-type-label">
                       <strong>Per Hour</strong>
-                      <span className="booking-type-price">${((venue?.price || 0) / 8).toFixed(2)} (per hour)</span>
+                      <span className="booking-type-price">
+                        ${(() => {
+                          if (venue?.openHour && venue?.closeHour) {
+                            const openHour = parseInt(venue.openHour.split(':')[0]);
+                            const closeHour = parseInt(venue.closeHour.split(':')[0]);
+                            const operatingHours = closeHour - openHour;
+                            return ((venue?.price || 0) / operatingHours).toFixed(2);
+                          }
+                          return ((venue?.price || 0) / 8).toFixed(2);
+                        })()} (per hour)
+                      </span>
                       <span className="booking-type-note">Minimum 2 hours</span>
                     </span>
                   </label>

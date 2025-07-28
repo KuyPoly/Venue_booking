@@ -109,7 +109,14 @@ router.post('/', authenticateToken, async (req, res) => {
       const startDate = new Date(booking_date);
       const endDate = new Date(end_date);
       const diffHours = (endDate - startDate) / (1000 * 60 * 60);
-      const hourlyRate = venue.price / 8; // Daily price divided by 8 hours
+      
+      // Calculate actual operating hours for this venue
+      const venueOpenHour = parseInt(venue.open_hour.split(':')[0]);
+      const venueCloseHour = parseInt(venue.close_hour.split(':')[0]);
+      const operatingHours = venueCloseHour - venueOpenHour;
+      
+      // Calculate hourly rate based on actual operating hours
+      const hourlyRate = venue.price / operatingHours;
       total_amount = hourlyRate * diffHours;
     }
 
