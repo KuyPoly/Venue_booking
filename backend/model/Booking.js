@@ -29,6 +29,11 @@ const Booking = sequelize.define('Booking', {
     allowNull: false,
     defaultValue: 'pending',
   },
+  booking_type: {
+    type: DataTypes.ENUM('daily', 'hourly'),
+    allowNull: false,
+    defaultValue: 'daily',
+  },
 }, {
   timestamps: true,
   createdAt: 'created_at',

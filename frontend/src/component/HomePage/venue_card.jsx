@@ -90,6 +90,8 @@ export default function CategorySection(props) {
     setSelectedCategory(selectedCategory === categoryName ? null : categoryName);
   };
 
+
+
   const handleVenueClick = (venueId) => {
     navigate(`/room/${venueId}`);
   };
@@ -249,6 +251,8 @@ export default function CategorySection(props) {
           ))}
         </div>
       )}
+
+
 
       <div className="venues-grid">
         {venues.length === 0 ? (

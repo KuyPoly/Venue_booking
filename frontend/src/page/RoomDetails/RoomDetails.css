@@ -343,6 +343,90 @@
   font-weight: normal;
   margin-left: 8px;
 }
+
+.booking-type-section {
+  margin-bottom: 20px;
+}
+
+.booking-type-section label {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: #333;
+}
+
+.booking-type-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.booking-type-option {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #fff;
+}
+
+.booking-type-option:hover {
+  border-color: #0055A4;
+  background: #f8f9ff;
+}
+
+.booking-type-option input[type="radio"] {
+  margin-right: 12px;
+  transform: scale(1.2);
+}
+
+.booking-type-option input[type="radio"]:checked + .booking-type-label {
+  color: #0055A4;
+}
+
+.booking-type-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.booking-type-price {
+  font-size: 0.9em;
+  color: #666;
+  font-weight: normal;
+}
+
+.booking-type-note {
+  font-size: 0.8em;
+  color: #888;
+  font-style: italic;
+}
+
+.daily-booking-section {
+  margin-bottom: 20px;
+}
+
+.daily-booking-info {
+  margin-top: 12px;
+  padding: 12px;
+  background: #f8f9ff;
+  border-radius: 6px;
+  border-left: 3px solid #0055A4;
+}
+
+.daily-booking-info p {
+  margin: 4px 0;
+  font-size: 0.9em;
+  color: #555;
+}
+
+.daily-booking-info p:first-child {
+  color: #0055A4;
+  font-weight: 500;
+}
 .venue-location {
   font-size: 1.25rem;
   color: #555;

@@ -58,10 +58,10 @@ export default function RoomDetails() {
   const { id } = useParams();
   const [venue, setVenue] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [date, setDate] = useState('2025-07-06');
-  const [startTime, setStartTime] = useState('07:30');
-  const [endTime, setEndTime] = useState('12:00');
-  const [guests, setGuests] = useState(50);
+  const [date, setDate] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+  const [guests, setGuests] = useState('');
   const [showPayment, setShowPayment] = useState(false);
   const [bookingLoading, setBookingLoading] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
@@ -80,6 +80,8 @@ export default function RoomDetails() {
   const [guestError, setGuestError] = useState('');
   const [showMapModal, setShowMapModal] = useState(false);
   const [showConfirmLoading, setShowConfirmLoading] = useState(false); // <-- Added state for confirm loading
+  const [bookingType, setBookingType] = useState('daily'); // <-- Added booking type state
+  const [numberOfDays, setNumberOfDays] = useState(1); // <-- Added number of days state (can be number or empty string)
 
   // Helper function to format time
   const formatTime = (timeString) => {
@@ -203,6 +205,27 @@ export default function RoomDetails() {
         if (!res.ok) throw new Error('Failed to fetch venue');
         const data = await res.json();
         setVenue(data);
+        
+        // Set default values based on venue data
+        if (data) {
+          // Set current date as default
+          const today = new Date();
+          const formattedDate = today.toISOString().split('T')[0];
+          setDate(formattedDate);
+          
+          // Set venue opening and closing hours as default times
+          if (data.openHour) {
+            setStartTime(data.openHour);
+          }
+          if (data.closeHour) {
+            setEndTime(data.closeHour);
+          }
+          
+          // Set maximum capacity as default guest count
+          if (data.capacity) {
+            setGuests(data.capacity.toString());
+          }
+        }
       } catch (err) {
         setVenue(null);
       } finally {
@@ -239,18 +262,23 @@ export default function RoomDetails() {
         body: JSON.stringify({
           hallId: id,
           date,
-          startTime,
-          endTime,
+          startTime: bookingType === 'daily' ? '00:00' : startTime,
+          endTime: bookingType === 'daily' ? '23:59' : endTime,
           guests: Number(guests),
+          bookingType: bookingType,
+          numberOfDays: bookingType === 'daily' ? (numberOfDays === '' ? 1 : numberOfDays) : 1,
         }),
       });
-      if (!res.ok) throw new Error('Booking failed');
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Booking failed');
+      }
       const data = await res.json();
       setBookingId(data.id); // <-- Set bookingId from backend response
       setBookingSuccess(true);
       setShowPayment(true);
     } catch (err) {
-      setBookingError('Booking failed. Please try again.');
+      setBookingError(err.message || 'Booking failed. Please try again.');
     } finally {
       setBookingLoading(false);
     }
@@ -341,7 +369,14 @@ export default function RoomDetails() {
                 </span>
               </div>
               <div className="venue-meta">
-                <span className="venue-price">{venue.price ? `$${venue.price}` : 'N/A'} <span className="per-day-text">(per day)</span></span>
+                <span className="venue-price">
+                  {venue.price ? (
+                    bookingType === 'hourly' 
+                      ? `$${(venue.price / 8).toFixed(2)}` 
+                      : `$${venue.price}`
+                  ) : 'N/A'} 
+                  <span className="per-day-text">(per {bookingType === 'hourly' ? 'hour' : 'day'})</span>
+                </span>
                 <span className="venue-location">{venue.location || 'N/A'}</span>
                 <button 
                   className="see-location-btn"
@@ -370,18 +405,108 @@ export default function RoomDetails() {
           <div className="room-booking-form">
             <h3>Booking Hall</h3>
               <form onSubmit={handleBookingSubmit}>
-              <label>Date</label>
-              <input type="date" value={date} onChange={e => setDate(e.target.value)} required />
-              <div className="time-row">
-                <div>
-                  <label>Start time</label>
-                  <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} required />
-                </div>
-                <div>
-                  <label>Finish time</label>
-                  <input type="time" value={endTime} onChange={e => setEndTime(e.target.value)} required />
+              
+              {/* Booking Type Selection */}
+              <div className="booking-type-section">
+                <label>Booking Type</label>
+                <div className="booking-type-options">
+                  <label className="booking-type-option">
+                    <input
+                      type="radio"
+                      name="bookingType"
+                      value="daily"
+                      checked={bookingType === 'daily'}
+                      onChange={(e) => setBookingType(e.target.value)}
+                    />
+                    <span className="booking-type-label">
+                      <strong>Per Day</strong>
+                      <span className="booking-type-price">${venue?.price || 0} (per day)</span>
+                    </span>
+                  </label>
+                  <label className="booking-type-option">
+                    <input
+                      type="radio"
+                      name="bookingType"
+                      value="hourly"
+                      checked={bookingType === 'hourly'}
+                      onChange={(e) => setBookingType(e.target.value)}
+                    />
+                    <span className="booking-type-label">
+                      <strong>Per Hour</strong>
+                      <span className="booking-type-price">${((venue?.price || 0) / 8).toFixed(2)} (per hour)</span>
+                      <span className="booking-type-note">Minimum 2 hours</span>
+                    </span>
+                  </label>
                 </div>
               </div>
+
+              <label>Date</label>
+              <input 
+                type="date" 
+                value={date} 
+                onChange={e => setDate(e.target.value)} 
+                min={new Date().toISOString().split('T')[0]}
+                required 
+              />
+              
+              {/* Daily Booking Fields */}
+              {bookingType === 'daily' && (
+                <div className="daily-booking-section">
+                  <label>Number of Days (Max 10 days)</label>
+                  <input 
+                    type="number" 
+                    min="1" 
+                    max="10"
+                    value={numberOfDays} 
+                    onChange={e => {
+                      const value = e.target.value;
+                      if (value === '') {
+                        setNumberOfDays('');
+                      } else {
+                        const num = parseInt(value);
+                        if (num >= 1 && num <= 10) {
+                          setNumberOfDays(num);
+                        }
+                      }
+                    }} 
+                    onBlur={e => {
+                      if (e.target.value === '' || parseInt(e.target.value) < 1) {
+                        setNumberOfDays(1);
+                      }
+                    }}
+                    required 
+                  />
+
+                </div>
+              )}
+              
+              {/* Hourly Booking Fields */}
+              {bookingType === 'hourly' && (
+                <div className="time-row">
+                  <div>
+                    <label>Start time</label>
+                    <input 
+                      type="time" 
+                      value={startTime} 
+                      onChange={e => setStartTime(e.target.value)} 
+                      min={venue?.openHour || '00:00'}
+                      max={venue?.closeHour || '23:59'}
+                      required 
+                    />
+                  </div>
+                  <div>
+                    <label>Finish time</label>
+                    <input 
+                      type="time" 
+                      value={endTime} 
+                      onChange={e => setEndTime(e.target.value)} 
+                      min={venue?.openHour || '00:00'}
+                      max={venue?.closeHour || '23:59'}
+                      required 
+                    />
+                  </div>
+                </div>
+              )}
               <label>Guests</label>
               <input 
                 type="number" 
@@ -423,7 +548,19 @@ export default function RoomDetails() {
             />
             {guestError && <div className="booking-error">{guestError}</div>}
             <div className="payment-total" style={{textAlign:'left',color:'#222'}}>
-              Total Price : ${venue.price || 1000}
+              Total Price : ${(() => {
+                if (bookingType === 'daily') {
+                  const days = numberOfDays === '' ? 1 : numberOfDays;
+                  return ((venue.price || 1000) * days).toFixed(2);
+                } else if (bookingType === 'hourly') {
+                  const startDate = new Date(`${date}T${startTime}`);
+                  const endDate = new Date(`${date}T${endTime}`);
+                  const diffHours = (endDate - startDate) / (1000 * 60 * 60);
+                  const hourlyRate = (venue.price || 1000) / 8;
+                  return (hourlyRate * diffHours).toFixed(2);
+                }
+                return venue.price || 1000;
+              })()}
             </div>
             <div style={{fontWeight:'bold',fontSize:'1.1rem',color:'#222',marginTop:'18px',textAlign:'left'}}>
               Choose Payment Method
@@ -614,17 +751,72 @@ export default function RoomDetails() {
                       {activeStep === 1 && (
                         <>
                           <label>Date</label>
-                          <input type="date" value={date} onChange={e => setDate(e.target.value)} />
-                          <div className="time-row">
-                            <div>
-                              <label>Start time</label>
-                              <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} />
+                          <input 
+                            type="date" 
+                            value={date} 
+                            onChange={e => setDate(e.target.value)} 
+                            min={new Date().toISOString().split('T')[0]}
+                            required 
+                          />
+                          
+                          {/* Daily Booking Fields */}
+                          {bookingType === 'daily' && (
+                            <div className="daily-booking-section">
+                              <label>Number of Days (Max 10 days)</label>
+                              <input 
+                                type="number" 
+                                min="1" 
+                                max="10"
+                                value={numberOfDays} 
+                                onChange={e => {
+                                  const value = e.target.value;
+                                  if (value === '') {
+                                    setNumberOfDays('');
+                                  } else {
+                                    const num = parseInt(value);
+                                    if (num >= 1 && num <= 10) {
+                                      setNumberOfDays(num);
+                                    }
+                                  }
+                                }} 
+                                onBlur={e => {
+                                  if (e.target.value === '' || parseInt(e.target.value) < 1) {
+                                    setNumberOfDays(1);
+                                  }
+                                }}
+                                required 
+                              />
+
                             </div>
-                            <div>
-                              <label>Finish time</label>
-                              <input type="time" value={endTime} onChange={e => setEndTime(e.target.value)} />
+                          )}
+                          
+                          {/* Hourly Booking Fields */}
+                          {bookingType === 'hourly' && (
+                            <div className="time-row">
+                              <div>
+                                <label>Start time</label>
+                                <input 
+                                  type="time" 
+                                  value={startTime} 
+                                  onChange={e => setStartTime(e.target.value)} 
+                                  min={venue?.openHour || '00:00'}
+                                  max={venue?.closeHour || '23:59'}
+                                  required 
+                                />
+                              </div>
+                              <div>
+                                <label>Finish time</label>
+                                <input 
+                                  type="time" 
+                                  value={endTime} 
+                                  onChange={e => setEndTime(e.target.value)} 
+                                  min={venue?.openHour || '00:00'}
+                                  max={venue?.closeHour || '23:59'}
+                                  required 
+                                />
+                              </div>
                             </div>
-                          </div>
+                          )}
                           <label>Guests</label>
                           <input 
                             type="number" 
@@ -632,9 +824,25 @@ export default function RoomDetails() {
                             max={venue ? venue.capacity : undefined}
                             value={guests} 
                             onChange={handleGuestChange} 
+                            required
                           />
                           {guestError && <div className="booking-error">{guestError}</div>}
-                          <div className="payment-total">Total Price : ${venue.price || 1000}</div>
+                          <div className="payment-total">Total Price : ${(() => {
+                            if (activeStep === 1) {
+                              if (bookingType === 'daily') {
+                                const days = numberOfDays === '' ? 1 : numberOfDays;
+                                return ((venue.price || 1000) * days).toFixed(2);
+                              } else if (bookingType === 'hourly') {
+                                const startDate = new Date(`${date}T${startTime}`);
+                                const endDate = new Date(`${date}T${endTime}`);
+                                const diffHours = (endDate - startDate) / (1000 * 60 * 60);
+                                const hourlyRate = (venue.price || 1000) / 8;
+                                return (hourlyRate * diffHours).toFixed(2);
+                              }
+                              return venue.price || 1000;
+                            }
+                            return venue.price || 1000;
+                          })()}</div>
                         </>
                       )}
                       {activeStep === 2 && (

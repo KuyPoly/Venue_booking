@@ -46,21 +46,79 @@ const { authenticateToken } = require('../controllers/favoriteController');
 router.post('/', authenticateToken, async (req, res) => {
   try {
     // Accept frontend fields
-    const { hallId, date, startTime, endTime, guests } = req.body; // <-- Add hallId
+    const { hallId, date, startTime, endTime, guests, bookingType, numberOfDays } = req.body;
     const user_id = req.user.userId; // Get userId from token
     if (!user_id) {
       return res.status(401).json({ error: 'User not authenticated' });
     }
+
+    // Validate booking type
+    if (!bookingType || !['daily', 'hourly'].includes(bookingType)) {
+      return res.status(400).json({ error: 'Invalid booking type. Must be "daily" or "hourly"' });
+    }
+
+    // Get venue details for validation and pricing
+    const venue = await Hall.findByPk(hallId);
+    if (!venue) {
+      return res.status(404).json({ error: 'Venue not found' });
+    }
+
     // Compose booking_date from date and startTime
     const booking_date = date && startTime ? new Date(`${date}T${startTime}`) : null;
     const end_date = date && endTime ? new Date(`${date}T${endTime}`) : null;
-    // Calculate total_amount (example: guests * 10, replace with real logic)
-    const total_amount = guests ? Number(guests) * 10 : 0;
+
+    // Validate booking times
+    if (booking_date && end_date) {
+      if (bookingType === 'hourly') {
+        // Check if booking spans multiple days for hourly bookings
+        const startDate = new Date(booking_date);
+        const endDate = new Date(end_date);
+        const diffDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+        
+        if (diffDays > 1) {
+          return res.status(400).json({ error: 'Hourly bookings cannot span multiple days' });
+        }
+
+        // Check minimum duration (2 hours)
+        const diffHours = (endDate - startDate) / (1000 * 60 * 60);
+        if (diffHours < 2) {
+          return res.status(400).json({ error: 'Minimum booking duration is 2 hours for hourly bookings' });
+        }
+
+        // Validate against venue opening hours (only for hourly bookings)
+        const startHour = booking_date.getHours();
+        const endHour = end_date.getHours();
+        const venueOpenHour = parseInt(venue.open_hour.split(':')[0]);
+        const venueCloseHour = parseInt(venue.close_hour.split(':')[0]);
+
+        if (startHour < venueOpenHour || endHour > venueCloseHour) {
+          return res.status(400).json({ 
+            error: `Booking time must be within venue operating hours (${venue.open_hour} - ${venue.close_hour})` 
+          });
+        }
+      }
+      // For daily bookings, no time validation needed
+    }
+
+    // Calculate total amount based on booking type
+    let total_amount = 0;
+    if (bookingType === 'daily') {
+      const days = numberOfDays || 1;
+      total_amount = venue.price * days;
+    } else if (bookingType === 'hourly') {
+      const startDate = new Date(booking_date);
+      const endDate = new Date(end_date);
+      const diffHours = (endDate - startDate) / (1000 * 60 * 60);
+      const hourlyRate = venue.price / 8; // Daily price divided by 8 hours
+      total_amount = hourlyRate * diffHours;
+    }
+
     const booking = await Booking.create({
       user_id,
       total_amount,
       booking_date,
       status: 'pending',
+      booking_type: bookingType,
     });
 
     // Create the HallReservation to link the booking to the hall
@@ -73,8 +131,9 @@ router.post('/', authenticateToken, async (req, res) => {
 
     res.status(201).json({
       message: 'Booking created!',
-      id: booking.booking_id, // <-- Add this line for frontend compatibility
-      booking
+      id: booking.booking_id,
+      booking,
+      total_amount: total_amount.toFixed(2)
     });
   } catch (error) {
     console.error('Error creating booking:', error);
