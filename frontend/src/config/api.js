@@ -1,5 +1,13 @@
 // config/api.js
-export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://venuebooking-production.up.railway.app';
+
+console.log('API Configuration:', {
+  env: process.env.REACT_APP_API_BASE_URL,
+  fallback: 'https://venuebooking-production.up.railway.app',
+  final: API_BASE_URL
+});
+
+export { API_BASE_URL };
 
 export const API_ENDPOINTS = {
   // Auth endpoints

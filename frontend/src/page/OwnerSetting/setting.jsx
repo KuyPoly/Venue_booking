@@ -3,7 +3,8 @@ import './setting.css';
 
 const fetchSetting = async () => {
   try {
-    const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/setting/Setting`);
+    const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://venuebooking-production.up.railway.app';
+    const response = await fetch(`${apiUrl}/api/setting/Setting`);
     const data = await response.json();
     if (data.success) {
       return data.Setting;
@@ -31,7 +32,8 @@ const fetchSetting = async () => {
 
 const saveSetting = async (Setting) => {
   try {
-    const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/setting/Setting`, {
+    const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://venuebooking-production.up.railway.app';
+    const response = await fetch(`${apiUrl}/api/setting/Setting`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -54,7 +56,8 @@ const saveSetting = async (Setting) => {
 
 const changePassword = async (current, newPassword) => {
   try {
-    const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/setting/Setting/change-password`, {
+    const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://venuebooking-production.up.railway.app';
+    const response = await fetch(`${apiUrl}/api/setting/Setting/change-password`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
