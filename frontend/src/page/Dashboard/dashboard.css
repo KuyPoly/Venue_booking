@@ -1,6 +1,11 @@
 /* Remove or comment out the main-content class that conflicts with App.js */
 
 /* Keep only the component-specific styles */
+/* Hide the Views and Bookings stat cards */
+.stat-card.views,
+.stat-card.bookings {
+  display: none;
+}
 
 /* Dashboard Title */
 h1 {

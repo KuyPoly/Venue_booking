@@ -3,15 +3,23 @@ import { useNavigate } from 'react-router-dom';
 import pancakes from '../../assets/image1.png'; // Fallback image
 import { AuthContext } from '../../context/AuthContext';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { HiOutlineUsers } from 'react-icons/hi2';
+import { MdOutlineBuild, MdOutlineCelebration, MdOutlineBusinessCenter } from 'react-icons/md';
+import { GiDiamondRing } from 'react-icons/gi';
 
 import "./Home.css";
 
 const categoryIcons = {
-  meeting: '👥',
-  workshop: '🛠️',
-  wedding: '💍',
-  party: '🎉'
+  meeting: <HiOutlineUsers />,
+  workshop: <MdOutlineBuild />,
+  wedding: <GiDiamondRing />,
+  party: <MdOutlineCelebration />
 };
+
+const getCategoryIcon = (categoryName) => {
+  return categoryIcons[categoryName?.toLowerCase()] || <MdOutlineBusinessCenter />;
+};
+
 
 function Featured() {
   const [venues, setVenues] = useState([]);
@@ -188,7 +196,7 @@ function Featured() {
                   )}
                 </h3>
                 <p className="venue-location">{venue.location}</p>
-                <p className="venue-capacity">👥 {venue.capacity} guests</p>
+                <p className="venue-capacity"><HiOutlineUsers style={{marginRight: '4px'}} /> {venue.capacity} guests</p>
                 <p className="venue-price">{formatPrice(venue.price)} <span className="per-day-text">(per day)</span></p>
                 <div className="venue-footer">
                   <span 

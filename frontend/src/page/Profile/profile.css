@@ -125,3 +125,9 @@
     gap: 16px;
   }
 }
+
+
+.avatar-placeholder
+.profile-avatar-upload {
+  display: none;
+}

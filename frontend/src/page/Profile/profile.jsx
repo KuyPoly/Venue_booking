@@ -144,8 +144,7 @@ const Profile = () => {
         <div className="profile-content">
           <section className="profile-details">
             <div className="profile-section-header">Profile Details</div>
-            <div className="profile-avatar-upload">
-              <div className="avatar-placeholder">Upload Avatar</div>
+            <div className="profile-avatar-upload" style={{ display: 'none' }}>
             </div>
             <form className="profile-form" onSubmit={handleProfileSubmit}>
               <label>
@@ -190,14 +189,6 @@ const Profile = () => {
                   type="text" 
                   name="phone"
                   value={profile.phone}
-                  onChange={handleProfileChange}
-                />
-              </label>
-              <label>
-                About me
-                <textarea 
-                  name="aboutMe"
-                  value={profile.aboutMe}
                   onChange={handleProfileChange}
                 />
               </label>

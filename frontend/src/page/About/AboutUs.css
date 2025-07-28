@@ -1,7 +1,12 @@
-.about-us-section {
-  padding: 40px 20px;
-  background: #fff;
+/* General */
+.about-section {
   font-family: 'Inter', Arial, sans-serif;
+}
+
+/* About Us Section */
+.about-us-section {
+  padding: 48px 0 48px 0; /* Add bottom padding for space */
+  background: #fff;
 }
 
 .about-us-container {
@@ -17,6 +22,7 @@
 .about-us-text {
   flex: 1 1 350px;
   min-width: 320px;
+  text-align: left; /* Left align text */
 }
 
 .about-us-title {
@@ -92,11 +98,11 @@
   font-weight: 700;
 }
 
+/* List Your Space Section */
 .list-space-section {
   background: #112461;
   color: #fff;
   padding: 0;
-  font-family: 'Inter', Arial, sans-serif;
 }
 
 .list-space-container {
@@ -114,7 +120,6 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background: #112461;
 }
 
 .list-space-title {
@@ -168,8 +173,10 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  border-radius: 0;
 }
 
+/* Find Your Venue Section */
 .find-venue-section {
   background: #fff;
   font-family: 'Inter', Arial, sans-serif;
@@ -197,6 +204,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  border-radius: 0;
 }
 
 .find-venue-info {
@@ -205,7 +213,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background: #f8f9fd;
+  background: #fff;
 }
 
 .find-venue-title {

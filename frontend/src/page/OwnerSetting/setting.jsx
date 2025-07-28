@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './setting.css';
+import './Setting.css';
 
 const fetchSetting = async () => {
   try {
