@@ -32,7 +32,18 @@ const bookingHistoryRoutes = require('./routes/booking-history');
 const categoryRoutes = require('./routes/categories');
 
 // Middleware
-app.use(cors());
+const corsOptions = {
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001', 
+    'https://venue-booking-q3rdvw8uh-kuypolys-projects.vercel.app',
+    'https://venuebooking-production.up.railway.app'
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -80,14 +91,24 @@ async function startServer() {
       await sequelize.authenticate();
       console.log('Database connected successfully');
       
-      await sequelize.sync({ force: false });
-      console.log('Database synced');
+      // Use alter: true instead of force: false to handle new models gracefully
+      await sequelize.sync({ alter: true });
+      console.log('Database synced successfully');
     } catch (dbError) {
-      console.error('Database connection failed:', dbError.message);
-      console.log('Server is running but database features will be limited');
+      console.error('Database connection/sync failed:', dbError.message);
+      console.log('Server is running but database features may be limited');
+      
+      // Try to sync without the problematic tables
+      try {
+        await sequelize.sync({ force: false });
+        console.log('Database synced with existing tables only');
+      } catch (syncError) {
+        console.error('Basic database sync also failed:', syncError.message);
+      }
     }
   } catch (error) {
     console.error('Unable to start server:', error);
+    process.exit(1);
   }
 }
 

@@ -3,6 +3,7 @@ const router = express.Router();
 const { Booking, Hall, User, HallReservation } = require('../model/Association');
 const { Op, sequelize } = require('sequelize');
 const { authenticateToken } = require('../middleware/auth');
+const { authenticateToken } = require('../middleware/auth');
 
 
 

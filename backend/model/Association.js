@@ -10,8 +10,22 @@ const HallReservation = require('./HallReservation');
 const Payment = require('./Payment');
 const OwnerWallet = require('./OwnerWallet');
 const WalletTransaction = require('./WalletTransaction');
-const Payout = require('./Payout');
-const Activity = require('./Activity');
+
+// Optional models - may not exist in production yet
+let Payout = null;
+let Activity = null;
+
+try {
+  Payout = require('./Payout');
+} catch (error) {
+  console.warn('Payout model not available:', error.message);
+}
+
+try {
+  Activity = require('./Activity');
+} catch (error) {
+  console.warn('Activity model not available:', error.message);
+}
 
 
 // Booking - User (One-to-Many)
@@ -63,13 +77,18 @@ WalletTransaction.belongsTo(User, { foreignKey: 'ownerId', targetKey: 'user_id',
 Booking.hasMany(WalletTransaction, { foreignKey: 'bookingId', sourceKey: 'booking_id', as: 'walletTransactions' });
 WalletTransaction.belongsTo(Booking, { foreignKey: 'bookingId', targetKey: 'booking_id', as: 'booking' });
 
-// User - Payout (One-to-Many)
-User.hasMany(Payout, { foreignKey: 'owner_id', sourceKey: 'user_id', as: 'payouts' });
-Payout.belongsTo(User, { foreignKey: 'owner_id', targetKey: 'user_id', as: 'owner' });
+// Optional model associations - only if models are available
+if (Payout) {
+  // User - Payout (One-to-Many)
+  User.hasMany(Payout, { foreignKey: 'owner_id', sourceKey: 'user_id', as: 'payouts' });
+  Payout.belongsTo(User, { foreignKey: 'owner_id', targetKey: 'user_id', as: 'owner' });
+}
 
-// User - Activity (One-to-Many)
-User.hasMany(Activity, { foreignKey: 'owner_id', sourceKey: 'user_id', as: 'activities' });
-Activity.belongsTo(User, { foreignKey: 'owner_id', targetKey: 'user_id', as: 'owner' });
+if (Activity) {
+  // User - Activity (One-to-Many)
+  User.hasMany(Activity, { foreignKey: 'owner_id', sourceKey: 'user_id', as: 'activities' });
+  Activity.belongsTo(User, { foreignKey: 'owner_id', targetKey: 'user_id', as: 'owner' });
+}
 
 // Export all models
 module.exports = {
@@ -84,6 +103,6 @@ module.exports = {
   Payment,
   OwnerWallet,
   WalletTransaction,
-  Payout,
-  Activity
+  Payout: Payout || null,
+  Activity: Activity || null
 };
