@@ -1,4 +1,3 @@
-                        
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
@@ -885,14 +884,13 @@ export default function RoomDetails() {
                               onClick={async () => {
                                 // Simulate payment success and store in DB
                                 try {
-                                  // Show loading if needed
                                   setShowConfirmLoading(true);
                                   const response = await fetch('http://localhost:5000/payments', {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify({
                                       paid_at: new Date().toISOString(),
-                                      status: 'paid',
+                                      status: 'pending', // <-- Store as pending
                                       method: 'aba',
                                       booking_id: bookingId,
                                     }),

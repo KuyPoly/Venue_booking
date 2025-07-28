@@ -25,6 +25,7 @@ const SettingRoutes = require('./routes/setting');
 const dashboardRoutes = require('./routes/dashboard');
 const ProfileRoutes = require('./routes/profile');
 const bookingManagementRoutes = require('./routes/booking-management');
+const bookingRouter = require('./routes/booking');
 // Import settings routes
 
 
@@ -81,5 +82,6 @@ app.use(favoriteRoutes);
 app.use('/bookings', bookingsRoutes);
 app.use('/payments', paymentsRoutes);
 app.use('/venuesearch', venueSearchRoutes);
+app.use('/booking', bookingRouter);
 
 startServer();
