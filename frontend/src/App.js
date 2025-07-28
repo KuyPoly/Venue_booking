@@ -9,21 +9,22 @@ import Footer from './component/footer/footer';
 import Home from './page/Homepage/Home';
 import LoginModal from './component/LoginModal/LoginModal';
 import SignupModal from './component/SignupModal/SignupModal';
-import Sidebar from './component/Sidebar/Sidebar';
-import Topbar from './component/Topbar/Topbar';
-import Signup from './component/auth/Signup';
+import Sidebar from './component/Owner/Sidebar';
+import Topbar from './component/Owner/Topbar';
 import RoomDetails from './page/RoomDetails/RoomDetails';
+import SignupPage from './page/Auth/SignupPage';
 import VenuesList from './page/VenuesList/VenuesList';
 import Favorites from './page/Favorites/Favorites';
 import BookingHistory from './page/BookingHistory/BookingHistory';
 import BookingDetails from './page/BookingDetails/BookingDetails';
 import VenueSearch from './page/VenueSearch/VenueSearch';
 import About from './page/About/About';
-import ProfilePage from './page/Profile/ProfilePage';
+import ProfilePage from './page/Profile/profile';
 import Dashboard from './page/Dashboard/Dashboard';
 import Booking from './page/Booking/booking';
+import Listing from './page/Listing/Listing';
 import OwnerListings from './page/Listing/OwnerList';
-import ProfileComponent from './page/Profile/ProfilePage';
+import ProfileComponent from './page/Profile/profile';
 import Setting from './page/OwnerSetting/setting';
 import Wallet from './page/Wallet/Wallet';
 import DebugInputTest from './component/EnvironmentDebugger';
@@ -126,7 +127,7 @@ function App() {
                 handleSwitchToSignup={handleSwitchToSignup}
                 handleSwitchToLogin={handleSwitchToLogin}
               >
-                <Signup />
+                <SignupPage />
               </RegularLayout>
             } />
             
