@@ -24,7 +24,7 @@ import BookingHistory from './page/BookingHistory/BookingHistory';
 import BookingDetails from './page/BookingDetails/BookingDetails';
 import DebugInputTest from './components/DebugInputTest';
 import ProfileComponent from './page/Profile/profile';
-import SettingComponent from './page/OwnerSetting/setting';
+import Setting from './page/OwnerSetting/setting';
 
 // Dashboard Layout without navbar/footer
 function DashboardLayout({ children }) {
@@ -267,7 +267,7 @@ function App() {
             
             <Route path="/dashboard/setting" element={
               <DashboardLayout>
-                <SettingComponent />
+                <Setting />
               </DashboardLayout>
             }/>
             

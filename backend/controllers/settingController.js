@@ -5,11 +5,11 @@ const User = require('../model/User');
 
 const settingController = {
   // Get user settings
-  getSettings: async (req, res) => {
+  getSetting: async (req, res) => {
     try {
       // For now, return default settings
       // In a real app, you would get the user ID from the request and fetch their settings
-      const defaultSettings = {
+      const defaultSetting = {
         language: 'English',
         notification: false,
         privateMode: false,
@@ -19,7 +19,7 @@ const settingController = {
       
       res.json({
         success: true,
-        settings: defaultSettings
+        settings: defaultSetting
       });
     } catch (error) {
       console.error('Error getting settings:', error);
@@ -32,7 +32,7 @@ const settingController = {
   },
 
   // Update user settings
-  updateSettings: async (req, res) => {
+  updateSetting: async (req, res) => {
     try {
       const { language, notification, privateMode, darkMode, locations } = req.body;
       

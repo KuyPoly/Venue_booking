@@ -21,7 +21,7 @@ const favoriteRoutes = require('./routes/favorites');
 const bookingsRoutes = require('./routes/booking');
 const paymentsRoutes = require('./routes/payments');
 const venueSearchRoutes = require('./routes/venueSearch');
-const settingRoutes = require('./routes/setting');
+const SettingRoutes = require('./routes/setting');
 const dashboardRoutes = require('./routes/dashboard');
 const ProfileRoutes = require('./routes/profile');
 const bookingManagementRoutes = require('./routes/booking-management');
@@ -50,7 +50,7 @@ app.use('/booking', bookingRoutes); // For booking stats
 app.use('/categories', categoryRoutes);
 app.use('/listing', listingRoutes); // For dashboard compatibility
 
-app.use('/api/setting', settingRoutes);
+app.use('/api/setting', SettingRoutes);
 app.use('/profile', ProfileRoutes); // For profile management
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/booking-management', bookingManagementRoutes);

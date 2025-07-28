@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import './setting.css';
+import './Setting.css';
 
-const fetchSettings = async () => {
+const fetchSetting = async () => {
   try {
-    const response = await fetch('http://localhost:5000/api/setting/settings');
+    const response = await fetch('http://localhost:5000/api/setting/Setting');
     const data = await response.json();
     if (data.success) {
-      return data.settings;
+      return data.Setting;
     } else {
-      console.error('Failed to fetch settings:', data.message);
+      console.error('Failed to fetch Setting:', data.message);
       return {
         language: 'English',
         notification: false,
@@ -18,7 +18,7 @@ const fetchSettings = async () => {
       };
     }
   } catch (error) {
-    console.error('Error fetching settings:', error);
+    console.error('Error fetching Setting:', error);
     return {
       language: 'English',
       notification: false,
@@ -29,32 +29,32 @@ const fetchSettings = async () => {
   }
 };
 
-const saveSettings = async (settings) => {
+const saveSetting = async (Setting) => {
   try {
-    const response = await fetch('http://localhost:5000/api/setting/settings', {
+    const response = await fetch('http://localhost:5000/api/setting/Setting', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(settings),
+      body: JSON.stringify(Setting),
     });
     const data = await response.json();
     if (data.success) {
-      console.log('Settings saved successfully');
+      console.log('Setting saved successfully');
       return true;
     } else {
-      console.error('Failed to save settings:', data.message);
+      console.error('Failed to save Setting:', data.message);
       return false;
     }
   } catch (error) {
-    console.error('Error saving settings:', error);
+    console.error('Error saving Setting:', error);
     return false;
   }
 };
 
 const changePassword = async (current, newPassword) => {
   try {
-    const response = await fetch('http://localhost:5000/api/setting/settings/change-password', {
+    const response = await fetch('http://localhost:5000/api/setting/Setting/change-password', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ const changePassword = async (current, newPassword) => {
 };
 
 const Setting = () => {
-  const [settings, setSettings] = useState({
+  const [Setting, setSetting] = useState({
     language: 'English',
     notification: false,
     privateMode: false,
@@ -95,29 +95,29 @@ const Setting = () => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    fetchSettings().then(data => {
-      setSettings(data);
+    fetchSetting().then(data => {
+      setSetting(data);
       setLoading(false);
     });
   }, []);
 
   const handleToggle = (key) => {
-    setSettings(prev => ({ ...prev, [key]: !prev[key] }));
+    setSetting(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setSettings(prev => ({ ...prev, [name]: value }));
+    setSetting(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSave = async (e) => {
     e.preventDefault();
     setMessage('');
-    const success = await saveSettings(settings);
+    const success = await saveSetting(Setting);
     if (success) {
-      setMessage('Settings saved successfully!');
+      setMessage('Setting saved successfully!');
     } else {
-      setMessage('Failed to save settings. Please try again.');
+      setMessage('Failed to save Setting. Please try again.');
     }
   };
 
@@ -153,7 +153,7 @@ const Setting = () => {
           <form className="setting-form" onSubmit={handleSave}>
             <label>
               Language
-              <select name="language" value={settings.language} onChange={handleChange}>
+              <select name="language" value={Setting.language} onChange={handleChange}>
                 <option value="English">English</option>
                 <option value="Khmer">Khmer</option>
               </select>
@@ -161,28 +161,28 @@ const Setting = () => {
             <label>
               Notification
               <span className="toggle-switch">
-                <input type="checkbox" checked={settings.notification} onChange={() => handleToggle('notification')} />
+                <input type="checkbox" checked={Setting.notification} onChange={() => handleToggle('notification')} />
                 <span className="toggle-slider"></span>
               </span>
             </label>
             <label>
               Private Mode
               <span className="toggle-switch">
-                <input type="checkbox" checked={settings.privateMode} onChange={() => handleToggle('privateMode')} />
+                <input type="checkbox" checked={Setting.privateMode} onChange={() => handleToggle('privateMode')} />
                 <span className="toggle-slider"></span>
               </span>
             </label>
             <label>
               Dark Mode
               <span className="toggle-switch">
-                <input type="checkbox" checked={settings.darkMode} onChange={() => handleToggle('darkMode')} />
+                <input type="checkbox" checked={Setting.darkMode} onChange={() => handleToggle('darkMode')} />
                 <span className="toggle-slider"></span>
               </span>
             </label>
             <label>
               Locations
               <span className="toggle-switch">
-                <input type="checkbox" checked={settings.locations} onChange={() => handleToggle('locations')} />
+                <input type="checkbox" checked={Setting.locations} onChange={() => handleToggle('locations')} />
                 <span className="toggle-slider"></span>
               </span>
             </label>
