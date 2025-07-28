@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import './LoginModal.css';
 
-const LoginModal = ({ onClose, onSwitchToSignup }) => {
+const LoginModal = ({ onClose, onSwitchToSignup, onSuccess }) => {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
   const [email, setEmail] = useState('');
@@ -21,7 +21,8 @@ const LoginModal = ({ onClose, onSwitchToSignup }) => {
     setError('');
 
     try {
-      const response = await fetch("http://localhost:5000/login", {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://venuebooking-production.up.railway.app';
+      const response = await fetch(`${apiUrl}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -33,7 +34,13 @@ const LoginModal = ({ onClose, onSwitchToSignup }) => {
         login(data.token, data.user);
         alert("Login successful!");
         onClose();
-        navigate('/'); // Navigate to home page
+        
+        // Call onSuccess callback if provided, otherwise navigate to home
+        if (onSuccess) {
+          onSuccess();
+        } else {
+          navigate('/'); // Navigate to home page
+        }
       } else {
         setError(data.error || "Login failed");
       }

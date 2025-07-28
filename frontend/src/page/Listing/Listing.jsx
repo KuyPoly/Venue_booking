@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 import { 
   FaChartLine, 
   FaGlobe, 
@@ -10,18 +11,44 @@ import {
   FaDollarSign,
   FaHandshake
 } from 'react-icons/fa';
+import BecomeOwnerModal from '../../component/BecomeOwnerModal/BecomeOwnerModal';
+import LoginModal from '../../component/LoginModal/LoginModal';
 import './Listing.css';
 
 const Listing = () => {
+  const { user } = useContext(AuthContext);
+  const [showBecomeOwnerModal, setShowBecomeOwnerModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const handleJoinUsClick = (e) => {
+    e.preventDefault();
+    
+    if (!user) {
+      // User is not logged in, show login modal
+      setShowLoginModal(true);
+    } else if (user.role === 'owner') {
+      // User is already an owner, redirect to dashboard or show message
+      window.location.href = '/dashboard';
+    } else {
+      // User is logged in but not an owner, show become owner modal
+      setShowBecomeOwnerModal(true);
+    }
+  };
+
+  const handleLoginSuccess = () => {
+    setShowLoginModal(false);
+    // After successful login, show the become owner modal
+    setShowBecomeOwnerModal(true);
+  };
+
   return (
-    <div className="listing-container">
-      {/* Hero Section */}
+    <div className="listing-container">{/* Hero Section */}
       <section className="listing-section">
         <div className="listing-overlay">
           <div className="listing-content">
             <h1>Join the leading venue marketplace in Cambodia.</h1>
             <p>Get more booking for your event space business</p>
-            <Link to="/signup" className="cta-btn">JOIN US TODAY</Link>
+            <button onClick={handleJoinUsClick} className="cta-btn">JOIN US TODAY</button>
           </div>
         </div>
       </section>
@@ -32,7 +59,7 @@ const Listing = () => {
           <h2>Why work with us?</h2>
           <p className="work-subtitle">
             We partner with the world's best venues to grow their event booking business, giving them 
-            access to over £250M of event value each year
+            access to over $250M of event value each year
           </p>
 
           <div className="features-grid">
@@ -97,11 +124,11 @@ const Listing = () => {
       {/* Testimonial Section */}
       <section className="testimonial-section">
         <div className="container">
-          <h2>What The Standard say about VenueScanner:</h2>
+          <h2>What The Standard say about Ocean Gate:</h2>
           <div className="testimonial-card">
             <div className="quote-icon">"</div>
             <p>
-              Couldn't recommend enough! Joanna, Jack, and the team at VenueScanner are fantastic. 
+              Couldn't recommend enough! Joanna, Jack, and the team at Ocean Gate are fantastic. 
               They consistently send us high-level, quality leads - selling our spaces to the high 
               standards each deserves. They genuinely care and live our property, and that shines 
               through.
@@ -109,6 +136,19 @@ const Listing = () => {
           </div>
         </div>
       </section>
+
+      {/* Modals */}
+      <BecomeOwnerModal 
+        isOpen={showBecomeOwnerModal} 
+        onClose={() => setShowBecomeOwnerModal(false)} 
+      />
+      
+      {showLoginModal && (
+        <LoginModal 
+          onClose={() => setShowLoginModal(false)}
+          onSuccess={handleLoginSuccess}
+        />
+      )}
 
     </div>
   );
