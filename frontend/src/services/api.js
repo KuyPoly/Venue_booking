@@ -161,7 +161,7 @@ const api = {
     body: JSON.stringify(listingData)
   }),
 
-  updateListing: (listingId, ownerId, listingData) => fetch(`${API_BASE_URL}/api/listings/${listingId}?owner_id=${ownerId}`, {
+  updateListing: (listingId, listingData) => fetch(`${API_BASE_URL}/api/listings/${listingId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -176,7 +176,7 @@ const api = {
   }),
 
   // Booking management
-  getOwnerBookings: (ownerId) => fetch(`${API_BASE_URL}/booking?owner_id=${ownerId}`, {
+  getOwnerBookings: () => fetch(`${API_BASE_URL}/booking`, {
     headers: getAuthHeaders()
   }),
 

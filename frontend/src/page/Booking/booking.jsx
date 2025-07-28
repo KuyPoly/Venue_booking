@@ -10,8 +10,8 @@ function Booking() {
   const ownerId = user?.id;
 
   useEffect(() => {
-    if (!ownerId) return;
-    api.getOwnerBookings(ownerId)
+    if (!user) return;
+    api.getOwnerBookings()
       .then(res => res.json())
       .then(data => {
         setBookings(data.booking || []);
@@ -29,7 +29,7 @@ function Booking() {
 
       if (response.ok) {
         // Refresh bookings after action
-        const updatedResponse = await api.getOwnerBookings(ownerId);
+        const updatedResponse = await api.getOwnerBookings();
         const updatedData = await updatedResponse.json();
         setBookings(updatedData.booking || []);
       } else {

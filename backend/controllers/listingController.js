@@ -329,7 +329,7 @@ exports.createListing = async (req, res) => {
 // Update a listing
 exports.updateListing = async (req, res) => {
   try {
-    const { owner_id } = req.query;
+    const owner_id = req.user.user_id; // Get from authenticated user
     const {
       name,
       type,
