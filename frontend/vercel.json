@@ -14,10 +14,5 @@
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ],
-  "functions": {
-    "app/**": {
-      "runtime": "nodejs20.x"
-    }
-  }
+  ]
 }
