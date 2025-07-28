@@ -6,12 +6,15 @@ import { AuthContext } from '../../context/AuthContext';
 import SignupPopUp from '../../component/HomePage/SignupPopUp';
 import ABAPayModal from '../../component/ABAPayModal';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { HiOutlineUsers } from 'react-icons/hi2';
+import { MdOutlineBuild, MdOutlineCelebration, MdOutlineBusinessCenter } from 'react-icons/md';
+import { GiDiamondRing } from 'react-icons/gi';
 
 const categoryIcons = {
-  meeting: '👥',
-  workshop: '🛠️',
-  wedding: '💍',
-  party: '🎉'
+  meeting: <HiOutlineUsers />,
+  workshop: <MdOutlineBuild />,
+  wedding: <GiDiamondRing />,
+  party: <MdOutlineCelebration />
 };
 
 export default function VenuesList() {
@@ -189,7 +192,7 @@ export default function VenuesList() {
   };
 
   const getCategoryIcon = (categoryName) => {
-    return categoryIcons[categoryName.toLowerCase()] || '🏢';
+    return categoryIcons[categoryName.toLowerCase()] || <MdOutlineBusinessCenter />;
   };
 
   const formatPrice = (price) => {
@@ -380,7 +383,7 @@ export default function VenuesList() {
                 <h3 className="venue-name">{venue.name}</h3>
                 <p className="venue-location">{venue.location}</p>
                 <p className="venue-type">{venue.type}</p>
-                <p className="venue-capacity">👥 {venue.capacity} guests</p>
+                <p className="venue-capacity"><HiOutlineUsers style={{marginRight: '4px'}} /> {venue.capacity} guests</p>
                 <p className="venue-price">{formatPrice(venue.price)}</p>
                 <div className="venue-footer">
                   <span 
