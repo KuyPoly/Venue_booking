@@ -107,7 +107,7 @@ export default function Navbar({ openLoginModal, openSignupModal }) {
           </div>
           <div className="navbar-buttons">
             <a href="#" className="login-btn" onClick={handleLoginClick}>Login</a>
-            <a href="#" className="signup-btn" onClick={handleSignupClick}>Signup</a>
+            <a href="#" className="signup-bt" onClick={handleSignupClick}>Signup</a>
           </div>
         </div>
 
