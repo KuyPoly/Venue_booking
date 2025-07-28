@@ -158,7 +158,7 @@ function OwnerListings() {
     try {
       setLoading(true);
       console.log('Fetching listings for owner_id:', owner_id); // Debug log
-      const response = await api.getOwnerListings(owner_id);
+      const response = await api.getOwnerListings();
       console.log('Response status:', response.status); // Debug log
       
       if (!response.ok) {

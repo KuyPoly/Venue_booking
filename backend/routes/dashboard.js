@@ -4,15 +4,11 @@ const { Hall, Booking, User, HallReservation } = require('../model/Association')
 const { Op, sequelize } = require('sequelize');
 const { authenticateToken } = require('../middleware/auth');
 
-// GET /dashboard/stats?owner_id=123 - Get comprehensive dashboard statistics
+// GET /dashboard/stats - Get comprehensive dashboard statistics
 router.get('/stats', authenticateToken, async (req, res) => {
   try {
-    const { owner_id } = req.query;
+    const owner_id = req.user.user_id; // Get from authenticated user
     
-    if (!owner_id) {
-      return res.status(400).json({ error: 'owner_id is required' });
-    }
-
     // Get all halls by this owner
     const halls = await Hall.findAll({
       where: { owner_id: owner_id },

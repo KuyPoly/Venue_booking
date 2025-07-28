@@ -2,20 +2,17 @@ const express = require('express');
 const router = express.Router();
 const { Booking, Hall, User, HallReservation } = require('../model/Association');
 const { Op, sequelize } = require('sequelize');
+const { authenticateToken } = require('../middleware/auth');
 
 
 
 // GET /booking/stats?owner_id=123 - Get booking statistics for dashboard
 
 
-router.get('/stats', async (req, res) => {
+router.get('/stats', authenticateToken, async (req, res) => {
   try {
-    const { owner_id } = req.query;
+    const owner_id = req.user.user_id; // Get from authenticated user
     
-    if (!owner_id) {
-      return res.status(400).json({ error: 'owner_id is required' });
-    }
-
     // Get all halls by this owner
     const halls = await Hall.findAll({
       where: { owner_id: owner_id },
@@ -243,6 +240,54 @@ router.delete('/:id', async (req, res) => {
   } catch (error) {
     console.error('Error cancelling booking:', error);
     res.status(500).json({ error: 'Failed to cancel booking' });
+  }
+});
+
+// GET /booking/requests - Get pending booking requests for owner
+router.get('/requests', authenticateToken, async (req, res) => {
+  try {
+    const owner_id = req.user.user_id; // Get from authenticated user
+    
+    // Get all halls by this owner
+    const halls = await Hall.findAll({
+      where: { owner_id: owner_id },
+      attributes: ['hall_id', 'name']
+    });
+
+    const hallIds = halls.map(hall => hall.hall_id);
+
+    if (hallIds.length === 0) {
+      return res.json({ requests: [] });
+    }
+
+    // Get pending bookings for these halls
+    const requests = await Booking.findAll({
+      where: { status: 'pending' },
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: ['user_id', 'first_name', 'last_name', 'email']
+        },
+        {
+          model: HallReservation,
+          as: 'hall_reservations',
+          include: [{
+            model: Hall,
+            as: 'hall',
+            where: { hall_id: { [Op.in]: hallIds } },
+            attributes: ['hall_id', 'name']
+          }]
+        }
+      ],
+      order: [['createdAt', 'DESC']],
+      limit: 10
+    });
+
+    res.json({ requests });
+  } catch (error) {
+    console.error('Error fetching booking requests:', error);
+    res.status(500).json({ error: 'Failed to fetch booking requests' });
   }
 });
 

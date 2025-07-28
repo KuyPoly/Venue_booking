@@ -3,7 +3,7 @@ const { Op } = require('sequelize');
 const moment = require('moment');
 
 exports.getWeeklyEarnings = async (req, res) => {
-  const ownerId = req.query.owner_id;
+  const ownerId = req.user.user_id; // Get from authenticated user
 
   try {
     const startDate = moment().subtract(4, 'weeks').startOf('isoWeek').toDate();

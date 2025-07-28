@@ -3,7 +3,7 @@ const router = express.Router();
 const listingController = require('../controllers/listingController');
 const { authenticateToken } = require('../middleware/auth');
 
-router.get('/', listingController.getAllListings);
+router.get('/', authenticateToken, listingController.getAllListings);
 router.get('/:id', listingController.getListingById);
 
 // Use multer middleware for create and update routes

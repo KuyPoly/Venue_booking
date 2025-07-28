@@ -1,5 +1,5 @@
 // controllers/walletController.js
-const { OwnerWallet, WalletTransaction, User, Booking } = require('../model');
+const { OwnerWallet, WalletTransaction, User, Booking } = require('../model/Association');
 const { Op } = require('sequelize');
 const sequelize = require('../database/sequelize');
 
