@@ -4,54 +4,22 @@ import './profile.css';
 
 const fetchProfile = async () => {
   try {
-    const response = await api.getProfile();
-    const data = await response.json();
+    const data = await api.getProfile();
     if (data.success) {
       return data.profile;
     } else {
       console.error('Failed to fetch profile:', data.message);
-      return {
-        firstName: '',
-        lastName: '',
-        displayName: '',
-        email: '',
-        phone: '',
-        aboutMe: '',
-        social: {
-          twitter: '',
-          facebook: '',
-          linkedin: '',
-          instagram: '',
-          whatsapp: '',
-          website: ''
-        }
-      };
+      return getEmptyProfile();
     }
   } catch (error) {
     console.error('Error fetching profile:', error);
-    return {
-      firstName: '',
-      lastName: '',
-      displayName: '',
-      email: '',
-      phone: '',
-      aboutMe: '',
-      social: {
-        twitter: '',
-        facebook: '',
-        linkedin: '',
-        instagram: '',
-        whatsapp: '',
-        website: ''
-      }
-    };
+    return getEmptyProfile();
   }
 };
 
 const saveProfile = async (profileData) => {
   try {
-    const response = await api.updateProfile(profileData);
-    const data = await response.json();
+    const data = await api.updateProfile(profileData);
     if (data.success) {
       console.log('Profile saved successfully');
       return true;
@@ -65,28 +33,45 @@ const saveProfile = async (profileData) => {
   }
 };
 
+const changePassword = async (passwords) => {
+  try {
+    const data = await api.changePassword(passwords);
+    return data;
+  } catch (error) {
+    console.error('Password change error:', error);
+    return { success: false, message: 'An error occurred while changing the password.' };
+  }
+};
+
+const getEmptyProfile = () => ({
+  firstName: '',
+  lastName: '',
+  displayName: '',
+  email: '',
+  phone: '',
+  aboutMe: '',
+  social: {
+    twitter: '',
+    facebook: '',
+    linkedin: '',
+    instagram: '',
+    whatsapp: '',
+    website: '',
+  },
+});
+
 const Profile = () => {
-  const [profile, setProfile] = useState({
-    firstName: '',
-    lastName: '',
-    displayName: '',
-    email: '',
-    phone: '',
-    aboutMe: '',
-    social: {
-      twitter: '',
-      facebook: '',
-      linkedin: '',
-      instagram: '',
-      whatsapp: '',
-      website: ''
-    }
-  });
+  const [profile, setProfile] = useState(getEmptyProfile());
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
+  const [passwords, setPasswords] = useState({
+    current: '',
+    new: '',
+    confirm: '',
+  });
 
   useEffect(() => {
-    fetchProfile().then(data => {
+    fetchProfile().then((data) => {
       setProfile(data);
       setLoading(false);
     });
@@ -96,15 +81,15 @@ const Profile = () => {
     const { name, value } = e.target;
     if (name.startsWith('social.')) {
       const socialField = name.split('.')[1];
-      setProfile(prev => ({
+      setProfile((prev) => ({
         ...prev,
         social: {
           ...prev.social,
-          [socialField]: value
-        }
+          [socialField]: value,
+        },
       }));
     } else {
-      setProfile(prev => ({ ...prev, [name]: value }));
+      setProfile((prev) => ({ ...prev, [name]: value }));
     }
   };
 
@@ -112,21 +97,29 @@ const Profile = () => {
     e.preventDefault();
     setMessage('');
     const success = await saveProfile(profile);
-    if (success) {
-      setMessage('Profile saved successfully!');
-    } else {
-      setMessage('Failed to save profile. Please try again.');
-    }
+    setMessage(success ? 'Profile saved successfully!' : 'Failed to save profile. Please try again.');
   };
 
-  const handleSocialSubmit = async (e) => {
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setPasswords((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     setMessage('');
-    const success = await saveProfile(profile);
-    if (success) {
-      setMessage('Social links saved successfully!');
+
+    if (passwords.new !== passwords.confirm) {
+      setMessage('New passwords do not match.');
+      return;
+    }
+
+    const data = await changePassword(passwords);
+    if (data.success) {
+      setMessage('Password updated successfully!');
+      setPasswords({ current: '', new: '', confirm: '' });
     } else {
-      setMessage('Failed to save social links. Please try again.');
+      setMessage(data.message || 'Failed to update password.');
     }
   };
 
@@ -139,13 +132,11 @@ const Profile = () => {
         <div className="profile-content">
           <section className="profile-details">
             <div className="profile-section-header">Profile Details</div>
-            <div className="profile-avatar-upload" style={{ display: 'none' }}>
-            </div>
             <form className="profile-form" onSubmit={handleProfileSubmit}>
               <label>
                 First Name
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   name="firstName"
                   value={profile.firstName}
                   onChange={handleProfileChange}
@@ -153,105 +144,63 @@ const Profile = () => {
               </label>
               <label>
                 Last Name
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   name="lastName"
                   value={profile.lastName}
                   onChange={handleProfileChange}
                 />
               </label>
               <label>
-                Display Name
-                <input 
-                  type="text" 
-                  name="displayName"
-                  value={profile.displayName}
-                  onChange={handleProfileChange}
-                />
-              </label>
-              <label>
                 E-Mail
-                <input 
-                  type="email" 
+                <input
+                  type="email"
                   name="email"
                   value={profile.email}
-                  onChange={handleProfileChange}
-                />
-              </label>
-              <label>
-                Phone
-                <input 
-                  type="text" 
-                  name="phone"
-                  value={profile.phone}
                   onChange={handleProfileChange}
                 />
               </label>
               <button type="submit" className="save-btn">Save Changes</button>
             </form>
           </section>
-          <section className="profile-social">
-            <div className="profile-section-header">Social</div>
-            <form className="social-form" onSubmit={handleSocialSubmit}>
+
+          <section className="change-password-section">
+            <div className="profile-section-header">Change Password</div>
+            <form onSubmit={handlePasswordSubmit} className="profile-form">
               <label>
-                Twitter
-                <input 
-                  type="text" 
-                  name="social.twitter"
-                  value={profile.social.twitter}
-                  onChange={handleProfileChange}
+                Current Password
+                <input
+                  type="password"
+                  name="current"
+                  value={passwords.current}
+                  onChange={handlePasswordChange}
                 />
               </label>
               <label>
-                Facebook
-                <input 
-                  type="text" 
-                  name="social.facebook"
-                  value={profile.social.facebook}
-                  onChange={handleProfileChange}
+                New Password
+                <input
+                  type="password"
+                  name="new"
+                  value={passwords.new}
+                  onChange={handlePasswordChange}
                 />
               </label>
               <label>
-                Linkedin
-                <input 
-                  type="text" 
-                  name="social.linkedin"
-                  value={profile.social.linkedin}
-                  onChange={handleProfileChange}
-                />
-              </label>
-              <label>
-                Instagram
-                <input 
-                  type="text" 
-                  name="social.instagram"
-                  value={profile.social.instagram}
-                  onChange={handleProfileChange}
-                />
-              </label>
-              <label>
-                Whatsapp
-                <input 
-                  type="text" 
-                  name="social.whatsapp"
-                  value={profile.social.whatsapp}
-                  onChange={handleProfileChange}
-                />
-              </label>
-              <label>
-                Website
-                <input 
-                  type="text" 
-                  name="social.website"
-                  value={profile.social.website}
-                  onChange={handleProfileChange}
+                Verify New Password
+                <input
+                  type="password"
+                  name="confirm"
+                  value={passwords.confirm}
+                  onChange={handlePasswordChange}
                 />
               </label>
               <button type="submit" className="save-btn">Save Changes</button>
             </form>
           </section>
         </div>
-        {message && <div style={{ marginTop: 20, color: '#2563eb', fontWeight: 500 }}>{message}</div>}
+        {message && (
+          <div style={{ marginTop: 20, color: '#2563eb', fontWeight: 500 }}>{message}</div>
+        )}
       </main>
     </div>
   );

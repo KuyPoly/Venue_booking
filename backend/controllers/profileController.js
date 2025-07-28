@@ -1,7 +1,5 @@
-// controller/profileController.js
-// This controller handles user profile operations without middleware authentication
-
 const User = require('../model/User');
+const bcrypt = require('bcrypt');
 
 const profileController = {
   // Get user profile
@@ -84,7 +82,46 @@ const profileController = {
         error: error.message
       });
     }
+  },
+
+  // Change password
+  changePassword: async (req, res) => {
+    try {
+      // TODO: Replace this with your actual authenticated user ID logic
+      const userId = 'some-user-id'; // Replace with your auth system
+
+      const { current, new: newPassword, confirm } = req.body;
+
+      if (!current || !newPassword || !confirm) {
+        return res.status(400).json({ success: false, message: 'Please provide all password fields.' });
+      }
+
+      if (newPassword !== confirm) {
+        return res.status(400).json({ success: false, message: 'New passwords do not match.' });
+      }
+
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ success: false, message: 'User not found.' });
+      }
+
+      const isMatch = await bcrypt.compare(current, user.password);
+      if (!isMatch) {
+        return res.status(400).json({ success: false, message: 'Current password is incorrect.' });
+      }
+
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+      user.password = hashedPassword;
+      await user.save();
+
+      return res.json({ success: true, message: 'Password changed successfully.' });
+    } catch (error) {
+      console.error('Error changing password:', error);
+      return res.status(500).json({ success: false, message: 'Failed to change password.', error: error.message });
+    }
   }
 };
 
-module.exports = profileController; 
+module.exports = profileController;

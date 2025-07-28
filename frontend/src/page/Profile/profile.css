@@ -17,10 +17,11 @@
   width: 100%;
 }
 
-.profile-details, .profile-social {
+.profile-details,
+.change-password-section {
   background: #fff;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   padding: 32px 24px 24px 24px;
   flex: 1;
   min-width: 340px;
@@ -56,7 +57,7 @@
   background: #f9fafb;
 }
 
-.profile-form label, .social-form label {
+.profile-form label {
   display: flex;
   flex-direction: column;
   font-size: 0.98rem;
@@ -65,8 +66,8 @@
   color: #222;
 }
 
-.profile-form input, .profile-form textarea,
-.social-form input {
+.profile-form input,
+.profile-form textarea {
   margin-top: 6px;
   padding: 10px 12px;
   border: 1px solid #d1d5db;
@@ -76,8 +77,8 @@
   transition: border 0.2s;
 }
 
-.profile-form input:focus, .profile-form textarea:focus,
-.social-form input:focus {
+.profile-form input:focus,
+.profile-form textarea:focus {
   border: 1.5px solid #2563eb;
   outline: none;
 }
@@ -109,9 +110,12 @@
     flex-direction: column;
     gap: 24px;
   }
-  .profile-details, .profile-social {
+
+  .profile-details,
+  .change-password-section {
     min-width: unset;
   }
+
   .profile-title {
     font-size: 2rem;
   }
@@ -121,13 +125,14 @@
   .profile-title {
     font-size: 1.8rem;
   }
+
   .profile-content {
     gap: 16px;
   }
 }
 
-
-.avatar-placeholder
+/* Hide avatar upload */
+.avatar-placeholder,
 .profile-avatar-upload {
   display: none;
 }
