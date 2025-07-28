@@ -1,7 +1,7 @@
 // services/walletService.js
 class WalletService {
   constructor() {
-    this.baseURL = 'http://localhost:5000/api/wallet';
+    this.baseURL = `${process.env.REACT_APP_API_BASE_URL}/api/wallet`;
   }
 
   // Get authentication token from localStorage
