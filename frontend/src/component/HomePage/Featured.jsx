@@ -122,6 +122,16 @@ function Featured() {
     }).format(price);
   };
 
+  const formatTime = (timeString) => {
+    if (!timeString) return '';
+    // Convert time string (HH:MM:SS) to 12-hour format
+    const [hours, minutes] = timeString.split(':');
+    const hour = parseInt(hours);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour % 12 || 12;
+    return `${displayHour}:${minutes} ${ampm}`;
+  };
+
   const handleSeeMore = () => {
     navigate('/venues');
   };
@@ -167,10 +177,19 @@ function Featured() {
                 }}
               />
               <div className="venue-info">
-                <h3 className="venue-name">{venue.name}</h3>
+                <h3 className="venue-name">
+                  {venue.name}
+                  {(venue.openHour || venue.closeHour) && (
+                    <span className="venue-hours">
+                      {venue.openHour && formatTime(venue.openHour)}
+                      {venue.openHour && venue.closeHour && ' - '}
+                      {venue.closeHour && formatTime(venue.closeHour)}
+                    </span>
+                  )}
+                </h3>
                 <p className="venue-location">{venue.location}</p>
                 <p className="venue-capacity">👥 {venue.capacity} guests</p>
-                <p className="venue-price">{formatPrice(venue.price)}</p>
+                <p className="venue-price">{formatPrice(venue.price)} <span className="per-day-text">(per day)</span></p>
                 <div className="venue-footer">
                   <span 
                     className={`like${favoriteIds.includes(venue.id) ? ' liked' : ''}`}

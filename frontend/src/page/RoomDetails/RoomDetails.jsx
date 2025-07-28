@@ -81,6 +81,17 @@ export default function RoomDetails() {
   const [showMapModal, setShowMapModal] = useState(false);
   const [showConfirmLoading, setShowConfirmLoading] = useState(false); // <-- Added state for confirm loading
 
+  // Helper function to format time
+  const formatTime = (timeString) => {
+    if (!timeString) return '';
+    // Convert time string (HH:MM:SS) to 12-hour format
+    const [hours, minutes] = timeString.split(':');
+    const hour = parseInt(hours);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour % 12 || 12;
+    return `${displayHour}:${minutes} ${ampm}`;
+  };
+
   // Google Maps loading
   const { isLoaded: isMapLoaded, loadError: mapLoadError } = useJsApiLoader({
     id: 'google-map-script',
@@ -306,7 +317,16 @@ export default function RoomDetails() {
             </div>
             <div className="venue-info-card">
               <div className="venue-title-row">
-                <h2>{venue.name}</h2>
+                <h2>
+                  {venue.name}
+                  {(venue.openHour || venue.closeHour) && (
+                    <span className="venue-hours">
+                      {venue.openHour && formatTime(venue.openHour)}
+                      {venue.openHour && venue.closeHour && ' - '}
+                      {venue.closeHour && formatTime(venue.closeHour)}
+                    </span>
+                  )}
+                </h2>
                 <span 
                   className={`like${favoriteIds.includes(venue.id) ? ' liked' : ''}`}
                   onClick={e => handleFavoriteClick(e, venue.id)}
@@ -321,7 +341,7 @@ export default function RoomDetails() {
                 </span>
               </div>
               <div className="venue-meta">
-                <span className="venue-price">{venue.price ? `$${venue.price}` : 'N/A'}</span>
+                <span className="venue-price">{venue.price ? `$${venue.price}` : 'N/A'} <span className="per-day-text">(per day)</span></span>
                 <span className="venue-location">{venue.location || 'N/A'}</span>
                 <button 
                   className="see-location-btn"

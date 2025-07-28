@@ -330,6 +330,19 @@
   color: #0055A4;
   margin-bottom: 8px;
 }
+
+.per-day-text {
+  color: #888;
+  font-size: 0.85em;
+  font-weight: normal;
+}
+
+.venue-hours {
+  color: #888;
+  font-size: 0.55em;
+  font-weight: normal;
+  margin-left: 8px;
+}
 .venue-location {
   font-size: 1.25rem;
   color: #555;
