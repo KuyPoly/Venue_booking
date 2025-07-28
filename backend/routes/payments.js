@@ -3,6 +3,7 @@ const router = express.Router();
 const Payment = require('../model/Payment');
 const Booking = require('../model/Booking');
 const { generateABAQR } = require('../controllers/abaPay');
+const { creditWalletFromBooking } = require('../controllers/walletController');
 
 // POST /payments - create a new payment
 router.post('/', async (req, res) => {
@@ -14,13 +15,45 @@ router.post('/', async (req, res) => {
       method,
       booking_id,
     });
+    
     // After payment, update booking status to 'confirmed'
     if (booking_id) {
       await Booking.update(
         { status: 'confirmed' },
         { where: { booking_id } }
       );
+      
+      // Credit wallet when payment is successful
+      if (status === 'paid' || status === 'completed') {
+        try {
+          // Get booking details to find the owner and amount
+          const booking = await Booking.findByPk(booking_id, {
+            include: [{
+              model: require('../model/HallReservation'),
+              as: 'hall_reservations',
+              include: [{
+                model: require('../model/Hall'),
+                as: 'hall',
+                attributes: ['owner_id']
+              }]
+            }]
+          });
+          
+          if (booking && booking.hall_reservations && booking.hall_reservations[0]) {
+            const ownerId = booking.hall_reservations[0].hall.owner_id;
+            const amount = booking.total_amount;
+            
+            // Credit the owner's wallet
+            await creditWalletFromBooking(booking_id, amount, ownerId, `Payment received for booking ${booking_id}`);
+            console.log(`Wallet credited for owner ${ownerId}: $${amount} from booking ${booking_id}`);
+          }
+        } catch (walletError) {
+          console.error('Error crediting wallet:', walletError);
+          // Don't fail the payment if wallet credit fails
+        }
+      }
     }
+    
     res.status(201).json({ message: 'Payment saved', payment });
   } catch (error) {
     console.error('Error saving payment:', error);

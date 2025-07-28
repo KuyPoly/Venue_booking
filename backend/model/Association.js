@@ -8,6 +8,8 @@ const User = require('./User');
 const Booking = require('./Booking');
 const HallReservation = require('./HallReservation');
 const Payment = require('./Payment');
+const OwnerWallet = require('./OwnerWallet');
+const WalletTransaction = require('./WalletTransaction');
 
 
 // Booking - User (One-to-Many)
@@ -46,6 +48,19 @@ Favorite.belongsTo(Hall, { foreignKey: 'hall_id', as: 'hall' });
 User.hasMany(Favorite, { foreignKey: 'user_id', as: 'favorites' });
 Hall.hasMany(Favorite, { foreignKey: 'hall_id', as: 'favorites' });
 
+// Wallet Associations
+// User - OwnerWallet (One-to-One)
+User.hasOne(OwnerWallet, { foreignKey: 'ownerId', sourceKey: 'user_id', as: 'wallet' });
+OwnerWallet.belongsTo(User, { foreignKey: 'ownerId', targetKey: 'user_id', as: 'owner' });
+
+// User - WalletTransaction (One-to-Many)
+User.hasMany(WalletTransaction, { foreignKey: 'ownerId', sourceKey: 'user_id', as: 'walletTransactions' });
+WalletTransaction.belongsTo(User, { foreignKey: 'ownerId', targetKey: 'user_id', as: 'owner' });
+
+// Booking - WalletTransaction (One-to-Many)
+Booking.hasMany(WalletTransaction, { foreignKey: 'bookingId', sourceKey: 'booking_id', as: 'walletTransactions' });
+WalletTransaction.belongsTo(Booking, { foreignKey: 'bookingId', targetKey: 'booking_id', as: 'booking' });
+
 // Export all models
 module.exports = {
   Hall,
@@ -56,5 +71,7 @@ module.exports = {
   User,
   Booking,
   HallReservation,
-  Payment
+  Payment,
+  OwnerWallet,
+  WalletTransaction
 };

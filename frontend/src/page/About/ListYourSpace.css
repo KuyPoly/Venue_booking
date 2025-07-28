@@ -1,0 +1,99 @@
+/* List Your Space Section Styles */
+.list-space-section {
+  padding: 80px 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.list-space-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 60px;
+}
+
+.list-space-info {
+  flex: 1;
+  max-width: 500px;
+}
+
+.list-space-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 30px;
+  line-height: 1.2;
+}
+
+.list-space-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 40px 0;
+}
+
+.list-space-features li {
+  padding: 12px 0;
+  font-size: 1.1rem;
+  color: #4a5568;
+  position: relative;
+  padding-left: 30px;
+  line-height: 1.6;
+}
+
+.list-space-features li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  color: #48bb78;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.list-space-btn {
+  background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+  color: white;
+  border: none;
+  padding: 15px 35px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+}
+
+.list-space-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(66, 153, 225, 0.4);
+}
+
+.list-space-image {
+  flex: 1;
+  text-align: center;
+}
+
+.list-space-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .list-space-container {
+    flex-direction: column;
+    gap: 40px;
+    text-align: center;
+  }
+  
+  .list-space-title {
+    font-size: 2rem;
+  }
+  
+  .list-space-features li {
+    text-align: left;
+  }
+}
