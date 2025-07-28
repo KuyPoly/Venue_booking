@@ -9,6 +9,7 @@ const Dashboard = () => {
   const [weeklyEarnings, setWeeklyEarnings] = useState([]);
   const [payouts, setPayouts] = useState([]);
   const [recentActivities, setRecentActivities] = useState([]);
+  const [walletInfo, setWalletInfo] = useState({ balance: 0 });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,12 +19,10 @@ const Dashboard = () => {
     // Fetch listings count
     fetch(`http://localhost:5000/listing?owner_id=${ownerId}`)
       .then(res => res.json())
-      .then(data => {
-        setListingCount(data.listings?.length || 0);
-      })
+      .then(data => setListingCount(data.listings?.length || 0))
       .catch(err => console.error('Error fetching listings:', err));
 
-    // Fetch booking stats (total)
+    // Fetch booking stats
     fetch(`http://localhost:5000/booking/stats?owner_id=${ownerId}`)
       .then(res => res.json())
       .then(data => {
@@ -55,7 +54,13 @@ const Dashboard = () => {
     fetch(`http://localhost:5000/activities?owner_id=${ownerId}`)
       .then(res => res.json())
       .then(data => setRecentActivities(data.activities || []))
-      .catch(err => console.error('Error fetching activities:', err))
+      .catch(err => console.error('Error fetching activities:', err));
+
+    // Fetch wallet info
+    fetch(`http://localhost:5000/wallet/info?owner_id=${ownerId}`)
+      .then(res => res.json())
+      .then(data => setWalletInfo(data))
+      .catch(err => console.error('Error fetching wallet info:', err))
       .finally(() => setLoading(false));
   }, []);
 
@@ -79,6 +84,11 @@ const Dashboard = () => {
           <div className="stat-value">{bookingCount}</div>
           <div className="stat-title">Total Bookings</div>
         </div>
+        <div className="stat-card earnings">
+          <div className="stat-icon"><i className="fas fa-wallet"></i></div>
+          <div className="stat-value">${walletInfo.balance?.toFixed(2) || '0.00'}</div>
+          <div className="stat-title">Available Balance</div>
+        </div>
       </div>
 
       {/* Main Content */}
@@ -101,7 +111,7 @@ const Dashboard = () => {
             )}
           </div>
 
-          {/* Analytics (placeholder) */}
+          {/* Analytics Placeholder */}
           <div className="analytics">
             <div className="card-title">Listings Analytics</div>
             <div style={{ height: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#bfc2d4', fontSize: '1.1rem' }}>
@@ -111,14 +121,14 @@ const Dashboard = () => {
         </div>
 
         <div style={{ flex: 0.97, display: 'flex', flexDirection: 'column', gap: '18px' }}>
-          {/* Booking Requests Card */}
+          {/* Booking Requests */}
           <div className="card small">
             <div className="card-title">Booking Requests</div>
             {bookingRequests.length > 0 ? (
               <ul>
                 {bookingRequests.slice(0, 3).map(req => (
                   <li key={req.id}>
-                    {req.amount.toLocaleString('en-US',{style:'currency', currency:'USD'})} on {new Date(req.date).toLocaleDateString()} – {req.status}
+                    {req.amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} on {new Date(req.date).toLocaleDateString()} – {req.status}
                   </li>
                 ))}
               </ul>
@@ -127,7 +137,7 @@ const Dashboard = () => {
             )}
           </div>
 
-          {/* Earnings Card */}
+          {/* Earnings by Week */}
           <div className="card small">
             <div className="card-title">
               Earnings <span style={{ float: 'right', color: '#bfc2d4', fontSize: '0.95rem' }}>Last 4 Weeks</span>
@@ -136,7 +146,7 @@ const Dashboard = () => {
               <ul>
                 {weeklyEarnings.map(w => (
                   <li key={w.week}>
-                    Week {w.week}: {w.amount.toLocaleString('en-US',{style:'currency', currency:'USD'})}
+                    Week {w.week}: {w.amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
                   </li>
                 ))}
               </ul>
@@ -145,14 +155,14 @@ const Dashboard = () => {
             )}
           </div>
 
-          {/* Payout History Card */}
+          {/* Payout History */}
           <div className="card small">
             <div className="card-title">Payout History</div>
             {payouts.length > 0 ? (
               <ul>
                 {payouts.map(p => (
                   <li key={p.id}>
-                    {p.amount.toLocaleString('en-US',{style:'currency', currency:'USD'})} on {new Date(p.date).toLocaleDateString()} – {p.status}
+                    {p.amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} on {new Date(p.date).toLocaleDateString()} – {p.status}
                   </li>
                 ))}
               </ul>
