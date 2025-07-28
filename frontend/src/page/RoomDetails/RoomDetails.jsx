@@ -673,7 +673,7 @@ export default function RoomDetails() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                       paid_at: new Date().toISOString(),
-                      status: 'paid',
+                      status: 'pending',
                       method: 'credit_card',
                       booking_id: bookingId,
                     }),
@@ -719,7 +719,7 @@ export default function RoomDetails() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                       paid_at: new Date().toISOString(),
-                      status: 'paid',
+                      status: 'pending',
                       method: 'paypal',
                       booking_id: bookingId,
                     }),

@@ -1,7 +1,5 @@
 import React from 'react';
 import './AboutUs.css';
-import './ListYourSpace.css';
-import './FindVenue.css';
 import teamImage from '../../assets/image6.png'; // Adjust path as needed
 import venueImage from '../../assets/image7.png'; // Adjust path as needed
 import perfectVenueImg from '../../assets/image8.png'; // Adjust path as needed
