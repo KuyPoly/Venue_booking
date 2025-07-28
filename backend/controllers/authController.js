@@ -129,7 +129,7 @@ exports.profile = async (req, res) => {
 exports.becomeOwner = async (req, res) => {
   try {
     const { agreeToTerms, agreeToCommission } = req.body;
-    const userId = req.user.id;
+    const userId = req.user.user_id;
 
     // Validation
     if (!agreeToTerms || !agreeToCommission) {
@@ -164,7 +164,7 @@ exports.becomeOwner = async (req, res) => {
       success: true,
       message: 'Successfully upgraded to venue owner',
       user: {
-        id: user.id,
+        id: user.user_id,
         firstName: user.first_name,
         lastName: user.last_name,
         email: user.email,
