@@ -5,11 +5,6 @@ import './BecomeOwnerModal.css';
 const BecomeOwnerModal = ({ isOpen, onClose }) => {
   const { user, login } = useContext(AuthContext);
   const [formData, setFormData] = useState({
-    businessName: '',
-    businessType: '',
-    businessAddress: '',
-    businessPhone: '',
-    businessEmail: '',
     agreeToTerms: false,
     agreeToCommission: false
   });
@@ -47,7 +42,10 @@ const BecomeOwnerModal = ({ isOpen, onClose }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ 
+          agreeToTerms: formData.agreeToTerms,
+          agreeToCommission: formData.agreeToCommission 
+        }),
       });
 
       const data = await response.json();
@@ -98,78 +96,10 @@ const BecomeOwnerModal = ({ isOpen, onClose }) => {
         <div className="modal-body">
           <p className="modal-intro">
             Join thousands of venue owners who trust us to grow their business. 
-            Fill out the form below to get started.
+            By agreeing to the terms below, your account will be upgraded to venue owner status.
           </p>
 
           <form onSubmit={handleSubmit} className="owner-form">
-            <div className="form-group">
-              <label>Business Name *</label>
-              <input
-                type="text"
-                name="businessName"
-                value={formData.businessName}
-                onChange={handleChange}
-                required
-                placeholder="Enter your business name"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Business Type *</label>
-              <select
-                name="businessType"
-                value={formData.businessType}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select business type</option>
-                <option value="hotel">Hotel</option>
-                <option value="restaurant">Restaurant</option>
-                <option value="event_hall">Event Hall</option>
-                <option value="conference_center">Conference Center</option>
-                <option value="wedding_venue">Wedding Venue</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label>Business Address *</label>
-              <textarea
-                name="businessAddress"
-                value={formData.businessAddress}
-                onChange={handleChange}
-                required
-                placeholder="Enter your business address"
-                rows="3"
-              />
-            </div>
-
-            <div className="form-row">
-              <div className="form-group">
-                <label>Business Phone *</label>
-                <input
-                  type="tel"
-                  name="businessPhone"
-                  value={formData.businessPhone}
-                  onChange={handleChange}
-                  required
-                  placeholder="Business phone number"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Business Email *</label>
-                <input
-                  type="email"
-                  name="businessEmail"
-                  value={formData.businessEmail}
-                  onChange={handleChange}
-                  required
-                  placeholder="Business email address"
-                />
-              </div>
-            </div>
-
             <div className="terms-section">
               <div className="checkbox-group">
                 <label className="checkbox-label">

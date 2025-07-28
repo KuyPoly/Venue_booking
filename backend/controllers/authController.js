@@ -125,3 +125,58 @@ exports.profile = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+exports.becomeOwner = async (req, res) => {
+  try {
+    const { agreeToTerms, agreeToCommission } = req.body;
+    const userId = req.user.id;
+
+    // Validation
+    if (!agreeToTerms || !agreeToCommission) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'You must agree to all terms and conditions' 
+      });
+    }
+
+    // Check if user exists and is not already an owner
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'User not found' 
+      });
+    }
+
+    if (user.role === 'owner') {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'User is already a venue owner' 
+      });
+    }
+
+    // Update user role only
+    await user.update({
+      role: 'owner'
+    });
+
+    res.json({
+      success: true,
+      message: 'Successfully upgraded to venue owner',
+      user: {
+        id: user.id,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        email: user.email,
+        role: user.role
+      }
+    });
+
+  } catch (error) {
+    console.error('Become owner error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Internal server error' 
+    });
+  }
+};

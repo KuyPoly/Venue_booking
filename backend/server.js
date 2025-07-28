@@ -37,7 +37,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes - Fix the mounting paths
-app.use('/', authRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/', venueRoutes);
 app.use('/api/listings', listingRoutes);
 app.use('/', favoriteRoutes);

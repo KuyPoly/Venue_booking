@@ -28,7 +28,8 @@ export default function Signup() {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:5000/register', {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://venuebooking-production.up.railway.app';
+      const res = await fetch(`${apiUrl}/api/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form),
@@ -41,7 +42,7 @@ export default function Signup() {
       }
 
       // Auto-login after successful registration
-      const loginRes = await fetch('http://localhost:5000/login', {
+      const loginRes = await fetch(`${apiUrl}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
