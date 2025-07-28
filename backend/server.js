@@ -56,6 +56,12 @@ app.use('/api/wallet', walletRoutes);
 app.use('/payments', paymentsRoutes);
 app.use('/venuesearch', venueSearchRoutes);
 
+
+app.use('/activities', require('./routes/activity'));
+app.use('/booking', require('./routes/booking'));
+app.use('/earnings', require('./routes/earnings'));
+app.use('/payouts', require('./routes/payout'));
+
 // Test route
 app.get('/', (req, res) => {
   res.send('Venue Booking API is running!');
