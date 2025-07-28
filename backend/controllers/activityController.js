@@ -2,7 +2,7 @@ const { Activity } = require('../model/Association');
 
 exports.getActivitiesByOwner = async (req, res) => {
   try {
-    const ownerId = req.query.owner_id;
+    const ownerId = req.user.user_id; // Get from authenticated user
     const activities = await Activity.findAll({
       where: { owner_id: ownerId },
       order: [['createdAt', 'DESC']],

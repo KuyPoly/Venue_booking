@@ -1,7 +1,7 @@
 const { Payout } = require('../model/Association');
 
 exports.getPayoutHistory = async (req, res) => {
-  const ownerId = req.query.owner_id;
+  const ownerId = req.user.user_id; // Get from authenticated user
 
   try {
     const payouts = await Payout.findAll({

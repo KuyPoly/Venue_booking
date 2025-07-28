@@ -25,34 +25,34 @@ const Dashboard = () => {
         setListingCount(listingsData.listings?.length || 0);
 
         // Fetch booking stats
-        const statsRes = await api.getBookingStats(ownerId);
+        const statsRes = await api.getBookingStats();
         const statsData = await statsRes.json();
         setStats(statsData.stats || []);
         const total = (statsData.stats || []).reduce((sum, s) => sum + parseInt(s.count), 0);
         setBookingCount(total);
 
         // Fetch booking requests
-        const requestsRes = await api.getBookingRequests(ownerId);
+        const requestsRes = await api.getBookingRequests();
         const requestsData = await requestsRes.json();
         setBookingRequests(requestsData.requests || []);
 
         // Fetch weekly earnings
-        const earningsRes = await api.getWeeklyEarnings(ownerId);
+        const earningsRes = await api.getWeeklyEarnings();
         const earningsData = await earningsRes.json();
         setWeeklyEarnings(earningsData.earnings || []);
 
         // Fetch payout history
-        const payoutsRes = await api.getPayoutHistory(ownerId);
+        const payoutsRes = await api.getPayoutHistory();
         const payoutsData = await payoutsRes.json();
         setPayouts(payoutsData.payouts || []);
 
         // Fetch recent activities
-        const activitiesRes = await api.getActivities(ownerId);
+        const activitiesRes = await api.getActivities();
         const activitiesData = await activitiesRes.json();
         setRecentActivities(activitiesData.activities || []);
 
         // Fetch wallet info
-        const walletRes = await api.getWalletInfo(ownerId);
+        const walletRes = await api.getWalletInfo();
         const walletData = await walletRes.json();
         setWalletInfo(walletData);
 

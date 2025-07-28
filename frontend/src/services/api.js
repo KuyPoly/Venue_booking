@@ -119,36 +119,36 @@ const api = {
   }),
 
   // Owner/Dashboard APIs
-  getListings: (ownerId) => fetch(`${API_BASE_URL}/api/listings?owner_id=${ownerId}`, {
+  getListings: () => fetch(`${API_BASE_URL}/api/listings`, {
     headers: getAuthHeaders()
   }),
 
-  getBookingStats: (ownerId) => fetch(`${API_BASE_URL}/api/dashboard/stats?owner_id=${ownerId}`, {
+  getBookingStats: () => fetch(`${API_BASE_URL}/api/dashboard/stats`, {
     headers: getAuthHeaders()
   }),
 
-  getBookingRequests: (ownerId) => fetch(`${API_BASE_URL}/booking/requests?owner_id=${ownerId}`, {
+  getBookingRequests: () => fetch(`${API_BASE_URL}/booking/requests`, {
     headers: getAuthHeaders()
   }),
 
-  getWeeklyEarnings: (ownerId) => fetch(`${API_BASE_URL}/earnings/weekly?owner_id=${ownerId}`, {
+  getWeeklyEarnings: () => fetch(`${API_BASE_URL}/earnings/weekly`, {
     headers: getAuthHeaders()
   }),
 
-  getPayoutHistory: (ownerId) => fetch(`${API_BASE_URL}/payouts/history?owner_id=${ownerId}`, {
+  getPayoutHistory: () => fetch(`${API_BASE_URL}/payouts/history`, {
     headers: getAuthHeaders()
   }),
 
-  getActivities: (ownerId) => fetch(`${API_BASE_URL}/activities?owner_id=${ownerId}`, {
+  getActivities: () => fetch(`${API_BASE_URL}/activities`, {
     headers: getAuthHeaders()
   }),
 
-  getWalletInfo: (ownerId) => fetch(`${API_BASE_URL}/api/wallet?owner_id=${ownerId}`, {
+  getWalletInfo: () => fetch(`${API_BASE_URL}/api/wallet`, {
     headers: getAuthHeaders()
   }),
 
   // Listing management
-  getOwnerListings: (ownerId) => fetch(`${API_BASE_URL}/api/listings?owner_id=${ownerId}`, {
+  getOwnerListings: () => fetch(`${API_BASE_URL}/api/listings`, {
     headers: getAuthHeaders()
   }),
 

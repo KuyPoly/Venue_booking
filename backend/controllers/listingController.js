@@ -1,8 +1,4 @@
-const Hall = require('../model/Hall');
-const Image = require('../model/Image');
-const Category = require('../model/Category');
-const HallCategory = require('../model/HallCategory');
-const User = require('../model/User');
+const { Hall, Image, Category, HallCategory, User } = require('../model/Association');
 const { sendVenueAddedNotification } = require('../utils/emailJSService');
 const multer = require('multer');
 const { storage, cloudinary } = require('../config/cloudinary');
@@ -28,17 +24,13 @@ exports.uploadImages = upload.array('images', 5);
 // Get all listings for a specific owner
 exports.getAllListings = async (req, res) => {
   try {
-    const { owner_id, category } = req.query;
+    const owner_id = req.user.user_id; // Get from authenticated user
+    const { category } = req.query;
     
     console.log('=== getAllListings Debug ===');
-    console.log('Received owner_id:', owner_id);
+    console.log('Authenticated owner_id:', owner_id);
     console.log('Query params:', req.query);
     
-    if (!owner_id) {
-      console.log('❌ No owner_id provided');
-      return res.status(400).json({ error: 'Owner ID is required' });
-    }
-
     // First, check if any halls exist for this owner
     const hallCount = await Hall.count({ where: { owner_id } });
     console.log(`📊 Total halls for owner ${owner_id}:`, hallCount);
