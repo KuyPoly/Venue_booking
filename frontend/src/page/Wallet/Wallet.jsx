@@ -5,7 +5,7 @@ import walletService from '../../services/walletService';
 import './wallet.css';
 
 const Wallet = () => {
-  const { isAuthenticated, user, token } = useContext(AuthContext);
+  const { isAuthenticated, token } = useContext(AuthContext);
   const navigate = useNavigate();
   const [walletData, setWalletData] = useState(null);
   const [loading, setLoading] = useState(true);

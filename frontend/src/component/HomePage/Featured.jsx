@@ -16,9 +16,9 @@ const categoryIcons = {
   party: <MdOutlineCelebration />
 };
 
-const getCategoryIcon = (categoryName) => {
-  return categoryIcons[categoryName?.toLowerCase()] || <MdOutlineBusinessCenter />;
-};
+// const getCategoryIcon = (categoryName) => {
+//   return categoryIcons[categoryName?.toLowerCase()] || <MdOutlineBusinessCenter />;
+// };
 
 
 function Featured() {

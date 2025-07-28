@@ -4,18 +4,18 @@ import '../../page/Homepage/Home.css'; //
 import { useNavigate } from 'react-router-dom';
 
 export default function Hero() {
-  const [backendMessage, setBackendMessage] = useState('');
+  // const [backendMessage, setBackendMessage] = useState('');
   const [location, setLocation] = useState('');
   const [guests, setGuests] = useState('');
   const [budget, setBudget] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch('http://localhost:3000/')
-      .then(response => response.text())
-      .then(data => setBackendMessage(data))
-      .catch(error => setBackendMessage('Error fetching backend data'));
-  }, []);
+  // useEffect(() => {
+  //   fetch('http://localhost:3000/')
+  //     .then(response => response.text())
+  //     .then(data => setBackendMessage(data))
+  //     .catch(error => setBackendMessage('Error fetching backend data'));
+  // }, []);
 
   return (
     <div className="hero" style={{ backgroundImage: `url(${bgImage})` }}>

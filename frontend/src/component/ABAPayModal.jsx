@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 const ABAPayModal = ({ show, onClose, amount, onAmountChange, onGenerateQR, loading, error, qr }) => {
   if (!show) return null;
