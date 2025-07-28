@@ -119,22 +119,38 @@ const api = {
   }),
 
   // Owner/Dashboard APIs
-  getListings: (ownerId) => fetch(`${API_BASE_URL}/listing?owner_id=${ownerId}`),
+  getListings: (ownerId) => fetch(`${API_BASE_URL}/api/listings?owner_id=${ownerId}`, {
+    headers: getAuthHeaders()
+  }),
 
-  getBookingStats: (ownerId) => fetch(`${API_BASE_URL}/booking/stats?owner_id=${ownerId}`),
+  getBookingStats: (ownerId) => fetch(`${API_BASE_URL}/api/dashboard/stats?owner_id=${ownerId}`, {
+    headers: getAuthHeaders()
+  }),
 
-  getBookingRequests: (ownerId) => fetch(`${API_BASE_URL}/booking/requests?owner_id=${ownerId}`),
+  getBookingRequests: (ownerId) => fetch(`${API_BASE_URL}/booking/requests?owner_id=${ownerId}`, {
+    headers: getAuthHeaders()
+  }),
 
-  getWeeklyEarnings: (ownerId) => fetch(`${API_BASE_URL}/earnings/weekly?owner_id=${ownerId}`),
+  getWeeklyEarnings: (ownerId) => fetch(`${API_BASE_URL}/earnings/weekly?owner_id=${ownerId}`, {
+    headers: getAuthHeaders()
+  }),
 
-  getPayoutHistory: (ownerId) => fetch(`${API_BASE_URL}/payouts/history?owner_id=${ownerId}`),
+  getPayoutHistory: (ownerId) => fetch(`${API_BASE_URL}/payouts/history?owner_id=${ownerId}`, {
+    headers: getAuthHeaders()
+  }),
 
-  getActivities: (ownerId) => fetch(`${API_BASE_URL}/activities?owner_id=${ownerId}`),
+  getActivities: (ownerId) => fetch(`${API_BASE_URL}/activities?owner_id=${ownerId}`, {
+    headers: getAuthHeaders()
+  }),
 
-  getWalletInfo: (ownerId) => fetch(`${API_BASE_URL}/wallet/info?owner_id=${ownerId}`),
+  getWalletInfo: (ownerId) => fetch(`${API_BASE_URL}/api/wallet?owner_id=${ownerId}`, {
+    headers: getAuthHeaders()
+  }),
 
   // Listing management
-  getOwnerListings: (ownerId) => fetch(`${API_BASE_URL}/api/listings?owner_id=${ownerId}`),
+  getOwnerListings: (ownerId) => fetch(`${API_BASE_URL}/api/listings?owner_id=${ownerId}`, {
+    headers: getAuthHeaders()
+  }),
 
   createListing: (listingData) => fetch(`${API_BASE_URL}/api/listings`, {
     method: 'POST',
@@ -154,13 +170,15 @@ const api = {
     body: JSON.stringify(listingData)
   }),
 
-  deleteListing: (listingId, ownerId) => fetch(`${API_BASE_URL}/api/listings/${listingId}?owner_id=${ownerId}`, {
+  deleteListing: (listingId) => fetch(`${API_BASE_URL}/api/listings/${listingId}`, {
     method: 'DELETE',
     headers: getAuthHeaders()
   }),
 
   // Booking management
-  getOwnerBookings: (ownerId) => fetch(`${API_BASE_URL}/booking?owner_id=${ownerId}`),
+  getOwnerBookings: (ownerId) => fetch(`${API_BASE_URL}/booking?owner_id=${ownerId}`, {
+    headers: getAuthHeaders()
+  }),
 
   updateBookingStatus: (bookingId, action) => fetch(`${API_BASE_URL}/booking-management/${bookingId}/${action}`, {
     method: 'PUT',

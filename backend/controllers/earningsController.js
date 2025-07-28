@@ -1,4 +1,4 @@
-const { Booking } = require('../model');
+const { Booking } = require('../model/Association');
 const { Op } = require('sequelize');
 const moment = require('moment');
 

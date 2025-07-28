@@ -410,7 +410,7 @@ function OwnerListings() {
   const handleDelete = async (listingId) => {
     if (window.confirm('Are you sure you want to delete this venue? This will also delete all associated images and bookings.')) {
       try {
-        const response = await api.deleteListing(listingId, owner_id);
+        const response = await api.deleteListing(listingId);
 
         if (response.ok) {
           await fetchListings();
