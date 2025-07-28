@@ -101,10 +101,13 @@ return (
       <h5>Venue Search Results</h5>
       <div className="venue-cards-grid">
         {venues.length === 0 ? (
-          <p>No venues found.</p>
+          <div className="no-venues">
+            <img src={require('../../assets/image1.png')} alt="No venues found" />
+            <p>No venues found. Try adjusting your search filters!</p>
+          </div>
         ) : (
           venues.map(venue => (
-          <VenueCard key={venue.id} venue={venue} hideCategories />
+            <VenueCard key={venue.id} venue={venue} hideCategories />
           ))
         )}
       </div>

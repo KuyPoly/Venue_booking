@@ -1,3 +1,95 @@
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .room-main-content {
+    flex-direction: column;
+    gap: 18px;
+    margin-top: 18px;
+    margin-bottom: 18px;
+  }
+  .room-gallery-info {
+    width: 100%;
+    padding: 18px;
+  }
+  .room-booking-form {
+    width: 100%;
+    margin-top: 18px;
+    padding: 18px 12px;
+  }
+  .main-gallery-image {
+    width: 100%;
+    height: 220px;
+  }
+  .gallery-thumbnails img {
+    width: 80px;
+    height: 50px;
+  }
+}
+
+@media (max-width: 900px) {
+  .room-header-img {
+    height: 220px;
+  }
+  .room-title {
+    font-size: 1.5rem;
+  }
+  .room-gallery-info {
+    padding: 10px;
+  }
+  .room-booking-form {
+    padding: 10px 6px;
+  }
+  .main-gallery-image {
+    height: 140px;
+  }
+  .gallery-thumbnails img {
+    width: 60px;
+    height: 36px;
+  }
+  .feature-tag {
+    width: 100px;
+    height: 28px;
+    font-size: 0.7rem;
+    padding: 4px 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .room-header-img {
+    height: 120px;
+  }
+  .room-title {
+    font-size: 1.1rem;
+    padding: 0 4px;
+  }
+  .room-main-content {
+    gap: 8px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+  .room-gallery-info {
+    padding: 4px;
+    border-radius: 6px;
+  }
+  .room-booking-form {
+    padding: 4px 2px;
+    border-radius: 6px;
+  }
+  .main-gallery-image {
+    height: 70px;
+    border-radius: 6px;
+  }
+  .gallery-thumbnails img {
+    width: 32px;
+    height: 18px;
+    border-radius: 4px;
+  }
+  .feature-tag {
+    width: 60px;
+    height: 18px;
+    font-size: 0.6rem;
+    padding: 2px 4px;
+  }
+}
 /* Payment method button styles moved back from PaymentForm.css */
 .payment-method-row {
   display: flex;
@@ -451,7 +543,7 @@
   padding: 8px 18px;
   border-radius: 7px;
   box-shadow: 0 0px 4px rgba(0,0,0,0.08);
-  font-size: 1rem;
+  font-size: 0.7rem;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -461,7 +553,7 @@
   background: #e3e7f1;
   color: #1a237e;
   border-radius: 6px;
-  font-weight: 540;
+  font-weight: 600;
   width: 155px;
   height: 38px;
   display: flex;

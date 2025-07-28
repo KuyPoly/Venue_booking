@@ -1,15 +1,18 @@
 import React from 'react';
 import pancakes from '../../assets/image1.png';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { HiOutlineUsers } from 'react-icons/hi2';
+import { MdOutlineBuild, MdOutlineCelebration, MdOutlineBusinessCenter } from 'react-icons/md';
+import { GiDiamondRing } from 'react-icons/gi';
 
 const categoryIcons = {
-  meeting: '👥',
-  workshop: '🛠️',
-  wedding: '💍',
-  party: '🎉'
+  meeting: <HiOutlineUsers />,
+  workshop: <MdOutlineBuild />,
+  wedding: <GiDiamondRing />,
+  party: <MdOutlineCelebration />
 };
 
-const getCategoryIcon = (categoryName) => categoryIcons[categoryName?.toLowerCase()] || '🏢';
+const getCategoryIcon = (categoryName) => categoryIcons[categoryName?.toLowerCase()] || <MdOutlineBusinessCenter />;
 
 const formatPrice = (price) => new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -49,7 +52,7 @@ const VenueCard = ({ venue, onClick, onFavorite, isFavorite, isAuthenticated }) 
       </h3>
       <p className="venue-location">{venue.location}</p>
       <p className="venue-type">{venue.type}</p>
-      <p className="venue-capacity">👥 {venue.capacity} guests</p>
+      <p className="venue-capacity"><HiOutlineUsers style={{marginRight: '4px'}} /> {venue.capacity} guests</p>
       <p className="venue-price">{formatPrice(venue.price)}</p>
       <div className="venue-footer">
         <span
