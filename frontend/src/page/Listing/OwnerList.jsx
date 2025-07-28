@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext'; // Add this import
 import { GoogleMap, useJsApiLoader, Marker, Autocomplete } from '@react-google-maps/api';
 import { sendHallAddedNotification } from '../../services/emailService';
+import api from '../../services/api';
 
 const libraries = ['places'];
 const mapContainerStyle = {
@@ -139,7 +140,7 @@ function OwnerListings() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('http://localhost:5000/categories');
+      const response = await api.getCategories();
       const data = await response.json();
       setCategories(data || []);
     } catch (error) {
@@ -157,7 +158,7 @@ function OwnerListings() {
     try {
       setLoading(true);
       console.log('Fetching listings for owner_id:', owner_id); // Debug log
-      const response = await fetch(`http://localhost:5000/api/listings?owner_id=${owner_id}`);
+      const response = await api.getOwnerListings(owner_id);
       console.log('Response status:', response.status); // Debug log
       
       if (!response.ok) {
@@ -337,8 +338,8 @@ function OwnerListings() {
       });
 
       const url = editingListing 
-        ? `http://localhost:5000/api/listings/${editingListing.id}?owner_id=${owner_id}`
-        : `http://localhost:5000/api/listings`;
+        ? `${api.baseURL}/api/listings/${editingListing.id}?owner_id=${owner_id}`
+        : `${api.baseURL}/api/listings`;
       
       const method = editingListing ? 'PUT' : 'POST';
       
@@ -409,9 +410,7 @@ function OwnerListings() {
   const handleDelete = async (listingId) => {
     if (window.confirm('Are you sure you want to delete this venue? This will also delete all associated images and bookings.')) {
       try {
-        const response = await fetch(`http://localhost:5000/api/listings/${listingId}?owner_id=${owner_id}`, {
-          method: 'DELETE'
-        });
+        const response = await api.deleteListing(listingId, owner_id);
 
         if (response.ok) {
           await fetchListings();

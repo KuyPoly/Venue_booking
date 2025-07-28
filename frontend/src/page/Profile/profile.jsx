@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import api from '../../services/api';
 import './profile.css';
 
 const fetchProfile = async () => {
   try {
-    const response = await fetch('http://localhost:5000/api/profile/profile');
+    const response = await api.getProfile();
     const data = await response.json();
     if (data.success) {
       return data.profile;
@@ -49,13 +50,7 @@ const fetchProfile = async () => {
 
 const saveProfile = async (profileData) => {
   try {
-    const response = await fetch('http://localhost:5000/api/profile/profile', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(profileData),
-    });
+    const response = await api.updateProfile(profileData);
     const data = await response.json();
     if (data.success) {
       console.log('Profile saved successfully');

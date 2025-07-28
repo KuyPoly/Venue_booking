@@ -8,6 +8,7 @@ import ABAPayModal from '../../component/ABAPayModal';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { HiOutlineUsers } from 'react-icons/hi2';
 import { MdOutlineBuild, MdOutlineCelebration, MdOutlineBusinessCenter } from 'react-icons/md';
+import api from '../../services/api';
 import { GiDiamondRing } from 'react-icons/gi';
 
 const categoryIcons = {
@@ -50,7 +51,7 @@ export default function VenuesList() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('http://localhost:5000/categories');
+        const response = await api.getCategories();
         const data = await response.json();
         setCategories(data);
       } catch (error) {
@@ -66,11 +67,7 @@ export default function VenuesList() {
     const fetchVenues = async () => {
       setLoading(true);
       try {
-        const url = selectedCategory 
-          ? `http://localhost:5000/venues?category=${selectedCategory}`
-          : 'http://localhost:5000/venues';
-        
-        const response = await fetch(url);
+        const response = await api.getVenues(selectedCategory);
         const data = await response.json();
         setVenues(data);
         setCurrentPage(1); // Reset to first page when category changes
@@ -144,9 +141,7 @@ export default function VenuesList() {
       return;
     }
     try {
-      const response = await fetch('http://localhost:5000/favorites', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      const response = await api.getFavorites();
       if (response.ok) {
         const data = await response.json();
         setFavoriteIds(data.map(v => v.id));
@@ -166,19 +161,9 @@ export default function VenuesList() {
       return;
     }
     if (favoriteIds.includes(venueId)) {
-      await fetch(`http://localhost:5000/favorites/${venueId}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      await api.removeFavorite(venueId);
     } else {
-      await fetch('http://localhost:5000/favorites', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ hallId: venueId })
-      });
+      await api.addFavorite(venueId);
     }
     fetchFavorites();
   };

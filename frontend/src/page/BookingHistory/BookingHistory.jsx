@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import api from '../../services/api';
 import './BookingHistory.css';
 import pancakes from '../../assets/image1.png'; // Placeholder
 
@@ -25,11 +26,7 @@ const BookingHistory = () => {
       }
 
       try {
-        const response = await fetch('http://localhost:5000/bookings/history', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
+        const response = await api.getBookingHistory();
 
         if (!response.ok) {
           throw new Error('Failed to fetch booking history');

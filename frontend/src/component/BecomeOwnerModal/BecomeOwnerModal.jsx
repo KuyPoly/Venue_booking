@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
+import api from '../../services/api';
 import './BecomeOwnerModal.css';
 
 const BecomeOwnerModal = ({ isOpen, onClose }) => {
@@ -33,27 +34,18 @@ const BecomeOwnerModal = ({ isOpen, onClose }) => {
     }
 
     try {
-      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://venuebooking-production.up.railway.app';
-      const token = localStorage.getItem('token');
-      
-      const response = await fetch(`${apiUrl}/api/auth/become-owner`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ 
-          agreeToTerms: formData.agreeToTerms,
-          agreeToCommission: formData.agreeToCommission 
-        }),
+      const response = await api.becomeOwner({ 
+        agreeToTerms: formData.agreeToTerms,
+        agreeToCommission: formData.agreeToCommission 
       });
 
       const data = await response.json();
 
       if (data.success) {
         // Update user context with new role
+        const currentToken = localStorage.getItem('token');
         const updatedUser = { ...user, role: 'owner' };
-        login({ token, user: updatedUser });
+        login(currentToken, updatedUser);
         
         setSuccess(true);
         setTimeout(() => {

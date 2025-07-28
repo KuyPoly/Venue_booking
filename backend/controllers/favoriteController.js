@@ -82,7 +82,7 @@ exports.getFavorites = async (req, res) => {
         image: hall.images && hall.images.length > 0 
           ? (hall.images[0].url.startsWith('http') 
              ? hall.images[0].url 
-             : `http://localhost:5000/${hall.images[0].url}`)
+             : `${process.env.RAILWAY_PUBLIC_DOMAIN || process.env.PORT ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : 'http://localhost:5000'}/${hall.images[0].url}`)
           : null
       } : null;
     }).filter(Boolean);

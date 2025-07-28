@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import api from '../../services/api';
 import './BookingDetails.css';
 import pancakes from '../../assets/image1.png'; // Placeholder
 
@@ -20,11 +21,7 @@ const BookingDetails = () => {
       }
 
       try {
-        const response = await fetch(`http://localhost:5000/bookings/${id}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
+        const response = await api.getBooking(id);
 
         if (!response.ok) {
           throw new Error('Failed to fetch booking details');

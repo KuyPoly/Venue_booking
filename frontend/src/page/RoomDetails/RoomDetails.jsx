@@ -16,6 +16,7 @@ import { AuthContext } from '../../context/AuthContext';
 import SignupPopUp from '../../component/HomePage/SignupPopUp';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import config from '../../config/config';
+import api from '../../services/api';
 import ABAPayModal from '../../component/ABAPayModal';
 
 // Google Maps configuration
@@ -158,9 +159,7 @@ export default function RoomDetails() {
       return;
     }
     try {
-      const response = await fetch('http://localhost:5000/favorites', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      const response = await api.getFavorites();
       if (response.ok) {
         const data = await response.json();
         setFavoriteIds(data.map(v => v.id));
@@ -180,19 +179,9 @@ export default function RoomDetails() {
       return;
     }
     if (favoriteIds.includes(venueId)) {
-      await fetch(`http://localhost:5000/favorites/${venueId}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      await api.removeFavorite(venueId);
     } else {
-      await fetch('http://localhost:5000/favorites', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ hallId: venueId })
-      });
+      await api.addFavorite(venueId);
     }
     fetchFavorites();
   };
@@ -201,7 +190,7 @@ export default function RoomDetails() {
     const fetchVenue = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`http://localhost:5000/venues/${id}`);
+        const res = await api.getVenue(id);
         if (!res.ok) throw new Error('Failed to fetch venue');
         const data = await res.json();
         setVenue(data);
@@ -253,22 +242,17 @@ export default function RoomDetails() {
     setGuestError('');
     setBookingSuccess(false);
     try {
-      const res = await fetch('http://localhost:5000/bookings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` // Add JWT token for authentication
-        },
-        body: JSON.stringify({
-          hallId: id,
-          date,
-          startTime: bookingType === 'daily' ? '00:00' : startTime,
-          endTime: bookingType === 'daily' ? '23:59' : endTime,
-          guests: Number(guests),
-          bookingType: bookingType,
-          numberOfDays: bookingType === 'daily' ? (numberOfDays === '' ? 1 : numberOfDays) : 1,
-        }),
-      });
+      const bookingData = {
+        hallId: id,
+        date,
+        startTime: bookingType === 'daily' ? '00:00' : startTime,
+        endTime: bookingType === 'daily' ? '23:59' : endTime,
+        guests: Number(guests),
+        bookingType: bookingType,
+        numberOfDays: bookingType === 'daily' ? (numberOfDays === '' ? 1 : numberOfDays) : 1,
+      };
+      
+      const res = await api.createBooking(bookingData);
       if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.error || 'Booking failed');
@@ -669,16 +653,14 @@ export default function RoomDetails() {
                 setPaymentSuccess(false);
                 setPaymentLoading(true);
                 try {
-                  const response = await fetch('http://localhost:5000/payments', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      paid_at: new Date().toISOString(),
-                      status: 'paid',
-                      method: 'credit_card',
-                      booking_id: bookingId,
-                    }),
-                  });
+                  const paymentData = {
+                    paid_at: new Date().toISOString(),
+                    status: 'paid',
+                    method: 'credit_card',
+                    booking_id: bookingId,
+                  };
+                  
+                  const response = await api.createPayment(paymentData);
                   if (!response.ok) throw new Error('Payment failed');
                   setPaymentSuccess(true);
                   setShowConfirmation(true);
@@ -715,16 +697,14 @@ export default function RoomDetails() {
                 setPaymentSuccess(false);
                 setPaymentLoading(true);
                 try {
-                  const response = await fetch('http://localhost:5000/payments', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      paid_at: new Date().toISOString(),
-                      status: 'paid',
-                      method: 'paypal',
-                      booking_id: bookingId,
-                    }),
-                  });
+                  const paymentData = {
+                    paid_at: new Date().toISOString(),
+                    status: 'paid',
+                    method: 'paypal',
+                    booking_id: bookingId,
+                  };
+                  
+                  const response = await api.createPayment(paymentData);
                   if (!response.ok) throw new Error('Payment failed');
                   setPaymentSuccess(true);
                   setShowConfirmation(true);
@@ -887,16 +867,14 @@ export default function RoomDetails() {
                                 try {
                                   // Show loading if needed
                                   setShowConfirmLoading(true);
-                                  const response = await fetch('http://localhost:5000/payments', {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({
-                                      paid_at: new Date().toISOString(),
-                                      status: 'paid',
-                                      method: 'aba',
-                                      booking_id: bookingId,
-                                    }),
-                                  });
+                                  const paymentData = {
+                                    paid_at: new Date().toISOString(),
+                                    status: 'paid',
+                                    method: 'aba',
+                                    booking_id: bookingId,
+                                  };
+                                  
+                                  const response = await api.createPayment(paymentData);
                                   if (!response.ok) throw new Error('Payment failed');
                                   setActiveStep(3);
                                 } catch (err) {

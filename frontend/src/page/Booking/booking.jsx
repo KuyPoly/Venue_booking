@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import './booking.css';
 import { AuthContext } from '../../context/AuthContext';
+import api from '../../services/api';
 
 function Booking() {
   const [bookings, setBookings] = useState([]);
@@ -10,7 +11,7 @@ function Booking() {
 
   useEffect(() => {
     if (!ownerId) return;
-    fetch(`http://localhost:5000/booking?owner_id=${ownerId}`)
+    api.getOwnerBookings(ownerId)
       .then(res => res.json())
       .then(data => {
         setBookings(data.booking || []);
@@ -24,16 +25,11 @@ function Booking() {
 
   const handleBookingAction = async (bookingId, action) => {
     try {
-      const response = await fetch(`http://localhost:5000/booking-management/${bookingId}/${action}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
+      const response = await api.updateBookingStatus(bookingId, action);
 
       if (response.ok) {
         // Refresh bookings after action
-        const updatedResponse = await fetch(`http://localhost:5000/booking?owner_id=${ownerId}`);
+        const updatedResponse = await api.getOwnerBookings(ownerId);
         const updatedData = await updatedResponse.json();
         setBookings(updatedData.booking || []);
       } else {

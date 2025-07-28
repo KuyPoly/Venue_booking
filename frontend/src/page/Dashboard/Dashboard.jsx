@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import api from '../../services/api';
 import './dashboard.css';
 
 const Dashboard = () => {
@@ -16,52 +17,53 @@ const Dashboard = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const ownerId = user?.id;
 
-    // Fetch listings count
-    fetch(`http://localhost:5000/listing?owner_id=${ownerId}`)
-      .then(res => res.json())
-      .then(data => setListingCount(data.listings?.length || 0))
-      .catch(err => console.error('Error fetching listings:', err));
+    const fetchDashboardData = async () => {
+      try {
+        // Fetch listings count
+        const listingsRes = await api.getListings(ownerId);
+        const listingsData = await listingsRes.json();
+        setListingCount(listingsData.listings?.length || 0);
 
-    // Fetch booking stats
-    fetch(`http://localhost:5000/booking/stats?owner_id=${ownerId}`)
-      .then(res => res.json())
-      .then(data => {
-        setStats(data.stats || []);
-        const total = (data.stats || []).reduce((sum, s) => sum + parseInt(s.count), 0);
+        // Fetch booking stats
+        const statsRes = await api.getBookingStats(ownerId);
+        const statsData = await statsRes.json();
+        setStats(statsData.stats || []);
+        const total = (statsData.stats || []).reduce((sum, s) => sum + parseInt(s.count), 0);
         setBookingCount(total);
-      })
-      .catch(err => console.error('Error fetching booking stats:', err));
 
-    // Fetch booking requests
-    fetch(`http://localhost:5000/booking/requests?owner_id=${ownerId}`)
-      .then(res => res.json())
-      .then(data => setBookingRequests(data.requests || []))
-      .catch(err => console.error('Error fetching booking requests:', err));
+        // Fetch booking requests
+        const requestsRes = await api.getBookingRequests(ownerId);
+        const requestsData = await requestsRes.json();
+        setBookingRequests(requestsData.requests || []);
 
-    // Fetch weekly earnings
-    fetch(`http://localhost:5000/earnings/weekly?owner_id=${ownerId}`)
-      .then(res => res.json())
-      .then(data => setWeeklyEarnings(data.earnings || []))
-      .catch(err => console.error('Error fetching weekly earnings:', err));
+        // Fetch weekly earnings
+        const earningsRes = await api.getWeeklyEarnings(ownerId);
+        const earningsData = await earningsRes.json();
+        setWeeklyEarnings(earningsData.earnings || []);
 
-    // Fetch payout history
-    fetch(`http://localhost:5000/payouts/history?owner_id=${ownerId}`)
-      .then(res => res.json())
-      .then(data => setPayouts(data.payouts || []))
-      .catch(err => console.error('Error fetching payouts:', err));
+        // Fetch payout history
+        const payoutsRes = await api.getPayoutHistory(ownerId);
+        const payoutsData = await payoutsRes.json();
+        setPayouts(payoutsData.payouts || []);
 
-    // Fetch recent activities
-    fetch(`http://localhost:5000/activities?owner_id=${ownerId}`)
-      .then(res => res.json())
-      .then(data => setRecentActivities(data.activities || []))
-      .catch(err => console.error('Error fetching activities:', err));
+        // Fetch recent activities
+        const activitiesRes = await api.getActivities(ownerId);
+        const activitiesData = await activitiesRes.json();
+        setRecentActivities(activitiesData.activities || []);
 
-    // Fetch wallet info
-    fetch(`http://localhost:5000/wallet/info?owner_id=${ownerId}`)
-      .then(res => res.json())
-      .then(data => setWalletInfo(data))
-      .catch(err => console.error('Error fetching wallet info:', err))
-      .finally(() => setLoading(false));
+        // Fetch wallet info
+        const walletRes = await api.getWalletInfo(ownerId);
+        const walletData = await walletRes.json();
+        setWalletInfo(walletData);
+
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
   }, []);
 
   if (loading) {

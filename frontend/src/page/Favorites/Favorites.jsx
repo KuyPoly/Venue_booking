@@ -6,6 +6,7 @@ import './Favorites.css';
 import { HiOutlineUsers } from 'react-icons/hi2';
 import { MdOutlineBuild, MdOutlineCelebration, MdOutlineBusinessCenter } from 'react-icons/md';
 import { GiDiamondRing } from 'react-icons/gi';
+import api from '../../services/api';
 
 const categoryIcons = {
   meeting: <HiOutlineUsers />,
@@ -41,9 +42,7 @@ export default function Favorites() {
       }
       setFavLoading(true);
       try {
-        const response = await fetch('http://localhost:5000/favorites', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const response = await api.getFavorites();
         if (response.ok) {
           const data = await response.json();
           setFavorites(data);
@@ -62,7 +61,7 @@ export default function Favorites() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('http://localhost:5000/categories');
+        const response = await api.getCategories();
         const data = await response.json();
         setCategories(data);
       } catch (error) {
@@ -125,10 +124,7 @@ export default function Favorites() {
     e.stopPropagation(); // Prevent card click
     if (!token) return;
     try {
-      const response = await fetch(`http://localhost:5000/favorites/${venueId}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      const response = await api.removeFavorite(venueId);
       if (response.ok) {
         setFavorites(prev => prev.filter(v => v.id !== venueId));
       }

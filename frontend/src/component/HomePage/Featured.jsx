@@ -6,6 +6,7 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { HiOutlineUsers } from 'react-icons/hi2';
 import { MdOutlineBuild, MdOutlineCelebration, MdOutlineBusinessCenter } from 'react-icons/md';
 import { GiDiamondRing } from 'react-icons/gi';
+import api from '../../services/api';
 
 import "./Home.css";
 
@@ -33,7 +34,7 @@ function Featured() {
     const fetchVenues = async () => {
       setLoading(true);
       try {
-        const response = await fetch('http://localhost:5000/venues');
+        const response = await api.getVenues();
         const data = await response.json();
         
         // Ensure data is always an array
@@ -62,9 +63,7 @@ function Featured() {
         return;
       }
       try {
-        const response = await fetch('http://localhost:5000/favorites', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const response = await api.getFavorites();
         if (response.ok) {
           const data = await response.json();
           setFavoriteIds(data.map(v => v.id));
@@ -91,26 +90,14 @@ function Featured() {
     // Toggle favorite
     if (favoriteIds.includes(venueId)) {
       // Remove
-      await fetch(`http://localhost:5000/favorites/${venueId}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      await api.removeFavorite(venueId);
     } else {
       // Add
-      await fetch('http://localhost:5000/favorites', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ hallId: venueId })
-      });
+      await api.addFavorite(venueId);
     }
     
     // Re-fetch favorites
-    const response = await fetch('http://localhost:5000/favorites', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
+    const response = await api.getFavorites();
     if (response.ok) {
       const data = await response.json();
       setFavoriteIds(data.map(v => v.id));

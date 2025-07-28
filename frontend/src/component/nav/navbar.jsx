@@ -68,6 +68,7 @@ export default function Navbar({ openLoginModal, openSignupModal }) {
 
   // Show loading state
   if (loading) {
+    console.log('Navbar: Loading authentication state...');
     return (
       <nav className="navbar">
         <div className="navbar-left">
@@ -84,9 +85,11 @@ export default function Navbar({ openLoginModal, openSignupModal }) {
 
   // Show logged-in navbar
   if (isAuthenticated) {
+    console.log('Navbar: User is authenticated, showing LoggedInNavbar');
     return <LoggedInNavbar />;
   }
 
+  console.log('Navbar: User is not authenticated, showing login/signup navbar');
   // Show logged-out navbar
   return (
     <>

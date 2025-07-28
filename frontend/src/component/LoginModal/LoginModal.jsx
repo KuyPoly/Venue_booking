@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import api from '../../services/api';
 import './LoginModal.css';
 
 const LoginModal = ({ onClose, onSwitchToSignup, onSuccess }) => {
@@ -21,13 +22,7 @@ const LoginModal = ({ onClose, onSwitchToSignup, onSuccess }) => {
     setError('');
 
     try {
-      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://venuebooking-production.up.railway.app';
-      const response = await fetch(`${apiUrl}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
+      const response = await api.login({ email, password });
       const data = await response.json();
 
       if (response.ok) {

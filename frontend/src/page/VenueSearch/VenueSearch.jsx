@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import VenueCard from '../../component/HomePage/venue_card';
 import Map from '../../component/SearchPage/Map';
 import GoogleMapsTestComponent from '../../components/GoogleMapsTestComponent';
+import api from '../../services/api';
 import './VenueSearch.css';
 
 const VenueSearch = () => {
@@ -28,7 +29,7 @@ const VenueSearch = () => {
 
   const fetchVenues = async () => {
     // Fetch all venues from backend
-    const res = await fetch('http://localhost:5000/venues');
+    const res = await api.getVenues();
     if (res.ok) {
       const data = await res.json();
       // Filter venues on frontend

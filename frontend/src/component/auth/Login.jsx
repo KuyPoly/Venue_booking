@@ -1,6 +1,7 @@
 // ./component/auth/Login.jsx
 import { useState, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
+import api from '../../services/api';
 import './auth.css';
 
 export default function Login() {
@@ -20,13 +21,9 @@ export default function Login() {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:5000/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
-    });
+      const res = await api.login(form);
       
-    const data = await res.json();
+      const data = await res.json();
       
       if (!res.ok) {
         throw new Error(data.error || 'Login failed');
