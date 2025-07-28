@@ -1,6 +1,7 @@
 const { Booking, Hall, User, HallReservation } = require('../model/Association');
 const { Op, sequelize } = require('sequelize');
 
+
 class BookingController {
   // Get booking statistics for dashboard
   static async getBookingStats(ownerId) {
@@ -346,5 +347,7 @@ class BookingController {
     }
   }
 }
+
+
 
 module.exports = BookingController; 

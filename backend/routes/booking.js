@@ -3,7 +3,11 @@ const router = express.Router();
 const { Booking, Hall, User, HallReservation } = require('../model/Association');
 const { Op, sequelize } = require('sequelize');
 
+
+
 // GET /booking/stats?owner_id=123 - Get booking statistics for dashboard
+
+
 router.get('/stats', async (req, res) => {
   try {
     const { owner_id } = req.query;
