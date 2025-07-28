@@ -25,8 +25,35 @@ router.get('/pending', async (req, res) => {
 router.put('/:id/approve', async (req, res) => {
   try {
     const { id } = req.params;
-    
     const result = await BookingController.updateBookingStatus(id, { status: 'confirmed' });
+
+    // Credit wallet when booking is confirmed
+    if (result.booking && result.booking.status === 'confirmed') {
+      try {
+        // Get booking details to find the owner and amount
+        const booking = await require('../model/Booking').findByPk(id, {
+          include: [{
+            model: require('../model/HallReservation'),
+            as: 'hall_reservations',
+            include: [{
+              model: require('../model/Hall'),
+              as: 'hall',
+              attributes: ['owner_id']
+            }]
+          }]
+        });
+        if (booking && booking.hall_reservations && booking.hall_reservations[0]) {
+          const ownerId = booking.hall_reservations[0].hall.owner_id;
+          const amount = booking.total_amount;
+          await require('../controllers/walletController').creditWalletFromBooking(id, amount, ownerId, `Payment received for booking ${id}`);
+          console.log(`Wallet credited for owner ${ownerId}: $${amount} from booking ${id}`);
+        }
+      } catch (walletError) {
+        console.error('Error crediting wallet:', walletError);
+        // Don't fail the approval if wallet credit fails
+      }
+    }
+
     res.json({ message: 'Booking approved successfully', booking: result.booking });
   } catch (error) {
     console.error('Error approving booking:', error);
