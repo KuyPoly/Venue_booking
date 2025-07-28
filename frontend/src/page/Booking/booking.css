@@ -832,3 +832,97 @@ body {
     border-width: 1px;
   }
 }
+
+/* Booking Item Styles */
+.booking-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 8px;
+}
+
+.booking-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.booking-info {
+  flex: 1;
+}
+
+.booking-details {
+  margin-top: 4px;
+  display: flex;
+  gap: 16px;
+}
+
+.booking-details small {
+  color: #bfc2d4;
+  font-size: 0.85rem;
+}
+
+.booking-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Action Buttons */
+.btn-approve,
+.btn-reject,
+.btn-complete {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-approve {
+  background: #51cf66;
+  color: white;
+}
+
+.btn-approve:hover {
+  background: #40c057;
+}
+
+.btn-reject {
+  background: #ff6b6b;
+  color: white;
+}
+
+.btn-reject:hover {
+  background: #fa5252;
+}
+
+.btn-complete {
+  background: #339af0;
+  color: white;
+}
+
+.btn-complete:hover {
+  background: #228be6;
+}
+
+/* Responsive Design for Booking Actions */
+@media (max-width: 767px) {
+  .booking-item {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .booking-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  
+  .booking-details {
+    flex-direction: column;
+    gap: 4px;
+  }
+}
