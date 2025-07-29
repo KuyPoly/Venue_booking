@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './App.css';
 import { AuthProvider } from './context/AuthContext';
+import SimpleTest from './SimpleTest';
 
 // Component imports
 import Navbar from './component/nav/navbar';
 import Footer from './component/footer/footer';
-import Home from './page/Homepage/Home';
+import Home from './page/Homepage/Home.jsx';
 import LoginModal from './component/LoginModal/LoginModal';
 import SignupModal from './component/SignupModal/SignupModal';
 import Sidebar from './component/Owner/Sidebar';
@@ -95,10 +96,10 @@ function App() {
   
 
   return (
-    <AuthProvider>
-      <Router>
-        <div className="App">
-          <Routes>
+    <div className="App">
+      <SimpleTest />
+    </div>
+  );
             {/* Public Routes with Regular Layout */}
             <Route path="/" element={
               <RegularLayout 
