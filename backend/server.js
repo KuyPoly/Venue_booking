@@ -33,17 +33,48 @@ const categoryRoutes = require('./routes/categories');
 
 // Middleware
 const corsOptions = {
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:3001', 
-    'https://venue-booking-q3rdvw8uh-kuypolys-projects.vercel.app',
-    'https://venuebooking-production.up.railway.app'
-  ],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://venuebooking-production.up.railway.app'
+    ];
+    
+    // Allow any Vercel deployment from your account
+    const isVercelDomain = origin.includes('kuypolys-projects.vercel.app');
+    const isAllowedOrigin = allowedOrigins.includes(origin);
+    
+    if (isAllowedOrigin || isVercelDomain) {
+      callback(null, true);
+    } else {
+      console.log('CORS blocked origin:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  exposedHeaders: ['Content-Length', 'X-Kuma-Revision']
 };
 
 app.use(cors(corsOptions));
+
+// Additional CORS headers for preflight requests
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
