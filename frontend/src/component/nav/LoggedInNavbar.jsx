@@ -7,8 +7,7 @@ import './navbar.css';
 export default function LoggedInNavbar() {
   const { user, logout } = useContext(AuthContext);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [showSearch, setShowSearch] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const searchRef = useRef(null);
   const userMenuRef = useRef(null);
@@ -42,15 +41,6 @@ export default function LoggedInNavbar() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
-  // Handle search form submission
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
-      setShowSearch(false);
-    }
-  };
 
   // Toggle mobile menu
   const toggleMobileMenu = () => {

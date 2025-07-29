@@ -4,7 +4,7 @@ import pancakes from '../../assets/image1.png'; // Fallback image
 import { AuthContext } from '../../context/AuthContext';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { HiOutlineUsers } from 'react-icons/hi2';
-import { MdOutlineBuild, MdOutlineCelebration, MdOutlineBusinessCenter } from 'react-icons/md';
+import { MdOutlineBuild, MdOutlineCelebration } from 'react-icons/md';
 import { GiDiamondRing } from 'react-icons/gi';
 import api from '../../services/api';
 

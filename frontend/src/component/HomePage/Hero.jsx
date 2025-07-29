@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import bgImage from '../../assets/image1.png';
 import '../../page/Homepage/Home.css'; // 
 import { useNavigate } from 'react-router-dom';

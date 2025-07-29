@@ -1,15 +1,10 @@
 import React, { useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { 
   FaChartLine, 
-  FaGlobe, 
   FaCreditCard, 
   FaUsers, 
-  FaStar,
-  FaCalendarCheck,
-  FaDollarSign,
-  FaHandshake
+  FaDollarSign
 } from 'react-icons/fa';
 import BecomeOwnerModal from '../../component/BecomeOwnerModal/BecomeOwnerModal';
 import LoginModal from '../../component/LoginModal/LoginModal';

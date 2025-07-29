@@ -7,8 +7,7 @@ import './navbar.css';
 
 export default function Navbar({ openLoginModal, openSignupModal }) {
   const { isAuthenticated, loading } = useContext(AuthContext);
-  const [showSearch, setShowSearch] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const searchRef = useRef(null);
   const navigate = useNavigate();
@@ -28,15 +27,6 @@ export default function Navbar({ openLoginModal, openSignupModal }) {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
-  // Handle search form submission
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
-      setShowSearch(false);
-    }
-  };
 
   // Toggle mobile menu
   const toggleMobileMenu = () => {
@@ -109,8 +99,8 @@ export default function Navbar({ openLoginModal, openSignupModal }) {
             {/* No Favorites link for guests */}
           </div>
           <div className="navbar-buttons">
-            <a href="#" className="login-btn" onClick={handleLoginClick}>Login</a>
-            <a href="#" className="signup-bt" onClick={handleSignupClick}>Signup</a>
+            <button type="button" className="login-btn" onClick={handleLoginClick}>Login</button>
+            <button type="button" className="signup-bt" onClick={handleSignupClick}>Signup</button>
           </div>
         </div>
 
@@ -141,12 +131,12 @@ export default function Navbar({ openLoginModal, openSignupModal }) {
         </Link>
         {/* No Favorites link for guests */}
         <div className="navbar-buttons">
-          <a href="#" className="login-btn" onClick={handleLoginClick}>
+          <button type="button" className="login-btn" onClick={handleLoginClick}>
             Login
-          </a>
-          <a href="#" className="signup-btn" onClick={handleSignupClick}>
+          </button>
+          <button type="button" className="signup-btn" onClick={handleSignupClick}>
             Signup
-          </a>
+          </button>
         </div>
       </div>
     </>
