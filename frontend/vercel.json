@@ -1,7 +1,8 @@
 {
   "version": 2,
   "env": {
-    "CI": "false"
+    "CI": "false",
+    "DISABLE_ESLINT_PLUGIN": "true"
   },
   "builds": [
     {

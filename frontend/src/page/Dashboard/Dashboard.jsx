@@ -5,7 +5,6 @@ import './dashboard.css';
 const Dashboard = () => {
   const [listingCount, setListingCount] = useState(0);
   const [bookingCount, setBookingCount] = useState(0);
-  const [stats, setStats] = useState([]);
   const [bookingRequests, setBookingRequests] = useState([]);
   const [weeklyEarnings, setWeeklyEarnings] = useState([]);
   const [payouts, setPayouts] = useState([]);
@@ -27,7 +26,6 @@ const Dashboard = () => {
         // Fetch booking stats
         const statsRes = await api.getBookingStats();
         const statsData = await statsRes.json();
-        setStats(statsData.stats || []);
         const total = (statsData.stats || []).reduce((sum, s) => sum + parseInt(s.count), 0);
         setBookingCount(total);
 

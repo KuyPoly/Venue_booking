@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import VenueCard from '../../component/HomePage/venue_card';
-import Map from '../../component/SearchPage/Map';
 import GoogleMapsTestComponent from '../../components/GoogleMapsTestComponent';
 import api from '../../services/api';
 import './VenueSearch.css';
