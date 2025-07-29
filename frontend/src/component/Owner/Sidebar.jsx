@@ -36,7 +36,7 @@ export default function Sidebar() {
 
   return (
     <nav className="sidebar">
-      <div className="logo">WEBNAME</div>
+      <div className="logo">OceanGate</div>
       {menuItems.map((section, index) => (
         <div key={index}>
           <div className="section-title">{section.section}</div>

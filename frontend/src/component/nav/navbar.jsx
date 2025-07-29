@@ -78,7 +78,7 @@ export default function Navbar({ openLoginModal, openSignupModal }) {
       <nav className="navbar">
         <div className="navbar-left">
           <Link to="/" className="brand" onClick={closeMobileMenu}>
-            Booking_Hall
+            OceanGate
           </Link>
         </div>
 
