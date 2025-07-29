@@ -1,32 +1,58 @@
-const User = require('../model/User');
+const { User } = require('../model/Association');
 const bcrypt = require('bcryptjs');
 
 const profileController = {
   // Get user profile
   getProfile: async (req, res) => {
     try {
-      // For now, return default profile data
-      // In a real app, you would get the user ID from the request and fetch their profile
-      const defaultProfile = {
-        firstName: 'John',
-        lastName: 'Doe',
-        displayName: 'johndoe',
-        email: 'john@example.com',
-        phone: '+1234567890',
-        aboutMe: 'This is a sample profile.',
+      const userId = req.user.user_id; // Get user ID from authenticated request
+      
+      console.log('=== GET PROFILE DEBUG ===');
+      console.log('Authenticated user ID:', userId);
+      console.log('Request user:', req.user);
+      
+      // Find user by ID
+      const user = await User.findByPk(userId, {
+        attributes: ['user_id', 'first_name', 'last_name', 'email', 'phone_number', 'address', 'role', 'created_at', 'dob', 'gender']
+      });
+
+      if (!user) {
+        console.log('User not found for ID:', userId);
+        return res.status(404).json({
+          success: false,
+          message: 'User not found'
+        });
+      }
+
+      console.log('Found user:', user.toJSON());
+
+      // Map database fields to frontend format
+      const profile = {
+        firstName: user.first_name || '',
+        lastName: user.last_name || '',
+        displayName: `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.email.split('@')[0],
+        email: user.email || '',
+        phone: user.phone_number || '',
+        aboutMe: user.address || '', // Using address field as aboutMe for now
+        role: user.role || '',
+        memberSince: user.created_at ? new Date(user.created_at).toLocaleDateString() : '',
+        dateOfBirth: user.dob || '',
+        gender: user.gender || '',
         social: {
           twitter: '',
           facebook: '',
           linkedin: '',
           instagram: '',
-          whatsapp: '',
+          whatsapp: user.phone_number || '',
           website: ''
         }
       };
       
+      console.log('✅ Returning profile:', profile);
+      
       res.json({
         success: true,
-        profile: defaultProfile
+        profile: profile
       });
     } catch (error) {
       console.error('Error getting profile:', error);
@@ -41,16 +67,52 @@ const profileController = {
   // Update user profile
   updateProfile: async (req, res) => {
     try {
-      const { firstName, lastName, displayName, email, phone, aboutMe, social } = req.body;
+      const userId = req.user.user_id; // Get user ID from authenticated request
+      const { firstName, lastName, email, phone, aboutMe } = req.body;
       
-      // For now, just return success
-      // In a real app, you would save this data to the database
-      console.log('Profile to update:', { firstName, lastName, displayName, email, phone, aboutMe, social });
+      console.log('=== UPDATE PROFILE DEBUG ===');
+      console.log('User ID:', userId);
+      console.log('Update data:', { firstName, lastName, email, phone, aboutMe });
+      
+      // Find user by ID
+      const user = await User.findByPk(userId);
+
+      if (!user) {
+        console.log('User not found for ID:', userId);
+        return res.status(404).json({
+          success: false,
+          message: 'User not found'
+        });
+      }
+
+      // Update user fields (only update provided fields)
+      if (firstName !== undefined) user.first_name = firstName;
+      if (lastName !== undefined) user.last_name = lastName;
+      if (email !== undefined) user.email = email;
+      if (phone !== undefined) user.phone_number = phone;
+      if (aboutMe !== undefined) user.address = aboutMe; // Using address field as aboutMe for now
+
+      // Save changes
+      await user.save();
+      
+      console.log('✅ User updated successfully');
+      
+      // Return updated profile
+      const updatedProfile = {
+        firstName: user.first_name || '',
+        lastName: user.last_name || '',
+        displayName: `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.email.split('@')[0],
+        email: user.email || '',
+        phone: user.phone_number || '',
+        aboutMe: user.address || '',
+        role: user.role || '',
+        memberSince: user.created_at ? new Date(user.created_at).toLocaleDateString() : ''
+      };
       
       res.json({
         success: true,
         message: 'Profile updated successfully',
-        profile: { firstName, lastName, displayName, email, phone, aboutMe, social }
+        profile: updatedProfile
       });
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -87,10 +149,14 @@ const profileController = {
   // Change password
   changePassword: async (req, res) => {
     try {
-      // TODO: Replace this with your actual authenticated user ID logic
-      const userId = 'some-user-id'; // Replace with your auth system
-
+      const userId = req.user.user_id; // Get user ID from authenticated request
       const { current, new: newPassword, confirm } = req.body;
+
+      console.log('=== CHANGE PASSWORD DEBUG ===');
+      console.log('User ID:', userId);
+      console.log('Has current password:', !!current);
+      console.log('Has new password:', !!newPassword);
+      console.log('Has confirm password:', !!confirm);
 
       if (!current || !newPassword || !confirm) {
         return res.status(400).json({ success: false, message: 'Please provide all password fields.' });
@@ -100,21 +166,37 @@ const profileController = {
         return res.status(400).json({ success: false, message: 'New passwords do not match.' });
       }
 
-      const user = await User.findById(userId);
+      if (newPassword.length < 6) {
+        return res.status(400).json({ success: false, message: 'New password must be at least 6 characters long.' });
+      }
+
+      // Find user by ID
+      const user = await User.findByPk(userId);
       if (!user) {
+        console.log('User not found for ID:', userId);
         return res.status(404).json({ success: false, message: 'User not found.' });
       }
 
+      console.log('Found user for password change');
+
+      // Verify current password
       const isMatch = await bcrypt.compare(current, user.password);
       if (!isMatch) {
+        console.log('Current password verification failed');
         return res.status(400).json({ success: false, message: 'Current password is incorrect.' });
       }
 
+      console.log('Current password verified successfully');
+
+      // Hash new password
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
 
+      // Update password
       user.password = hashedPassword;
       await user.save();
+
+      console.log('✅ Password changed successfully');
 
       return res.json({ success: true, message: 'Password changed successfully.' });
     } catch (error) {
