@@ -26,16 +26,21 @@ exports.register = async (req, res) => {
     });
 
     // --- SEND WELCOME EMAIL VIA EMAILJS ---
-    await axios.post('https://api.emailjs.com/api/v1.0/email/send', {
-      service_id: process.env.EMAILJS_SERVICE_ID,
-      template_id: process.env.EMAILJS_TEMPLATE_ID,
-      user_id: process.env.EMAILJS_PUBLIC_KEY, // or PRIVATE_KEY if using server-side
-      template_params: {
-        to_email: email,
-        to_name: firstName,
-        // Add more params as defined in your EmailJS template
-      }
-    });
+    try {
+      await axios.post('https://api.emailjs.com/api/v1.0/email/send', {
+        service_id: process.env.EMAILJS_SERVICE_ID,
+        template_id: process.env.EMAILJS_TEMPLATE_ID,
+        user_id: process.env.EMAILJS_PUBLIC_KEY,
+        template_params: {
+          to_email: email,
+          to_name: firstName,
+        }
+      });
+      console.log('Welcome email sent successfully');
+    } catch (emailError) {
+      console.error('Failed to send welcome email:', emailError);
+      // Don't fail registration if email fails
+    }
 
     res.status(201).json({ 
       message: 'User registered successfully',
