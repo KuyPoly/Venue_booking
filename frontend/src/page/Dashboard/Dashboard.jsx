@@ -30,29 +30,64 @@ const Dashboard = () => {
         setBookingCount(total);
 
         // Fetch booking requests
-        const requestsRes = await api.getBookingRequests();
-        const requestsData = await requestsRes.json();
-        setBookingRequests(requestsData.requests || []);
+        try {
+          const requestsRes = await api.getBookingRequests();
+          if (requestsRes.ok) {
+            const requestsData = await requestsRes.json();
+            setBookingRequests(Array.isArray(requestsData.requests) ? requestsData.requests : []);
+          }
+        } catch (error) {
+          console.error('Error fetching booking requests:', error);
+          setBookingRequests([]);
+        }
 
         // Fetch weekly earnings
-        const earningsRes = await api.getWeeklyEarnings();
-        const earningsData = await earningsRes.json();
-        setWeeklyEarnings(earningsData.earnings || []);
+        try {
+          const earningsRes = await api.getWeeklyEarnings();
+          if (earningsRes.ok) {
+            const earningsData = await earningsRes.json();
+            setWeeklyEarnings(Array.isArray(earningsData.earnings) ? earningsData.earnings : []);
+          }
+        } catch (error) {
+          console.error('Error fetching weekly earnings:', error);
+          setWeeklyEarnings([]);
+        }
 
         // Fetch payout history
-        const payoutsRes = await api.getPayoutHistory();
-        const payoutsData = await payoutsRes.json();
-        setPayouts(payoutsData.payouts || []);
+        try {
+          const payoutsRes = await api.getPayoutHistory();
+          if (payoutsRes.ok) {
+            const payoutsData = await payoutsRes.json();
+            setPayouts(Array.isArray(payoutsData.payouts) ? payoutsData.payouts : []);
+          }
+        } catch (error) {
+          console.error('Error fetching payout history:', error);
+          setPayouts([]);
+        }
 
         // Fetch recent activities
-        const activitiesRes = await api.getActivities();
-        const activitiesData = await activitiesRes.json();
-        setRecentActivities(activitiesData.activities || []);
+        try {
+          const activitiesRes = await api.getActivities();
+          if (activitiesRes.ok) {
+            const activitiesData = await activitiesRes.json();
+            setRecentActivities(Array.isArray(activitiesData.activities) ? activitiesData.activities : []);
+          }
+        } catch (error) {
+          console.error('Error fetching recent activities:', error);
+          setRecentActivities([]);
+        }
 
         // Fetch wallet info
-        const walletRes = await api.getWalletInfo();
-        const walletData = await walletRes.json();
-        setWalletInfo(walletData);
+        try {
+          const walletRes = await api.getWalletInfo();
+          if (walletRes.ok) {
+            const walletData = await walletRes.json();
+            setWalletInfo(walletData || { balance: 0 });
+          }
+        } catch (error) {
+          console.error('Error fetching wallet info:', error);
+          setWalletInfo({ balance: 0 });
+        }
 
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
@@ -101,9 +136,9 @@ const Dashboard = () => {
               <button className="clear-btn" onClick={() => setRecentActivities([])}>Clear all</button>
             </div>
             {recentActivities.length > 0 ? (
-              recentActivities.map(act => (
-                <div key={act.id}>
-                  {act.description} on {new Date(act.date).toLocaleString()}
+              recentActivities.map((act, index) => (
+                <div key={act.id || index}>
+                  {act.description || 'Activity'} on {act.date ? new Date(act.date).toLocaleString() : 'N/A'}
                 </div>
               ))
             ) : (
@@ -127,8 +162,8 @@ const Dashboard = () => {
             {bookingRequests.length > 0 ? (
               <ul>
                 {bookingRequests.slice(0, 3).map(req => (
-                  <li key={req.id}>
-                    {req.amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} on {new Date(req.date).toLocaleDateString()} – {req.status}
+                  <li key={req.id || Math.random()}>
+                    ${(req.amount || 0).toLocaleString('en-US')} on {req.date ? new Date(req.date).toLocaleDateString() : 'N/A'} – {req.status || 'pending'}
                   </li>
                 ))}
               </ul>
@@ -144,9 +179,9 @@ const Dashboard = () => {
             </div>
             {weeklyEarnings.length > 0 ? (
               <ul>
-                {weeklyEarnings.map(w => (
-                  <li key={w.week}>
-                    Week {w.week}: {w.amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
+                {weeklyEarnings.map((w, index) => (
+                  <li key={w.week || index}>
+                    Week {w.week || index + 1}: ${(w.amount || 0).toLocaleString('en-US')}
                   </li>
                 ))}
               </ul>
@@ -160,9 +195,9 @@ const Dashboard = () => {
             <div className="card-title">Payout History</div>
             {payouts.length > 0 ? (
               <ul>
-                {payouts.map(p => (
-                  <li key={p.id}>
-                    {p.amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} on {new Date(p.date).toLocaleDateString()} – {p.status}
+                {payouts.map((p, index) => (
+                  <li key={p.id || index}>
+                    ${(p.amount || 0).toLocaleString('en-US')} on {p.date ? new Date(p.date).toLocaleDateString() : 'N/A'} – {p.status || 'pending'}
                   </li>
                 ))}
               </ul>
