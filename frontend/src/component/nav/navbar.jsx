@@ -1,15 +1,13 @@
 /* filepath: d:\y2t3\venue_booking\frontend\src\component\nav\navbar.jsx */
 import React, { useState, useEffect, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import LoggedInNavbar from './LoggedInNavbar';
 import './navbar.css';
 
 export default function Navbar({ openLoginModal, openSignupModal }) {
   const { isAuthenticated, loading } = useContext(AuthContext);
-  const [searchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const navigate = useNavigate();
 
   // Close mobile menu when clicking outside
   useEffect(() => {

@@ -7,7 +7,6 @@ import './navbar.css';
 export default function LoggedInNavbar() {
   const { user, logout } = useContext(AuthContext);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [searchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const userMenuRef = useRef(null);
   const navigate = useNavigate();
