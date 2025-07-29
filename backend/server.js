@@ -40,14 +40,16 @@ const corsOptions = {
     const allowedOrigins = [
       'http://localhost:3000',
       'http://localhost:3001',
-      'https://venuebooking-production.up.railway.app'
+      'https://venuebooking-production.up.railway.app',
+      'https://venue-booking-alpha.vercel.app'
     ];
     
-    // Allow any Vercel deployment from your account
-    const isVercelDomain = origin.includes('kuypolys-projects.vercel.app');
+    // Allow any Vercel deployment
+    const isVercelDomain = origin.includes('vercel.app');
     const isAllowedOrigin = allowedOrigins.includes(origin);
     
     if (isAllowedOrigin || isVercelDomain) {
+      console.log('CORS allowed for origin:', origin);
       callback(null, true);
     } else {
       console.log('CORS blocked origin:', origin);
@@ -104,7 +106,20 @@ app.use('/payouts', require('./routes/payout'));
 
 // Test route
 app.get('/', (req, res) => {
-  res.send('Venue Booking API is running!');
+  res.json({ 
+    message: 'Venue Booking API is running!',
+    timestamp: new Date().toISOString(),
+    cors: 'enabled'
+  });
+});
+
+// CORS test endpoint
+app.get('/test-cors', (req, res) => {
+  res.json({ 
+    message: 'CORS is working!',
+    origin: req.headers.origin,
+    timestamp: new Date().toISOString()
+  });
 });
 
 // Test database connection and sync
