@@ -4,7 +4,8 @@ import './profile.css';
 
 const fetchProfile = async () => {
   try {
-    const data = await api.getProfile();
+    const response = await api.getProfile();
+    const data = await response.json();
     if (data.success) {
       return data.profile;
     } else {
@@ -19,7 +20,8 @@ const fetchProfile = async () => {
 
 const saveProfile = async (profileData) => {
   try {
-    const data = await api.updateProfile(profileData);
+    const response = await api.updateProfile(profileData);
+    const data = await response.json();
     if (data.success) {
       console.log('Profile saved successfully');
       return true;
@@ -35,7 +37,8 @@ const saveProfile = async (profileData) => {
 
 const changePassword = async (passwords) => {
   try {
-    const data = await api.changePassword(passwords);
+    const response = await api.changePassword(passwords);
+    const data = await response.json();
     return data;
   } catch (error) {
     console.error('Password change error:', error);

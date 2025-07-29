@@ -88,6 +88,15 @@ const api = {
     body: JSON.stringify(profileData)
   }),
 
+  changePassword: (passwordData) => fetch(`${API_BASE_URL}/profile/change-password`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeaders()
+    },
+    body: JSON.stringify(passwordData)
+  }),
+
   // Auth
   login: (credentials) => fetch(`${API_BASE_URL}/api/auth/login`, {
     method: 'POST',

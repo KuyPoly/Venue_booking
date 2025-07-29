@@ -17,6 +17,7 @@ const defaultCenter = {
   lng: 104.9282
 };
 
+
 function OwnerListings() {
   const { user } = useContext(AuthContext); // Get user from auth context
   const [listings, setListings] = useState([]);
@@ -183,33 +184,12 @@ function OwnerListings() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     
-    // For number inputs, ensure we're working with the actual input value
-    let processedValue = value;
-    
-    // For capacity and price fields, handle number inputs carefully
-    if (name === 'capacity' || name === 'price') {
-      // Allow empty string for user to clear the field
-      if (value === '') {
-        processedValue = '';
-      } else {
-        // For capacity, ensure it's a valid integer
-        if (name === 'capacity') {
-          const numValue = parseInt(value, 10);
-          processedValue = isNaN(numValue) ? '' : numValue.toString();
-        }
-        // For price, ensure it's a valid decimal
-        else if (name === 'price') {
-          const numValue = parseFloat(value);
-          processedValue = isNaN(numValue) ? '' : value; // Keep original value for decimal input
-        }
-      }
-    }
-    
-    console.log(`Updating ${name} from "${formData[name]}" to "${processedValue}"`);
+    // Simply use the raw input value - let HTML5 input validation handle number constraints
+    console.log(`Updating ${name} from "${formData[name]}" to "${value}"`);
     
     setFormData(prev => ({
       ...prev,
-      [name]: processedValue
+      [name]: value
     }));
   };
 
@@ -338,13 +318,18 @@ function OwnerListings() {
       });
 
       const url = editingListing 
-        ? `${api.baseURL}/api/listings/${editingListing.id}?owner_id=${owner_id}`
+        ? `${api.baseURL}/api/listings/${editingListing.id}`
         : `${api.baseURL}/api/listings`;
       
       const method = editingListing ? 'PUT' : 'POST';
       
+      // Get auth headers
+      const token = localStorage.getItem('token');
+      const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+      
       const response = await fetch(url, {
         method,
+        headers,
         body: formDataToSend // Don't set Content-Type header, let browser set it
       });
 
@@ -408,20 +393,45 @@ function OwnerListings() {
   };
 
   const handleDelete = async (listingId) => {
-    if (window.confirm('Are you sure you want to delete this venue? This will also delete all associated images and bookings.')) {
+    if (window.confirm('Are you sure you want to delete this venue? This will also delete all associated images, bookings, and reservations.')) {
       try {
+        console.log('Attempting to delete listing:', listingId);
         const response = await api.deleteListing(listingId);
+        console.log('Delete response status:', response.status);
 
         if (response.ok) {
           await fetchListings();
-          alert('Venue deleted successfully!');
+          alert('Venue deleted successfully! All associated data has been removed.');
         } else {
-          const error = await response.json();
-          alert('Error deleting venue: ' + (error.error || 'Unknown error'));
+          let errorMessage = 'Unknown error';
+          try {
+            const error = await response.json();
+            errorMessage = error.error || error.message || `Server error: ${response.status}`;
+            if (error.details) {
+              errorMessage += `\nDetails: ${error.details}`;
+            }
+          } catch (jsonError) {
+            const errorText = await response.text();
+            errorMessage = errorText || `HTTP ${response.status}`;
+          }
+          console.error('Delete API error:', errorMessage);
+          
+          // Provide specific guidance for foreign key errors
+          if (errorMessage.toLowerCase().includes('foreign key') || 
+              errorMessage.toLowerCase().includes('constraint') ||
+              errorMessage.toLowerCase().includes('cannot delete')) {
+            alert('Unable to delete venue: This venue has active bookings or reservations that must be cancelled first. Please contact support if you need assistance.');
+          } else {
+            alert('Error deleting venue: ' + errorMessage);
+          }
         }
       } catch (error) {
         console.error('Error deleting listing:', error);
-        alert('Error deleting venue. Please try again.');
+        if (error.message.toLowerCase().includes('fetch')) {
+          alert('Network error: Please check your internet connection and try again.');
+        } else {
+          alert('Error deleting venue. Please check your connection and try again.');
+        }
       }
     }
   };

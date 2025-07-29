@@ -440,27 +440,68 @@ exports.updateListing = async (req, res) => {
 
 // Delete a listing
 exports.deleteListing = async (req, res) => {
+  const transaction = await Hall.sequelize.transaction(); // Start a transaction
+  
   try {
     const owner_id = req.user.user_id; // Get from authenticated user instead of query
+    const listingId = req.params.id;
+    
+    console.log('=== DELETE LISTING DEBUG ===');
+    console.log('Attempting to delete listing:', listingId);
+    console.log('Owner ID from auth:', owner_id);
+    console.log('Request user:', req.user);
     
     // Find the listing with its images
     const listing = await Hall.findOne({
       where: { 
-        hall_id: req.params.id,
+        hall_id: listingId,
         owner_id
       },
       include: [
         { model: Image, as: 'images', attributes: ['url'] }
-      ]
+      ],
+      transaction
     });
 
+    console.log('Found listing:', listing ? 'Yes' : 'No');
+    
     if (!listing) {
+      await transaction.rollback();
+      console.log('Listing not found or permission denied');
       return res.status(404).json({ error: 'Listing not found or you do not have permission to delete it' });
     }
 
-    // Delete associated image files
+    console.log('Listing details:', { id: listing.hall_id, name: listing.name, owner: listing.owner_id });
+
+    // Step 1: Delete all associated records in the correct order
+
+    // 1. Delete HallReservations first (they depend on both Hall and Booking)
+    const { HallReservation, Booking, Payment, HallCategory, Favorite } = require('../model/Association');
+    
+    console.log('Deleting hall reservations...');
+    await HallReservation.destroy({
+      where: { hall_id: listingId },
+      transaction
+    });
+
+    // 2. Delete HallCategory associations (Many-to-Many)
+    console.log('Deleting hall categories...');
+    await HallCategory.destroy({
+      where: { hall_id: listingId },
+      transaction
+    });
+
+    // 3. Delete Favorites
+    console.log('Deleting favorites...');
+    await Favorite.destroy({
+      where: { hall_id: listingId },
+      transaction
+    });
+
+    // 4. Delete associated image files from Cloudinary/filesystem
     if (listing.images && listing.images.length > 0) {
-      listing.images.forEach(async (image) => {
+      console.log(`Deleting ${listing.images.length} images`);
+      for (const image of listing.images) {
         // Check if it's a Cloudinary URL
         if (image.url.includes('cloudinary.com')) {
           try {
@@ -472,6 +513,7 @@ exports.deleteListing = async (req, res) => {
             console.log(`Deleted Cloudinary image: ${publicId}`);
           } catch (err) {
             console.error('Error deleting Cloudinary image:', err);
+            // Don't fail the transaction for image deletion errors
           }
         } else {
           // Handle legacy local files (if any exist)
@@ -479,31 +521,58 @@ exports.deleteListing = async (req, res) => {
           const fs = require('fs');
           const filePath = path.join(__dirname, '..', image.url);
           if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath);
-            console.log(`Deleted local image: ${filePath}`);
+            try {
+              fs.unlinkSync(filePath);
+              console.log(`Deleted local image: ${filePath}`);
+            } catch (err) {
+              console.error('Error deleting local image:', err);
+              // Don't fail the transaction for image deletion errors
+            }
           }
         }
-      });
+      }
     }
 
-    // Delete the hall (cascade will handle images and categories)
-    const deleted = await Hall.destroy({
-      where: { 
-        hall_id: req.params.id,
-        owner_id
-      }
+    // 5. Delete Images from database (cascade should handle this, but let's be explicit)
+    console.log('Deleting images from database...');
+    await Image.destroy({
+      where: { hall_id: listingId },
+      transaction
     });
 
+    // 6. Finally, delete the hall itself
+    console.log('Deleting hall...');
+    const deleted = await Hall.destroy({
+      where: { 
+        hall_id: listingId,
+        owner_id
+      },
+      transaction
+    });
+
+    console.log('Deletion result:', deleted);
+
     if (!deleted) {
+      await transaction.rollback();
+      console.log('Failed to delete - no rows affected');
       return res.status(404).json({ error: 'Failed to delete listing' });
     }
 
+    // Commit the transaction
+    await transaction.commit();
+    console.log('✅ Successfully deleted listing and all related records');
+    
     res.json({ 
       message: 'Hall listing deleted successfully!',
-      deletedId: req.params.id 
+      deletedId: listingId 
     });
   } catch (err) {
+    // Rollback the transaction in case of error
+    await transaction.rollback();
     console.error('Error deleting listing:', err);
-    res.status(500).json({ error: 'Failed to delete hall listing' });
+    res.status(500).json({ 
+      error: 'Failed to delete hall listing',
+      details: err.message 
+    });
   }
 };
