@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './App.css';
 import { AuthProvider } from './context/AuthContext';
-import SimpleTest from './SimpleTest';
 
 // Component imports
 import Navbar from './component/nav/navbar';
 import Footer from './component/footer/footer';
-import Home from './page/Homepage/Home.jsx';
+import Home from './page/Homepage/Home';
 import LoginModal from './component/LoginModal/LoginModal';
 import SignupModal from './component/SignupModal/SignupModal';
 import Sidebar from './component/Owner/Sidebar';
@@ -23,7 +22,7 @@ import About from './page/About/About';
 import Dashboard from './page/Dashboard/Dashboard';
 import Booking from './page/Booking/booking';
 import OwnerListings from './page/Listing/OwnerList';
-import ProfileComponent from './page/Profile/profile';
+import Profile from './page/Profile/profile';
 import Setting from './page/OwnerSetting/setting';
 import Wallet from './page/Wallet/Wallet';
 import Listing from './page/Listing/Listing';
@@ -96,10 +95,10 @@ function App() {
   
 
   return (
-    <div className="App">
-      <SimpleTest />
-    </div>
-  );
+    <AuthProvider>
+      <Router>
+        <div className="App">
+          <Routes>
             {/* Public Routes with Regular Layout */}
             <Route path="/" element={
               <RegularLayout 
@@ -285,7 +284,7 @@ function App() {
             {/* Profile and Setting routes using DashboardLayout */}
             <Route path="/dashboard/profile" element={
               <DashboardLayout>
-                <ProfileComponent />
+                <Profile />
               </DashboardLayout>
             }/>
             
