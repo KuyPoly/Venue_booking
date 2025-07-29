@@ -19,7 +19,6 @@ import BookingHistory from './page/BookingHistory/BookingHistory';
 import BookingDetails from './page/BookingDetails/BookingDetails';
 import VenueSearch from './page/VenueSearch/VenueSearch';
 import About from './page/About/About';
-import ProfilePage from './page/Profile/profile';
 import Dashboard from './page/Dashboard/Dashboard';
 import Booking from './page/Booking/booking';
 import Listing from './page/Listing/Listing';
