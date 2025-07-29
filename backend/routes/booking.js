@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { Booking, Hall, User, HallReservation } = require('../model/Association');
-const { Op, sequelize } = require('sequelize');
+const { Op } = require('sequelize');
+const sequelize = require('../database/sequelize');
 const { authenticateToken } = require('../middleware/auth');
 
 
@@ -243,6 +244,7 @@ router.delete('/:id', async (req, res) => {
 router.get('/requests', authenticateToken, async (req, res) => {
   try {
     const owner_id = req.user.user_id; // Get from authenticated user
+    console.log('Booking requests for owner:', owner_id);
     
     // Get all halls by this owner
     const halls = await Hall.findAll({
@@ -250,9 +252,11 @@ router.get('/requests', authenticateToken, async (req, res) => {
       attributes: ['hall_id', 'name']
     });
 
+    console.log('Found halls for requests:', halls.length);
     const hallIds = halls.map(hall => hall.hall_id);
 
     if (hallIds.length === 0) {
+      console.log('No halls found, returning empty requests');
       return res.json({ requests: [] });
     }
 
@@ -276,14 +280,19 @@ router.get('/requests', authenticateToken, async (req, res) => {
           }]
         }
       ],
-      order: [['createdAt', 'DESC']],
+      order: [['created_at', 'DESC']],
       limit: 10
     });
 
+    console.log('Found booking requests:', requests.length);
     res.json({ requests });
   } catch (error) {
     console.error('Error fetching booking requests:', error);
-    res.status(500).json({ error: 'Failed to fetch booking requests' });
+    console.error('Error stack:', error.stack);
+    res.status(500).json({ 
+      error: 'Failed to fetch booking requests',
+      details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+    });
   }
 });
 

@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const { Hall, Booking, User, HallReservation } = require('../model/Association');
-const { Op, sequelize } = require('sequelize');
+const { Op } = require('sequelize');
+const sequelize = require('../database/sequelize');
 const { authenticateToken } = require('../middleware/auth');
 
 // GET /dashboard/stats - Get comprehensive dashboard statistics
 router.get('/stats', authenticateToken, async (req, res) => {
   try {
     const owner_id = req.user.user_id; // Get from authenticated user
+    console.log('Dashboard stats request for owner:', owner_id);
     
     // Get all halls by this owner
     const halls = await Hall.findAll({
@@ -15,9 +17,11 @@ router.get('/stats', authenticateToken, async (req, res) => {
       attributes: ['hall_id', 'name', 'price']
     });
 
+    console.log('Found halls:', halls.length);
     const hallIds = halls.map(hall => hall.hall_id);
 
     if (hallIds.length === 0) {
+      console.log('No halls found for owner, returning empty stats');
       return res.json({
         stats: {
           totalListings: 0,
@@ -30,6 +34,8 @@ router.get('/stats', authenticateToken, async (req, res) => {
         }
       });
     }
+
+    console.log('Hall IDs:', hallIds);
 
     // Get booking statistics
     const bookingStats = await Booking.findAll({
@@ -74,7 +80,11 @@ router.get('/stats', authenticateToken, async (req, res) => {
     });
   } catch (error) {
     console.error('Error fetching dashboard stats:', error);
-    res.status(500).json({ error: 'Failed to fetch dashboard statistics' });
+    console.error('Error stack:', error.stack);
+    res.status(500).json({ 
+      error: 'Failed to fetch dashboard statistics',
+      details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+    });
   }
 });
 
