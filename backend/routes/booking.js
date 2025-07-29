@@ -243,8 +243,16 @@ router.delete('/:id', async (req, res) => {
 // GET /booking/requests - Get pending booking requests for owner
 router.get('/requests', authenticateToken, async (req, res) => {
   try {
+    console.log('=== BOOKING REQUESTS DEBUG ===');
+    console.log('User from token:', req.user);
+    
     const owner_id = req.user.user_id; // Get from authenticated user
     console.log('Booking requests for owner:', owner_id);
+    
+    if (!owner_id) {
+      console.log('ERROR: No owner_id found in token');
+      return res.status(400).json({ error: 'Owner ID not found in token' });
+    }
     
     // Get all halls by this owner
     const halls = await Hall.findAll({
@@ -253,6 +261,8 @@ router.get('/requests', authenticateToken, async (req, res) => {
     });
 
     console.log('Found halls for requests:', halls.length);
+    console.log('Hall details:', halls.map(h => ({ id: h.hall_id, name: h.name })));
+    
     const hallIds = halls.map(hall => hall.hall_id);
 
     if (hallIds.length === 0) {
@@ -285,6 +295,7 @@ router.get('/requests', authenticateToken, async (req, res) => {
     });
 
     console.log('Found booking requests:', requests.length);
+    console.log('=== END DEBUG ===');
     res.json({ requests });
   } catch (error) {
     console.error('Error fetching booking requests:', error);
