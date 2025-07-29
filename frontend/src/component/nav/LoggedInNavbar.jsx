@@ -9,18 +9,14 @@ export default function LoggedInNavbar() {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [searchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const searchRef = useRef(null);
   const userMenuRef = useRef(null);
   const navigate = useNavigate();
 
-  // Close the search bar when clicking outside
+  // Close the user menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
-        const isSearchIcon = event.target.closest('.search-icon');
-        if (!isSearchIcon) {
-          setShowSearch(false);
-        }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setShowUserMenu(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);

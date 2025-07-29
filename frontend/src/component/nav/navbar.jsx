@@ -1,5 +1,5 @@
 /* filepath: d:\y2t3\venue_booking\frontend\src\component\nav\navbar.jsx */
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import LoggedInNavbar from './LoggedInNavbar';
@@ -9,18 +9,12 @@ export default function Navbar({ openLoginModal, openSignupModal }) {
   const { isAuthenticated, loading } = useContext(AuthContext);
   const [searchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const searchRef = useRef(null);
   const navigate = useNavigate();
 
-  // Close the search bar when clicking outside
+  // Close mobile menu when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
-        const isSearchIcon = event.target.closest('.bi-search');
-        if (!isSearchIcon) {
-          setShowSearch(false);
-        }
-      }
+    const handleClickOutside = () => {
+      setIsMobileMenuOpen(false);
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
