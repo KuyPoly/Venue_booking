@@ -1,6 +1,50 @@
 const express = require('express');
 const router = express.Router();
 const BookingController = require('../controllers/bookingController');
+const { Booking, Hall, HallReservation } = require('../model/Association');
+const walletController = require('../controllers/walletController');
+
+// Test endpoint to debug booking and wallet functionality
+router.get('/debug/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Get booking details
+    const booking = await Booking.findByPk(id, {
+      include: [{
+        model: HallReservation,
+        as: 'hall_reservations',
+        include: [{
+          model: Hall,
+          as: 'hall',
+          attributes: ['owner_id', 'name']
+        }]
+      }]
+    });
+
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    const debugInfo = {
+      booking: {
+        id: booking.id,
+        status: booking.status,
+        total_amount: booking.total_amount,
+        hall_reservations: booking.hall_reservations?.map(hr => ({
+          id: hr.id,
+          hall_id: hr.hall_id,
+          hall: hr.hall
+        }))
+      }
+    };
+
+    res.json(debugInfo);
+  } catch (error) {
+    console.error('Debug error:', error);
+    res.status(500).json({ error: 'Debug failed', details: error.message });
+  }
+});
 
 // GET /booking-management/pending?owner_id=123 - Get pending bookings
 router.get('/pending', async (req, res) => {
@@ -25,39 +69,59 @@ router.get('/pending', async (req, res) => {
 router.put('/:id/approve', async (req, res) => {
   try {
     const { id } = req.params;
+    console.log(`Approving booking ${id}`);
+    
     const result = await BookingController.updateBookingStatus(id, { status: 'confirmed' });
 
     // Credit wallet when booking is confirmed
     if (result.booking && result.booking.status === 'confirmed') {
       try {
+        console.log('Booking confirmed, attempting to credit wallet...');
+        
         // Get booking details to find the owner and amount
-        const booking = await require('../model/Booking').findByPk(id, {
+        const booking = await Booking.findByPk(id, {
           include: [{
-            model: require('../model/HallReservation'),
+            model: HallReservation,
             as: 'hall_reservations',
             include: [{
-              model: require('../model/Hall'),
+              model: Hall,
               as: 'hall',
               attributes: ['owner_id']
             }]
           }]
         });
+
+        console.log('Booking details:', booking ? 'found' : 'not found');
+        
         if (booking && booking.hall_reservations && booking.hall_reservations[0]) {
           const ownerId = booking.hall_reservations[0].hall.owner_id;
           const amount = booking.total_amount;
-          await require('../controllers/walletController').creditWalletFromBooking(id, amount, ownerId, `Payment received for booking ${id}`);
-          console.log(`Wallet credited for owner ${ownerId}: $${amount} from booking ${id}`);
+          
+          console.log(`Crediting wallet for owner ${ownerId}: $${amount}`);
+          
+          await walletController.creditWalletFromBooking(
+            id, 
+            amount, 
+            ownerId, 
+            `Payment received for booking ${id}`
+          );
+          
+          console.log(`Wallet successfully credited for owner ${ownerId}: $${amount} from booking ${id}`);
+        } else {
+          console.log('Could not find booking details or hall information for wallet credit');
         }
       } catch (walletError) {
         console.error('Error crediting wallet:', walletError);
-        // Don't fail the approval if wallet credit fails
+        console.error('Wallet error stack:', walletError.stack);
+        // Don't fail the approval if wallet credit fails, but log it
       }
     }
 
     res.json({ message: 'Booking approved successfully', booking: result.booking });
   } catch (error) {
     console.error('Error approving booking:', error);
-    res.status(500).json({ error: 'Failed to approve booking' });
+    console.error('Approval error stack:', error.stack);
+    res.status(500).json({ error: 'Failed to approve booking', details: error.message });
   }
 });
 

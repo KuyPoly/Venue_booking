@@ -241,62 +241,83 @@ router.delete('/:id', async (req, res) => {
 });
 
 // GET /booking/requests - Get pending booking requests for owner
-router.get('/requests', authenticateToken, async (req, res) => {
+router.get('/requests', async (req, res) => {
   try {
     console.log('=== BOOKING REQUESTS DEBUG ===');
-    console.log('User from token:', req.user);
     
-    const owner_id = req.user.user_id; // Get from authenticated user
-    console.log('Booking requests for owner:', owner_id);
+    // Check if user is authenticated
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
     
-    if (!owner_id) {
-      console.log('ERROR: No owner_id found in token');
-      return res.status(400).json({ error: 'Owner ID not found in token' });
-    }
-    
-    // Get all halls by this owner
-    const halls = await Hall.findAll({
-      where: { owner_id: owner_id },
-      attributes: ['hall_id', 'name']
-    });
-
-    console.log('Found halls for requests:', halls.length);
-    console.log('Hall details:', halls.map(h => ({ id: h.hall_id, name: h.name })));
-    
-    const hallIds = halls.map(hall => hall.hall_id);
-
-    if (hallIds.length === 0) {
-      console.log('No halls found, returning empty requests');
+    if (!token) {
+      console.log('No auth token provided, returning empty requests');
       return res.json({ requests: [] });
     }
 
-    // Get pending bookings for these halls
-    const requests = await Booking.findAll({
-      where: { status: 'pending' },
-      include: [
-        {
-          model: User,
-          as: 'user',
-          attributes: ['user_id', 'first_name', 'last_name', 'email']
-        },
-        {
-          model: HallReservation,
-          as: 'hall_reservations',
-          include: [{
-            model: Hall,
-            as: 'hall',
-            where: { hall_id: { [Op.in]: hallIds } },
-            attributes: ['hall_id', 'name']
-          }]
-        }
-      ],
-      order: [['created_at', 'DESC']],
-      limit: 10
-    });
+    // Try to authenticate the user
+    try {
+      const jwt = require('jsonwebtoken');
+      const { User } = require('../model');
+      
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_secret_key');
+      const user = await User.findByPk(decoded.userId);
+      
+      if (!user) {
+        console.log('User not found, returning empty requests');
+        return res.json({ requests: [] });
+      }
 
-    console.log('Found booking requests:', requests.length);
-    console.log('=== END DEBUG ===');
-    res.json({ requests });
+      const owner_id = user.user_id;
+      console.log('Booking requests for owner:', owner_id);
+      
+      // Get all halls by this owner
+      const halls = await Hall.findAll({
+        where: { owner_id: owner_id },
+        attributes: ['hall_id', 'name']
+      });
+
+      console.log('Found halls for requests:', halls.length);
+      console.log('Hall details:', halls.map(h => ({ id: h.hall_id, name: h.name })));
+      
+      const hallIds = halls.map(hall => hall.hall_id);
+
+      if (hallIds.length === 0) {
+        console.log('No halls found, returning empty requests');
+        return res.json({ requests: [] });
+      }
+
+      // Get pending bookings for these halls
+      const requests = await Booking.findAll({
+        where: { status: 'pending' },
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: ['user_id', 'first_name', 'last_name', 'email']
+          },
+          {
+            model: HallReservation,
+            as: 'hall_reservations',
+            include: [{
+              model: Hall,
+              as: 'hall',
+              where: { hall_id: { [Op.in]: hallIds } },
+              attributes: ['hall_id', 'name']
+            }]
+          }
+        ],
+        order: [['created_at', 'DESC']],
+        limit: 10
+      });
+
+      console.log('Found booking requests:', requests.length);
+      console.log('=== END DEBUG ===');
+      res.json({ requests });
+      
+    } catch (authError) {
+      console.log('Authentication failed, returning empty requests:', authError.message);
+      return res.json({ requests: [] });
+    }
   } catch (error) {
     console.error('Error fetching booking requests:', error);
     console.error('Error stack:', error.stack);

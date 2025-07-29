@@ -19,6 +19,9 @@ router.post('/withdraw', walletController.withdrawFunds);
 // Credit wallet (API endpoint for testing/manual credit)
 router.post('/credit', walletController.creditWalletAPI);
 
+// Test wallet functionality
+router.get('/test', walletController.testWallet);
+
 // Get wallet statistics
 router.get('/stats', walletController.getWalletStats);
 

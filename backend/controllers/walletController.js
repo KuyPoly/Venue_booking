@@ -275,11 +275,54 @@ exports.creditWalletAPI = async (req, res) => {
   try {
     const { bookingId, amount, ownerId, description } = req.body;
     
+    console.log('Manual wallet credit request:', { bookingId, amount, ownerId, description });
+    
     const result = await exports.creditWalletFromBooking(bookingId, amount, ownerId, description);
     res.json(result);
   } catch (error) {
-    console.error('Error in credit wallet API:', error);
-    res.status(500).json({ error: error.message || 'Failed to credit wallet' });
+    console.error('Manual wallet credit error:', error);
+    res.status(500).json({ error: 'Failed to credit wallet', details: error.message });
+  }
+};
+
+// Test wallet functionality
+exports.testWallet = async (req, res) => {
+  try {
+    const { ownerId } = req.query;
+    
+    if (!ownerId) {
+      return res.status(400).json({ error: 'ownerId is required' });
+    }
+
+    // Check if wallet exists
+    let wallet = await OwnerWallet.findOne({
+      where: { ownerId: parseInt(ownerId) }
+    });
+
+    if (!wallet) {
+      // Create wallet for testing
+      wallet = await OwnerWallet.create({
+        ownerId: parseInt(ownerId),
+        balance: 0.00,
+        totalEarnings: 0.00,
+        totalWithdrawals: 0.00,
+        status: 'active'
+      });
+    }
+
+    res.json({
+      message: 'Wallet test successful',
+      wallet: {
+        id: wallet.id,
+        ownerId: wallet.ownerId,
+        balance: parseFloat(wallet.balance),
+        totalEarnings: parseFloat(wallet.totalEarnings),
+        status: wallet.status
+      }
+    });
+  } catch (error) {
+    console.error('Wallet test error:', error);
+    res.status(500).json({ error: 'Wallet test failed', details: error.message });
   }
 };
 
