@@ -11,8 +11,8 @@ import LoginModal from './component/LoginModal/LoginModal';
 import SignupModal from './component/SignupModal/SignupModal';
 import Sidebar from './component/Owner/Sidebar';
 import Topbar from './component/Owner/Topbar';
+import Signup from './component/auth/Signup';
 import RoomDetails from './page/RoomDetails/RoomDetails';
-import SignupPage from './page/Auth/SignupPage';
 import VenuesList from './page/VenuesList/VenuesList';
 import Favorites from './page/Favorites/Favorites';
 import BookingHistory from './page/BookingHistory/BookingHistory';
@@ -21,11 +21,11 @@ import VenueSearch from './page/VenueSearch/VenueSearch';
 import About from './page/About/About';
 import Dashboard from './page/Dashboard/Dashboard';
 import Booking from './page/Booking/booking';
-import Listing from './page/Listing/Listing';
 import OwnerListings from './page/Listing/OwnerList';
 import ProfileComponent from './page/Profile/profile';
 import Setting from './page/OwnerSetting/setting';
 import Wallet from './page/Wallet/Wallet';
+import Listing from './page/Listing/Listing';
 import DebugInputTest from './component/EnvironmentDebugger';
 
 // Dashboard Layout without navbar/footer
@@ -126,7 +126,7 @@ function App() {
                 handleSwitchToSignup={handleSwitchToSignup}
                 handleSwitchToLogin={handleSwitchToLogin}
               >
-                <SignupPage />
+                <Signup />
               </RegularLayout>
             } />
             
