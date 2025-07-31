@@ -1,8 +1,8 @@
-🌊 OceanGate — Venue Booking System
+# 🌊 OceanGate — Venue Booking System
 
 OceanGate is a modern web platform that connects hall owners with customers, streamlining the traditional booking process for events such as weddings, parties, meetings, and more. Venue owners can showcase their spaces, and customers can search, compare, and book in just a few clicks.
 
-✨ Features
+# ✨ Features
 
 🎯 Browse and search available venues by location, guest count, and budget
 📅 Real-time availability and booking confirmation
@@ -12,7 +12,7 @@ OceanGate is a modern web platform that connects hall owners with customers, str
 📷 Image gallery for each venue
 🚀 Tech Stack
 
-Frontend
+# Frontend
 React.js (JSX, ES6+ JavaScript)
 HTML5, CSS3
 Backend
@@ -23,7 +23,7 @@ JSON for client–server data exchange
 Environment variables via .env
 Markdown for documentation
 
-🗂 Project Structure
+# 🗂 Project Structure
 
 Venue_booking/
 ├── backend/                 # Express.js API
@@ -61,12 +61,7 @@ Venue_booking/
         ├── App_backup.js   # (backup of App)
         └── App_debug.js    # (debug version of App)
 
-📷 Screenshots
-
-
-Figure: OceanGate landing page with search bar, venue categories, and featured listings.
-(Replace the path above with wherever you store your screenshot in the repo; e.g. public/images/home.png.)
-🔧 Installation & Setup
+# 🔧 Installation & Setup
 
 Clone the repo
 git clone https://github.com/your-username/Venue_booking.git
@@ -97,7 +92,7 @@ npm start
 
 Navigate to http://localhost:3000 to explore OceanGate.
 
-📡 API Endpoints
+# 📡 API Endpoints
 
 OceanGate’s REST API is organized under the /api prefix.
 Authentication Endpoints
@@ -146,17 +141,17 @@ PUT
 /api/owners/bookings/:id/status
 Update booking status (owners only)
 
-🧪 Testing
+# 🧪 Testing
 
 # In either folder, if you add tests:
 npm test
 
-🚧 Known Issues
+# 🚧 Known Issues
 
 Booking-conflict checks are not real-time yet
 Some UI components lack full mobile responsiveness
 
-🤝 Contributing
+# 🤝 Contributing
 
 Fork the repo
 Create a feature branch (git checkout -b feature/XYZ)
