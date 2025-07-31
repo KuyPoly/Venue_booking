@@ -17,7 +17,7 @@ import SignupPopUp from '../../component/HomePage/SignupPopUp';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import config from '../../config/config';
 import api from '../../services/api';
-import ABAPayModal from '../../component/ABAPayModal';
+import { ABAPayModal } from '../../component/payment';
 
 // Google Maps configuration
 const mapContainerStyle = {

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../page/VenueSearch/ABAPayModal.css';
+import './ABAPayModal.css';
 
 const ABAPayModal = ({ show, onClose, amount, onAmountChange, onGenerateQR, loading, error, qr }) => {
   if (!show) return null;

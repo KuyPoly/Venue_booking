@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import VenueCard from '../../component/HomePage/venue_card';
-import GoogleMapsTestComponent from '../../components/GoogleMapsTestComponent';
+import { GoogleMapsPicker } from '../../component/maps';
 import api from '../../services/api';
 import './VenueSearch.css';
 
@@ -113,7 +113,7 @@ return (
       </div>
     </div>
     <div className="venue-search-right">
-      <GoogleMapsTestComponent />
+      <GoogleMapsPicker />
     </div>
   </div>
 );

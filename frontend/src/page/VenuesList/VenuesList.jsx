@@ -4,7 +4,7 @@ import pancakes from '../../assets/image1.png';
 import './VenuesList.css';
 import { AuthContext } from '../../context/AuthContext';
 import SignupPopUp from '../../component/HomePage/SignupPopUp';
-import ABAPayModal from '../../component/ABAPayModal';
+import { ABAPayModal } from '../../component/payment';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { HiOutlineUsers } from 'react-icons/hi2';
 import { MdOutlineBuild, MdOutlineCelebration, MdOutlineBusinessCenter } from 'react-icons/md';
