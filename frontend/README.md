@@ -1,70 +1,165 @@
-# Getting Started with Create React App
+🌊 OceanGate — Venue Booking System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+OceanGate is a modern web platform that connects hall owners with customers, streamlining the traditional booking process for events such as weddings, parties, meetings, and more. Venue owners can showcase their spaces, and customers can search, compare, and book in just a few clicks.
 
-## Available Scripts
+✨ Features
 
-In the project directory, you can run:
+🎯 Browse and search available venues by location, guest count, and budget
+📅 Real-time availability and booking confirmation
+🧾 Owner dashboard for adding/editing venue listings
+🔒 Secure authentication (login/signup)
+📊 Booking statistics and activity logs
+📷 Image gallery for each venue
+🚀 Tech Stack
 
-### `npm start`
+Frontend
+React.js (JSX, ES6+ JavaScript)
+HTML5, CSS3
+Backend
+Node.js & Express.js
+Sequelize ORM + SQL database
+Other
+JSON for client–server data exchange
+Environment variables via .env
+Markdown for documentation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+🗂 Project Structure
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Venue_booking/
+├── backend/                 # Express.js API
+│   ├── config/              # DB & env configuration
+│   ├── controllers/         # Route handlers
+│   ├── database/            # Database connection setup
+│   ├── middleware/          # Auth, logging, etc.
+│   ├── migrations/          # Sequelize migrations
+│   ├── model/               # Sequelize models
+│   ├── public/              # Static assets served by backend
+│   ├── routes/              # API route definitions
+│   ├── seeders/             # Test data seed scripts
+│   ├── utils/               # Helper functions
+│   ├── .env                 # Environment variables (ignored by Git)
+│   ├── .env.example         # Sample env vars
+│   ├── .sequelizerc         # Sequelize CLI config
+│   ├── package.json         
+│   ├── package-lock.json    
+│   ├── railway.toml         # Deployment config
+│   ├── README.md            # (this file)
+│   └── server.js            # Entry point
+│
+└── frontend/                # React client
+    ├── node_modules/
+    ├── public/             # Static public files, favicon, index.html
+    └── src/                # React source code
+        ├── assets/         # Images, icons, fonts
+        ├── component/      # (if you have single-purpose UI pieces)
+        ├── components/     # Reusable React components
+        ├── config/         # API URLs, constants
+        ├── context/        # React Context providers
+        ├── hooks/          # Custom hooks
+        ├── page/           # Route-based page components
+        ├── services/       # API service functions
+        ├── App_backup.js   # (backup of App)
+        └── App_debug.js    # (debug version of App)
 
-### `npm test`
+📷 Screenshots
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+Figure: OceanGate landing page with search bar, venue categories, and featured listings.
+(Replace the path above with wherever you store your screenshot in the repo; e.g. public/images/home.png.)
+🔧 Installation & Setup
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Clone the repo
+git clone https://github.com/your-username/Venue_booking.git
+cd oceangate
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Install dependencies
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Backend
+cd backend
+npm install
 
-### `npm run eject`
+# Frontend
+cd ../frontend
+npm install
+Configure environment variables
+Copy backend/.env.example → backend/.env and fill in your PORT, database URL, JWT_SECRET, etc.
+Create frontend/.env and set:
+REACT_APP_API_BASE_URL=http://localhost:5000/api
+Run the app
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+# In one terminal (backend)
+cd backend
+npm start
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# In another (frontend)
+cd frontend
+npm start
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Navigate to http://localhost:3000 to explore OceanGate.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+📡 API Endpoints
 
-## Learn More
+OceanGate’s REST API is organized under the /api prefix.
+Authentication Endpoints
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+POST
+/api/auth/register
+Register a new user account
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+POST
+/api/auth/login
+Authenticate user and get token
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Hall Management Endpoints
 
-### Analyzing the Bundle Size
+GET
+/api/halls
+Retrieve list of all halls
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+GET
+/api/halls/:id
+Retrieve detailed info for one hall
 
-### Making a Progressive Web App
+POST
+/api/owners/halls
+Create a new hall listing (owners only)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+PUT
+/api/owners/halls/:id
+Update an existing hall (owners only)
 
-### Advanced Configuration
+DELETE
+/api/owners/halls/:id
+Delete a hall listing (owners only)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
+POST
+/api/bookings
+Create a new booking (authenticated users only)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+GET
+/api/bookings/user
+List bookings for the logged‑in user
 
-### `npm run build` fails to minify
+PUT
+/api/owners/bookings/:id/status
+Update booking status (owners only)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+🧪 Testing
+
+# In either folder, if you add tests:
+npm test
+
+🚧 Known Issues
+
+Booking-conflict checks are not real-time yet
+Some UI components lack full mobile responsiveness
+
+🤝 Contributing
+
+Fork the repo
+Create a feature branch (git checkout -b feature/XYZ)
+Commit your changes (git commit -m 'Add XYZ')
+Push to your branch (git push origin feature/XYZ)
+Open a Pull Request
