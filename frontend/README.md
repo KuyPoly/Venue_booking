@@ -61,11 +61,7 @@ Venue_booking/
         ├── App_backup.js   # (backup of App)
         └── App_debug.js    # (debug version of App)
 
-📷 Screenshots
 
-
-Figure: OceanGate landing page with search bar, venue categories, and featured listings.
-(Replace the path above with wherever you store your screenshot in the repo; e.g. public/images/home.png.)
 🔧 Installation & Setup
 
 Clone the repo
