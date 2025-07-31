@@ -143,7 +143,7 @@ Update booking status (owners only)
 
 # 🧪 Testing
 
-# In either folder, if you add tests:
+( In either folder) if you add tests:
 npm test
 
 # 🚧 Known Issues
