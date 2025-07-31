@@ -29,8 +29,10 @@ JSON for client–server data exchange
 Environment variables via .env
 Markdown for documentation
 
-# 🗂 Project Structure
-
+<details> <summary><strong>📁 Click to view: Project Folder Structure</strong></summary>
+plaintext
+Copy
+Edit
 Venue_booking/
 ├── backend/                   # Express.js backend API
 │   ├── config/               # DB & environment variable config
@@ -66,7 +68,7 @@ Venue_booking/
         ├── services/        # API request services (e.g., axios wrappers)
         ├── App_backup.js    # Backup version of App component
         └── App_debug.js     # Debug version of App component
-
+</details>
 
 # 🔧 Installation & Setup
 
