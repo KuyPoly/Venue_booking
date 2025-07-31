@@ -32,39 +32,71 @@ Markdown for documentation
 <details> <summary><strong>📁 Click to view: Project Folder Structure</strong></summary>
 🗂️ Venue_booking/
 📦 backend/ – Express.js API
+  
 config/ – DB & environment variable configuration
+
 controllers/ – Route handler functions
+
 database/ – Sequelize DB connection setup
+
 middleware/ – Authentication, logging, error handling
+
 migrations/ – Sequelize migration files
+
 model/ – Sequelize data models
+
 public/ – Static files served by backend
+
 routes/ – API route definitions
+
 seeders/ – Sample/test seed data
+
 utils/ – Helper utilities
+
 .env – Environment variables (not committed)
+
 .env.example – Sample env variables
+
 .sequelizerc – Sequelize CLI configuration
+
 package.json – Backend dependencies and scripts
+
 package-lock.json – Exact package versions
+
 railway.toml – Railway deployment config
+
 README.md – Project documentation (this file)
+
 server.js – App entry point
 
 💻 frontend/ – React Client
+
 node_modules/ – Frontend dependencies
+
 public/ – Static files (favicon, index.html)
+
 src/ – React source code
+
 assets/ – Images, icons, fonts
+
 component/ – Single-purpose UI elements
+
 components/ – Reusable components
+
 config/ – Constants, API base URLs
+
 context/ – React context providers
+
 hooks/ – Custom React hooks
+
 page/ – Page-level components
+
 services/ – API calls and logic
+
 App_backup.js – Backup of main App
+
 App_debug.js – Debug version of App
+
 </details>
 
 # 🔧 Installation & Setup
