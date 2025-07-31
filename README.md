@@ -5,11 +5,17 @@ OceanGate is a modern web platform that connects hall owners with customers, str
 # ✨ Features
 
 🎯 Browse and search available venues by location, guest count, and budget
+
 📅 Real-time availability and booking confirmation
+
 🧾 Owner dashboard for adding/editing venue listings
+
 🔒 Secure authentication (login/signup)
+
 📊 Booking statistics and activity logs
+
 📷 Image gallery for each venue
+
 🚀 Tech Stack
 
 # Frontend
