@@ -30,44 +30,71 @@ Environment variables via .env
 Markdown for documentation
 
 <details> <summary><strong>📁 Click to view: Project Folder Structure</strong></summary>
-plaintext
-Copy
-Edit
-Venue_booking/
-├── backend/                   # Express.js backend API
-│   ├── config/               # DB & environment variable config
-│   ├── controllers/          # Route handler functions
-│   ├── database/             # Sequelize DB connection setup
-│   ├── middleware/           # Auth, error, and logger middlewares
-│   ├── migrations/           # Sequelize migration files
-│   ├── model/                # Sequelize data models
-│   ├── public/               # Static files served by backend
-│   ├── routes/               # API route definitions
-│   ├── seeders/              # Sequelize seed data scripts
-│   ├── utils/                # Utility/helper functions
-│   ├── .env                  # Local environment variables (ignored by Git)
-│   ├── .env.example          # Example env file for reference
-│   ├── .sequelizerc          # Sequelize CLI config
-│   ├── package.json          # Backend dependencies and scripts
-│   ├── package-lock.json     # Lockfile for consistent installs
-│   ├── railway.toml          # Railway deployment config
-│   ├── README.md             # (This file)
-│   └── server.js             # Backend app entry point
-│
-└── frontend/                 # React frontend client
-    ├── node_modules/        # Frontend dependencies
-    ├── public/              # Public files (favicon, index.html, etc.)
-    └── src/                 # Main React app source code
-        ├── assets/          # Static assets (images, fonts, etc.)
-        ├── component/       # Small UI elements (optional, specific use)
-        ├── components/      # Reusable React components
-        ├── config/          # API base URL and constants
-        ├── context/         # React Context API providers
-        ├── hooks/           # Custom React hooks
-        ├── page/            # Page-level components for routing
-        ├── services/        # API request services (e.g., axios wrappers)
-        ├── App_backup.js    # Backup version of App component
-        └── App_debug.js     # Debug version of App component
+🗂️ Venue_booking/
+📦 backend/ – Express.js API
+config/ – DB & environment variable configuration
+
+controllers/ – Route handler functions
+
+database/ – Sequelize DB connection setup
+
+middleware/ – Authentication, logging, error handling
+
+migrations/ – Sequelize migration files
+
+model/ – Sequelize data models
+
+public/ – Static files served by backend
+
+routes/ – API route definitions
+
+seeders/ – Sample/test seed data
+
+utils/ – Helper utilities
+
+.env – Environment variables (not committed)
+
+.env.example – Sample env variables
+
+.sequelizerc – Sequelize CLI configuration
+
+package.json – Backend dependencies and scripts
+
+package-lock.json – Exact package versions
+
+railway.toml – Railway deployment config
+
+README.md – Project documentation (this file)
+
+server.js – App entry point
+
+💻 frontend/ – React Client
+node_modules/ – Frontend dependencies
+
+public/ – Static files (favicon, index.html)
+
+src/ – React source code
+
+assets/ – Images, icons, fonts
+
+component/ – Single-purpose UI elements
+
+components/ – Reusable components
+
+config/ – Constants, API base URLs
+
+context/ – React context providers
+
+hooks/ – Custom React hooks
+
+page/ – Page-level components
+
+services/ – API calls and logic
+
+App_backup.js – Backup of main App
+
+App_debug.js – Debug version of App
+
 </details>
 
 # 🔧 Installation & Setup
