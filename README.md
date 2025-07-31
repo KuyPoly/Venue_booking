@@ -32,40 +32,41 @@ Markdown for documentation
 # 🗂 Project Structure
 
 Venue_booking/
-├── backend/                 # Express.js API
-│   ├── config/              # DB & env configuration
-│   ├── controllers/         # Route handlers
-│   ├── database/            # Database connection setup
-│   ├── middleware/          # Auth, logging, etc.
-│   ├── migrations/          # Sequelize migrations
-│   ├── model/               # Sequelize models
-│   ├── public/              # Static assets served by backend
-│   ├── routes/              # API route definitions
-│   ├── seeders/             # Test data seed scripts
-│   ├── utils/               # Helper functions
-│   ├── .env                 # Environment variables (ignored by Git)
-│   ├── .env.example         # Sample env vars
-│   ├── .sequelizerc         # Sequelize CLI config
-│   ├── package.json         
-│   ├── package-lock.json    
-│   ├── railway.toml         # Deployment config
-│   ├── README.md            # (this file)
-│   └── server.js            # Entry point
+├── backend/                   # Express.js backend API
+│   ├── config/               # DB & environment variable config
+│   ├── controllers/          # Route handler functions
+│   ├── database/             # Sequelize DB connection setup
+│   ├── middleware/           # Auth, error, and logger middlewares
+│   ├── migrations/           # Sequelize migration files
+│   ├── model/                # Sequelize data models
+│   ├── public/               # Static files served by backend
+│   ├── routes/               # API route definitions
+│   ├── seeders/              # Sequelize seed data scripts
+│   ├── utils/                # Utility/helper functions
+│   ├── .env                  # Local environment variables (ignored by Git)
+│   ├── .env.example          # Example env file for reference
+│   ├── .sequelizerc          # Sequelize CLI config
+│   ├── package.json          # Backend dependencies and scripts
+│   ├── package-lock.json     # Lockfile for consistent installs
+│   ├── railway.toml          # Railway deployment config
+│   ├── README.md             # (This file)
+│   └── server.js             # Backend app entry point
 │
-└── frontend/                # React client
-    ├── node_modules/
-    ├── public/             # Static public files, favicon, index.html
-    └── src/                # React source code
-        ├── assets/         # Images, icons, fonts
-        ├── component/      # (if you have single-purpose UI pieces)
-        ├── components/     # Reusable React components
-        ├── config/         # API URLs, constants
-        ├── context/        # React Context providers
-        ├── hooks/          # Custom hooks
-        ├── page/           # Route-based page components
-        ├── services/       # API service functions
-        ├── App_backup.js   # (backup of App)
-        └── App_debug.js    # (debug version of App)
+└── frontend/                 # React frontend client
+    ├── node_modules/        # Frontend dependencies
+    ├── public/              # Public files (favicon, index.html, etc.)
+    └── src/                 # Main React app source code
+        ├── assets/          # Static assets (images, fonts, etc.)
+        ├── component/       # Small UI elements (optional, specific use)
+        ├── components/      # Reusable React components
+        ├── config/          # API base URL and constants
+        ├── context/         # React Context API providers
+        ├── hooks/           # Custom React hooks
+        ├── page/            # Page-level components for routing
+        ├── services/        # API request services (e.g., axios wrappers)
+        ├── App_backup.js    # Backup version of App component
+        └── App_debug.js     # Debug version of App component
+
 
 # 🔧 Installation & Setup
 
